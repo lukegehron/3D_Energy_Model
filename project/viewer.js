@@ -7,7 +7,11 @@ var camera, scene, raycaster, renderer, geometry;
 var cameraControls;
 
 // TWEAKPANE Parameter objects
-const PARAMS = {
+const PARAMS1 = {
+    model: 0,
+};
+
+const ROOM_PARAMS = {
     width: 20,
     length: 40,
     speed: 0.5,
@@ -15,9 +19,7 @@ const PARAMS = {
     randomness: 12
 };
 
-const PARAMS1 = {
-    quality: 0,
-};
+
 
 var mouse = new THREE.Vector2(), INTERSECTED;
 var frustumSize = 1000;
@@ -51,21 +53,7 @@ function init() {
 
     //THREE_GEOMETRY
     geometry = new THREE.PlaneBufferGeometry(0.9, 0.9);
-    for (let i = PARAMS.width / -2; i < PARAMS.width / 2; i++) {
-        for (let j = PARAMS.length / -2; j < PARAMS.length / 2; j++) {
-            const material = new THREE.MeshBasicMaterial({
-                color: 0x000000,
-                side: THREE.DoubleSide
-            });
-            const plane = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
-                color: 0xeeeeee
-            }));
-            plane.position.x = i;
-            plane.position.y = j;
-            plane.name = "grid"
-            scene.add(plane);
-        }
-    }
+    updateRoom();
 
     raycaster = new THREE.Raycaster();
 
@@ -85,18 +73,16 @@ function init() {
 
     document.addEventListener('mousemove', onDocumentMouseMove, false);
     window.addEventListener('resize', onWindowResize, false);
-
-
     
     //TWEAKPANE_PANELS
     const pane1 = new Tweakpane({
         container: document.getElementById('tweakpane1'),
     });
-    pane1.addInput(PARAMS1, 'quality', {
+    pane1.addInput(PARAMS1, 'model', {
         options: {
-            low: 0,
-            medium: 50,
-            high: 100,
+            directSolar: 0,
+            meanRadiantTemp: 1,
+            winterComfort: 2,
         },
     });
 
@@ -105,20 +91,20 @@ function init() {
     });
 
     const f1 = pane.addFolder({
-        title: 'Basic',
+        title: 'Climate',
     });
-    f1.addInput(PARAMS, 'speed');
+    f1.addInput(ROOM_PARAMS, 'speed');
 
     const f2 = pane.addFolder({
-        expanded: false,
-        title: 'Advanced',
+        expanded: true,
+        title: 'Room',
     });
-    f2.addInput(PARAMS, 'width');
-    f2.addInput(PARAMS, 'length');
+    f2.addInput(ROOM_PARAMS, 'width');
+    f2.addInput(ROOM_PARAMS, 'length');
 
     pane.on('change', (value) => {
         console.log('changed: ' + String(value));
-        console.log(PARAMS)
+        console.log(ROOM_PARAMS)
         updateParams();
     });
 }
@@ -132,10 +118,16 @@ function updateParams() {
         selectedObject = scene.getObjectByName("grid");
         count++;
     } while (selectedObject != null)
-    console.log("done after " + count)
 
-    for (let i = PARAMS.width / -2; i < PARAMS.width / 2; i++) {
-        for (let j = PARAMS.length / -2; j < PARAMS.length / 2; j++) {
+    updateRoom()
+
+    
+    animate();
+}
+
+function updateRoom(){
+    for (let i = ROOM_PARAMS.width / -2; i < ROOM_PARAMS.width / 2; i++) {
+        for (let j = ROOM_PARAMS.length / -2; j < ROOM_PARAMS.length / 2; j++) {
             const material = new THREE.MeshBasicMaterial({
                 color: 0x000000,
                 side: THREE.DoubleSide
@@ -145,11 +137,14 @@ function updateParams() {
             }));
             plane.position.x = i;
             plane.position.y = j;
-            plane.name = "grid"
+            plane.name = "grid";
+            plane.userData = {
+                loc_i: ROOM_PARAMS.width / 2 + i,
+                loc_j: ROOM_PARAMS.length / 2 + j
+            }
             scene.add(plane);
         }
     }
-    animate();
 }
 
 //CHANGE THIS TO PERSPECTIVE
@@ -192,7 +187,7 @@ function render() {
 
         if (INTERSECTED != intersects[0].object) {
 
-            console.log("yeah")
+            console.log(INTERSECTED)
 
             if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
 
