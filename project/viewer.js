@@ -6,19 +6,65 @@ var container, stats;
 var camera, scene, raycaster, renderer, geometry;
 var cameraControls;
 
+
+
+
+
 // TWEAKPANE Parameter objects
 const PARAMS1 = {
     model: 0,
 };
 
-const ROOM_PARAMS = {
-    width: 20,
-    length: 40,
-    speed: 0.5,
-    acceleration: 40,
-    randomness: 12
+const CLIMATE_PARAMS = {
+    longitude: -71,
+    latitude: 42,
+    timeZoneOffset: -5
 };
 
+const TIME_PARAMS = {
+    studyType: 1,
+    hour: 12,
+    day: 21,
+    month: 9,
+    timeStep: 4
+};
+
+const ROOM_PARAMS = {
+    orientation: 0,
+    ceilHeight: 12,
+    gridHeight:3,
+    length: 40,
+    depth: 20
+};
+
+const WINDOW_PARAMS = {
+    heightFromSill: 7.0,
+    sillHeight: 2.0,
+    glazingBy: 0,
+    separation: 12
+}
+
+const HORIZONTAL_SHADE_PARAMS = {
+    depth: 1,
+    number: 0,
+    spacing: 3,
+    dist: 0,
+    heightAbove: 0,
+    angle: 90
+}
+
+const VERTICAL_SHADE_PARAMS = {
+    depth: 3,
+    number: 0,
+    spacing: 3,
+    leftRight: 0,
+    lrShift: 0,
+    dist: 0,
+    fullHeight: 1,
+    heightAbove: 0,
+    relativeHeight: 0,
+    angle: 90
+}
 
 
 var mouse = new THREE.Vector2(), INTERSECTED;
@@ -50,7 +96,6 @@ function init() {
     scene.add(light);
     scene.add(new THREE.AmbientLight(0xffffff, 0.40));
 
-
     //THREE_GEOMETRY
     geometry = new THREE.PlaneBufferGeometry(0.9, 0.9);
     updateRoom();
@@ -75,10 +120,17 @@ function init() {
     window.addEventListener('resize', onWindowResize, false);
     
     //TWEAKPANE_PANELS
-    const pane1 = new Tweakpane({
-        container: document.getElementById('tweakpane1'),
+    initTweakPane();
+    
+}
+
+//INITIALIZE TWEAKPANE PANELS
+function initTweakPane() {
+    const global_pane = new Tweakpane({
+        container: document.getElementById('global_pane'),
+        title: 'Model Type',
     });
-    pane1.addInput(PARAMS1, 'model', {
+    global_pane.addInput(PARAMS1, 'model', {
         options: {
             directSolar: 0,
             meanRadiantTemp: 1,
@@ -86,23 +138,59 @@ function init() {
         },
     });
 
-    const pane = new Tweakpane({
-        container: document.getElementById('tweakpane2'),
+    const geometry_pane = new Tweakpane({
+        container: document.getElementById('room_pane'),
     });
 
-    const f1 = pane.addFolder({
-        title: 'Climate',
+    const room_pane = geometry_pane.addFolder({
+        title: 'Geometry',
     });
-    f1.addInput(ROOM_PARAMS, 'speed');
 
-    const f2 = pane.addFolder({
-        expanded: true,
+    const roomPanel = room_pane.addFolder({
         title: 'Room',
     });
-    f2.addInput(ROOM_PARAMS, 'width');
-    f2.addInput(ROOM_PARAMS, 'length');
+    roomPanel.addInput(ROOM_PARAMS, 'orientation');
+    roomPanel.addInput(ROOM_PARAMS, 'ceilHeight');
+    roomPanel.addInput(ROOM_PARAMS, 'gridHeight');
+    roomPanel.addInput(ROOM_PARAMS, 'depth');
+    roomPanel.addInput(ROOM_PARAMS, 'length');
 
-    pane.on('change', (value) => {
+    const windowPanel = room_pane.addFolder({
+        expanded: false,
+        title: 'Window',
+    });
+    windowPanel.addInput(WINDOW_PARAMS, 'heightFromSill');
+    windowPanel.addInput(WINDOW_PARAMS, 'sillHeight');
+    windowPanel.addInput(WINDOW_PARAMS, 'glazingBy');
+    windowPanel.addInput(WINDOW_PARAMS, 'separation');
+
+    const hshadePanel = room_pane.addFolder({
+        expanded: false,
+        title: 'Horizontal Shade',
+    });
+    hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'depth');
+    hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'number');
+    hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'spacing');
+    hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'dist');
+    hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'heightAbove');
+    hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'angle');
+
+    const vshadePanel = room_pane.addFolder({
+        expanded: false,
+        title: 'Vertical Shade',
+    });
+    vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'depth');
+    vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'number');
+    vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'spacing');
+    vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'leftRight');
+    vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'lrShift');
+    vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'dist');
+    vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'fullHeight');
+    vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'heightAbove');
+    vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'relativeHeight');
+    vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'angle');
+
+    geometry_pane.on('change', (value) => {
         console.log('changed: ' + String(value));
         console.log(ROOM_PARAMS)
         updateParams();
@@ -125,8 +213,9 @@ function updateParams() {
     animate();
 }
 
+//UPDATE ROOM SIZE
 function updateRoom(){
-    for (let i = ROOM_PARAMS.width / -2; i < ROOM_PARAMS.width / 2; i++) {
+    for (let i = ROOM_PARAMS.depth / -2; i < ROOM_PARAMS.depth / 2; i++) {
         for (let j = ROOM_PARAMS.length / -2; j < ROOM_PARAMS.length / 2; j++) {
             const material = new THREE.MeshBasicMaterial({
                 color: 0x000000,
@@ -135,8 +224,8 @@ function updateRoom(){
             const plane = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
                 color: 0xeeeeee
             }));
-            plane.position.x = i;
-            plane.position.y = j;
+            plane.position.y = i;
+            plane.position.x = j;
             plane.name = "grid";
             plane.userData = {
                 loc_i: ROOM_PARAMS.width / 2 + i,
@@ -147,7 +236,35 @@ function updateRoom(){
     }
 }
 
-//CHANGE THIS TO PERSPECTIVE
+// CHECKS INTERSECTIONS
+function render() {
+    raycaster.setFromCamera(mouse, camera);
+    var intersects = raycaster.intersectObjects(scene.children);
+    if (intersects.length > 0) {
+
+        if (INTERSECTED != intersects[0].object) {
+
+            if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+
+            if(INTERSECTED != null){
+                console.log(INTERSECTED)
+            }
+
+            
+
+            INTERSECTED = intersects[0].object;
+            INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+            INTERSECTED.material.emissive.setHex(0xff0000);
+        }
+
+    } else {
+        if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+        INTERSECTED = null;
+    }
+    renderer.render(scene, camera);
+}
+
+//TODO CHANGE THIS TO PERSPECTIVE
 function onWindowResize() {
 
     var aspect = window.innerWidth / window.innerHeight;
@@ -177,28 +294,4 @@ function animate() {
     render();
     stats.update();
 
-}
-
-function render() {
-    raycaster.setFromCamera(mouse, camera);
-    var intersects = raycaster.intersectObjects(scene.children);
-    if (intersects.length > 0) {
-        console.log(intersects.length)
-
-        if (INTERSECTED != intersects[0].object) {
-
-            console.log(INTERSECTED)
-
-            if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
-
-            INTERSECTED = intersects[0].object;
-            INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-            INTERSECTED.material.emissive.setHex(0xff0000);
-        }
-
-    } else {
-        if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
-        INTERSECTED = null;
-    }
-    renderer.render(scene, camera);
 }
