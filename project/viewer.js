@@ -139,6 +139,24 @@ function initTweakPane() {
         },
     });
 
+    const climate_pane = new Tweakpane({
+        container: document.getElementById('climate_pane'),
+        title: 'Climate',
+    })
+
+    climate_pane.addInput(CLIMATE_PARAMS, 'longitude');
+    climate_pane.addInput(CLIMATE_PARAMS, 'latitude');
+    climate_pane.addInput(CLIMATE_PARAMS, 'timeZoneOffset');
+
+    const time_pane = new Tweakpane({
+        container: document.getElementById('time_pane'),
+        title: 'Time',
+    })
+
+    time_pane.addInput(TIME_PARAMS, 'hour');
+    time_pane.addInput(TIME_PARAMS, 'day');
+    time_pane.addInput(TIME_PARAMS, 'month');
+
     const geometry_pane = new Tweakpane({
         container: document.getElementById('room_pane'),
     });
@@ -320,7 +338,7 @@ function updateRoom(){
     //geo.createGlazingForRect = function(rectHeight, wallLength, glazingRatio, windowWidth, winHeight, silHeight, distBreakup, ratioOrWidth, changedVar)
     var geoResult = geo.createGlazingForRect(
         parseFloat(ROOM_PARAMS.ceilHeight), 
-        parseFloat(ROOM_PARAMS.depth), 
+        parseFloat(ROOM_PARAMS.length), 
         WINDOW_PARAMS.glazingRatio/100.0, 
         parseFloat(WINDOW_PARAMS.width), 
         parseFloat(WINDOW_PARAMS.heightFromSill), 
@@ -342,11 +360,11 @@ function updateRoom(){
     for(let i = 0; i < r.glzCoords.length; i++){
         const window = [];
 
-            window.push( new THREE.Vector3( r.glzCoords[i][0][0], r.glzCoords[i][0][1], r.glzCoords[i][0][2] ) );
-            window.push( new THREE.Vector3( r.glzCoords[i][1][0], r.glzCoords[i][1][1], r.glzCoords[i][1][2] ) );
-            window.push( new THREE.Vector3( r.glzCoords[i][2][0], r.glzCoords[i][2][1], r.glzCoords[i][2][2] ) );
-            window.push( new THREE.Vector3( r.glzCoords[i][3][0], r.glzCoords[i][3][1], r.glzCoords[i][3][2] ) );
-            window.push( new THREE.Vector3( r.glzCoords[i][0][0], r.glzCoords[i][0][1], r.glzCoords[i][0][2] ) );
+            window.push( new THREE.Vector3( r.glzCoords[i][0][0] - 0.5, r.glzCoords[i][0][1] - ROOM_PARAMS.depth / 2 - 0.5, r.glzCoords[i][0][2] - ROOM_PARAMS.gridHeight) );
+            window.push( new THREE.Vector3( r.glzCoords[i][1][0] - 0.5, r.glzCoords[i][1][1] - ROOM_PARAMS.depth / 2 - 0.5, r.glzCoords[i][1][2] - ROOM_PARAMS.gridHeight) );
+            window.push( new THREE.Vector3( r.glzCoords[i][2][0] - 0.5, r.glzCoords[i][2][1] - ROOM_PARAMS.depth / 2 - 0.5, r.glzCoords[i][2][2] - ROOM_PARAMS.gridHeight) );
+            window.push( new THREE.Vector3( r.glzCoords[i][3][0] - 0.5, r.glzCoords[i][3][1] - ROOM_PARAMS.depth / 2 - 0.5, r.glzCoords[i][3][2] - ROOM_PARAMS.gridHeight) );
+            window.push( new THREE.Vector3( r.glzCoords[i][0][0] - 0.5, r.glzCoords[i][0][1] - ROOM_PARAMS.depth / 2 - 0.5, r.glzCoords[i][0][2] - ROOM_PARAMS.gridHeight) );
             
             lineGeometry = new THREE.BufferGeometry().setFromPoints( window );
             line = new THREE.Line( lineGeometry, lineMaterial );
