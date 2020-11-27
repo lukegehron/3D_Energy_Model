@@ -81,10 +81,10 @@ function init() {
     //THREE_CAMERA
     // var aspect = window.innerWidth / window.innerHeight;
     // camera = new THREE.OrthographicCamera( frustumSize * aspect / - 2, frustumSize * aspect / 2, frustumSize / 2, frustumSize / - 2, 0.1, 10000 );
-    camera = new THREE.PerspectiveCamera(0.1, window.innerWidth / window.innerHeight, 1, 100000);
-    camera.position.x = 20000;
-    camera.position.y = 20000;
-    camera.position.z = 20000;
+    camera = new THREE.PerspectiveCamera(1, window.innerWidth / window.innerHeight, 1, 100000);
+    camera.position.x = 2000;
+    camera.position.y = 2000;
+    camera.position.z = 2000;
     camera.up.set(0, 0, 1);
 
     scene = new THREE.Scene();
@@ -199,12 +199,19 @@ function initTweakPane() {
 
 //UPDATE TWEAKPANE PARAMETERS
 function updateParams() {
-    let count = 0;
+    // let count = 0;
     var selectedObject = scene.getObjectByName("grid");
     do {
         scene.remove(selectedObject);
         selectedObject = scene.getObjectByName("grid");
-        count++;
+        // count++;
+    } while (selectedObject != null)
+
+    var selectedObject = scene.getObjectByName("outline");
+    do {
+        scene.remove(selectedObject);
+        selectedObject = scene.getObjectByName("outline");
+        // count++;
     } while (selectedObject != null)
 
     updateRoom()
@@ -215,12 +222,14 @@ function updateParams() {
 
 //UPDATE ROOM SIZE
 function updateRoom(){
+
+    //CREATE GRID AT Z-HEIGHT 0
     for (let i = ROOM_PARAMS.depth / -2; i < ROOM_PARAMS.depth / 2; i++) {
         for (let j = ROOM_PARAMS.length / -2; j < ROOM_PARAMS.length / 2; j++) {
-            const material = new THREE.MeshBasicMaterial({
-                color: 0x000000,
-                side: THREE.DoubleSide
-            });
+            // const material = new THREE.MeshBasicMaterial({
+            //     color: 0x000000,
+            //     side: THREE.DoubleSide
+            // });
             const plane = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
                 color: 0xeeeeee
             }));
@@ -234,6 +243,75 @@ function updateRoom(){
             scene.add(plane);
         }
     }
+
+    const lineMaterial = new THREE.LineBasicMaterial({
+        color: 0x000000
+    });
+
+    const corner1 = []
+    const corner2 = []
+    const corner3 = []
+    const corner4 = []
+    const floor = []
+    const ceil = []
+    
+    const points = [];
+    corner1.push( new THREE.Vector3( ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / -2 - .5, - ROOM_PARAMS.gridHeight ) );
+    corner1.push( new THREE.Vector3( ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / -2 - .5, ROOM_PARAMS.ceilHeight - ROOM_PARAMS.gridHeight ) );
+
+    let lineGeometry = new THREE.BufferGeometry().setFromPoints( corner1 );
+    let line = new THREE.Line( lineGeometry, lineMaterial );
+    line.name = "outline"
+    scene.add( line );
+
+    corner2.push( new THREE.Vector3( ROOM_PARAMS.length / 2 - .5, ROOM_PARAMS.depth / 2 - .5, - ROOM_PARAMS.gridHeight ) );
+    corner2.push( new THREE.Vector3( ROOM_PARAMS.length / 2 - .5, ROOM_PARAMS.depth / 2 - .5, ROOM_PARAMS.ceilHeight - ROOM_PARAMS.gridHeight ) );
+
+    lineGeometry = new THREE.BufferGeometry().setFromPoints( corner2 );
+    line = new THREE.Line( lineGeometry, lineMaterial );
+    line.name = "outline"
+    scene.add( line );
+
+    corner3.push( new THREE.Vector3( ROOM_PARAMS.length / 2 - .5, ROOM_PARAMS.depth / -2 - .5, - ROOM_PARAMS.gridHeight ) );
+    corner3.push( new THREE.Vector3( ROOM_PARAMS.length / 2 - .5, ROOM_PARAMS.depth / -2 - .5, ROOM_PARAMS.ceilHeight - ROOM_PARAMS.gridHeight ) );
+
+    lineGeometry = new THREE.BufferGeometry().setFromPoints( corner3 );
+    line = new THREE.Line( lineGeometry, lineMaterial );
+    line.name = "outline"
+    scene.add( line );
+
+    corner4.push( new THREE.Vector3( ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / 2 - .5, - ROOM_PARAMS.gridHeight ) );
+    corner4.push( new THREE.Vector3( ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / 2 - .5, ROOM_PARAMS.ceilHeight - ROOM_PARAMS.gridHeight ) );
+
+    lineGeometry = new THREE.BufferGeometry().setFromPoints( corner4 );
+    line = new THREE.Line( lineGeometry, lineMaterial );
+    line.name = "outline"
+    scene.add( line );
+
+    //FLOOR OUTLINE
+    floor.push( new THREE.Vector3( ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / 2 - .5, - ROOM_PARAMS.gridHeight ) );
+    floor.push( new THREE.Vector3( ROOM_PARAMS.length / 2 - .5, ROOM_PARAMS.depth / 2 - .5, - ROOM_PARAMS.gridHeight ) );
+    floor.push( new THREE.Vector3( ROOM_PARAMS.length / 2 - .5, ROOM_PARAMS.depth / -2 - .5, - ROOM_PARAMS.gridHeight ) );
+    floor.push( new THREE.Vector3( ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / -2 - .5, - ROOM_PARAMS.gridHeight ) );
+    floor.push( new THREE.Vector3( ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / 2 - .5, - ROOM_PARAMS.gridHeight ) );
+    
+    lineGeometry = new THREE.BufferGeometry().setFromPoints( floor );
+    line = new THREE.Line( lineGeometry, lineMaterial );
+    line.name = "outline"
+    scene.add( line );
+
+    //CEILING OUTLINE
+    ceil.push( new THREE.Vector3( ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / 2 - .5, ROOM_PARAMS.ceilHeight - ROOM_PARAMS.gridHeight ) );
+    ceil.push( new THREE.Vector3( ROOM_PARAMS.length / 2 - .5, ROOM_PARAMS.depth / 2 - .5, ROOM_PARAMS.ceilHeight - ROOM_PARAMS.gridHeight ) );
+    ceil.push( new THREE.Vector3( ROOM_PARAMS.length / 2 - .5, ROOM_PARAMS.depth / -2 - .5, ROOM_PARAMS.ceilHeight - ROOM_PARAMS.gridHeight ) );
+    ceil.push( new THREE.Vector3( ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / -2 - .5, ROOM_PARAMS.ceilHeight - ROOM_PARAMS.gridHeight ) );
+    ceil.push( new THREE.Vector3( ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / 2 - .5, ROOM_PARAMS.ceilHeight - ROOM_PARAMS.gridHeight ) );
+
+    lineGeometry = new THREE.BufferGeometry().setFromPoints( ceil );
+    line = new THREE.Line( lineGeometry, lineMaterial );
+    line.name = "outline"
+    scene.add( line );
+
 }
 
 // CHECKS INTERSECTIONS
@@ -244,7 +322,7 @@ function render() {
 
         if (INTERSECTED != intersects[0].object) {
 
-            if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+            if (INTERSECTED) INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
 
             if(INTERSECTED != null){
                 console.log(INTERSECTED)
@@ -253,12 +331,12 @@ function render() {
             
 
             INTERSECTED = intersects[0].object;
-            INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-            INTERSECTED.material.emissive.setHex(0xff0000);
+            INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
+            INTERSECTED.material.color.setHex(0xff0000);
         }
 
     } else {
-        if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+        if (INTERSECTED) INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
         INTERSECTED = null;
     }
     renderer.render(scene, camera);
