@@ -230,15 +230,15 @@ function updateRoom(){
         transparent: true,
         opacity: 0.7
     });
-    for (let i = ROOM_PARAMS.depth / -2; i < ROOM_PARAMS.depth / 2; i++) {
-        for (let j = ROOM_PARAMS.length / -2; j < ROOM_PARAMS.length / 2; j++) {
+    for (let i = ROOM_PARAMS.length / -2; i < ROOM_PARAMS.length / 2; i++) {
+        for (let j = ROOM_PARAMS.depth / -2; j < ROOM_PARAMS.depth / 2; j++) {
             // const material = new THREE.MeshBasicMaterial({
             //     color: 0x000000,
             //     side: THREE.DoubleSide
             // });
             const plane = new THREE.Mesh(geometry, gridMaterial);
-            plane.position.y = i;
-            plane.position.x = j;
+            plane.position.x = i;
+            plane.position.y = j;
             plane.name = "grid";
             plane.userData = {
                 loc_i: ROOM_PARAMS.depth / 2 + i,
@@ -336,6 +336,23 @@ function updateRoom(){
     r.windowHeight = geoResult.windowHeight;
     r.sillHeight = geoResult.sillHeight;
     r.centLineDist = geoResult.centLineDist;
+
+    
+
+    for(let i = 0; i < r.glzCoords.length; i++){
+        const window = [];
+
+            window.push( new THREE.Vector3( r.glzCoords[i][0][0], r.glzCoords[i][0][1], r.glzCoords[i][0][2] ) );
+            window.push( new THREE.Vector3( r.glzCoords[i][1][0], r.glzCoords[i][1][1], r.glzCoords[i][1][2] ) );
+            window.push( new THREE.Vector3( r.glzCoords[i][2][0], r.glzCoords[i][2][1], r.glzCoords[i][2][2] ) );
+            window.push( new THREE.Vector3( r.glzCoords[i][3][0], r.glzCoords[i][3][1], r.glzCoords[i][3][2] ) );
+            window.push( new THREE.Vector3( r.glzCoords[i][0][0], r.glzCoords[i][0][1], r.glzCoords[i][0][2] ) );
+            
+            lineGeometry = new THREE.BufferGeometry().setFromPoints( window );
+            line = new THREE.Line( lineGeometry, lineMaterial );
+            line.name = "outline"
+            scene.add( line );
+    }
 
     console.log(r);
 }
