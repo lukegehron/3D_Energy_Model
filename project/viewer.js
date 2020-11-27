@@ -41,6 +41,8 @@ const WINDOW_PARAMS = {
     heightFromSill: 7.0,
     sillHeight: 2.0,
     glazingBy: 0,
+    glazingRatio: 40,
+    width: 14,
     separation: 12
 }
 
@@ -314,6 +316,28 @@ function updateRoom(){
     line.name = "outline"
     scene.add( line );
 
+    //GEO Result - TAKES DATA FROM THE GEO.JS FILE
+    //geo.createGlazingForRect = function(rectHeight, wallLength, glazingRatio, windowWidth, winHeight, silHeight, distBreakup, ratioOrWidth, changedVar)
+    var geoResult = geo.createGlazingForRect(
+        parseFloat(ROOM_PARAMS.ceilHeight), 
+        parseFloat(ROOM_PARAMS.depth), 
+        WINDOW_PARAMS.glazingRatio/100.0, 
+        parseFloat(WINDOW_PARAMS.width), 
+        parseFloat(WINDOW_PARAMS.heightFromSill), 
+        parseFloat(WINDOW_PARAMS.sillHeight), 
+        parseFloat(WINDOW_PARAMS.separation), 
+        WINDOW_PARAMS.glazingBy
+    );
+    var r = {}
+    r.wallCoords = geoResult.wallCoords;
+    r.glzCoords = geoResult.glzCoords;
+    r.glzRatio = geoResult.glzRatio;
+    r.windowWidth = geoResult.windowWidth;
+    r.windowHeight = geoResult.windowHeight;
+    r.sillHeight = geoResult.sillHeight;
+    r.centLineDist = geoResult.centLineDist;
+
+    console.log(r);
 }
 
 // CHECKS INTERSECTIONS
