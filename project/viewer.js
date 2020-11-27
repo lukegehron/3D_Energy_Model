@@ -33,7 +33,7 @@ const ROOM_PARAMS = {
     orientation: 0,
     ceilHeight: 12,
     gridHeight:3,
-    length: 40,
+    length: 30,
     depth: 20
 };
 
@@ -65,7 +65,6 @@ const VERTICAL_SHADE_PARAMS = {
     relativeHeight: 0,
     angle: 90
 }
-
 
 var mouse = new THREE.Vector2(), INTERSECTED;
 var frustumSize = 1000;
@@ -103,7 +102,7 @@ function init() {
     raycaster = new THREE.Raycaster();
 
     //THREE_RENDERER
-    renderer = new THREE.WebGLRenderer();
+    renderer = new THREE.WebGLRenderer( {antialias: true});
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     container.appendChild(renderer.domElement);
@@ -224,20 +223,23 @@ function updateParams() {
 function updateRoom(){
 
     //CREATE GRID AT Z-HEIGHT 0
+    const gridMaterial = new THREE.MeshLambertMaterial({
+        color: 0xeeeeee,
+        transparent: true,
+        opacity: 0.7
+    });
     for (let i = ROOM_PARAMS.depth / -2; i < ROOM_PARAMS.depth / 2; i++) {
         for (let j = ROOM_PARAMS.length / -2; j < ROOM_PARAMS.length / 2; j++) {
             // const material = new THREE.MeshBasicMaterial({
             //     color: 0x000000,
             //     side: THREE.DoubleSide
             // });
-            const plane = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({
-                color: 0xeeeeee
-            }));
+            const plane = new THREE.Mesh(geometry, gridMaterial);
             plane.position.y = i;
             plane.position.x = j;
             plane.name = "grid";
             plane.userData = {
-                loc_i: ROOM_PARAMS.width / 2 + i,
+                loc_i: ROOM_PARAMS.depth / 2 + i,
                 loc_j: ROOM_PARAMS.length / 2 + j
             }
             scene.add(plane);
@@ -245,7 +247,7 @@ function updateRoom(){
     }
 
     const lineMaterial = new THREE.LineBasicMaterial({
-        color: 0x000000
+        color: 0xaaaaaa
     });
 
     const corner1 = []
@@ -322,21 +324,20 @@ function render() {
 
         if (INTERSECTED != intersects[0].object) {
 
-            if (INTERSECTED) INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
+            // if (INTERSECTED) INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
 
-            if(INTERSECTED != null){
-                console.log(INTERSECTED)
+            if(INTERSECTED != null && INTERSECTED.name == "grid"){
+                // console.log(INTERSECTED)
+                console.log(INTERSECTED.userData.loc_i, INTERSECTED.userData.loc_j)
             }
 
-            
-
             INTERSECTED = intersects[0].object;
-            INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
-            INTERSECTED.material.color.setHex(0xff0000);
+            // INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
+            // INTERSECTED.material.color.setHex(0xff0000);
         }
 
     } else {
-        if (INTERSECTED) INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
+        // if (INTERSECTED) INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
         INTERSECTED = null;
     }
     renderer.render(scene, camera);
