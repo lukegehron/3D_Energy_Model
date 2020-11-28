@@ -1,5 +1,10 @@
 import * as THREE from '../build/three.module.js';
-import { OrbitControls } from "./jsm/controls/OrbitControls.js";
+import {
+    OrbitControls
+} from "./jsm/controls/OrbitControls.js";
+import {
+    ConvexGeometry
+} from "./jsm/geometries/ConvexGeometry.js";
 import Stats from './jsm/libs/stats.module.js';
 
 var container, stats;
@@ -32,7 +37,7 @@ const TIME_PARAMS = {
 const ROOM_PARAMS = {
     orientation: 0,
     ceilHeight: 12,
-    gridHeight:3,
+    gridHeight: 3,
     length: 30,
     depth: 20
 };
@@ -68,7 +73,8 @@ const VERTICAL_SHADE_PARAMS = {
     angle: 90
 }
 
-var mouse = new THREE.Vector2(), INTERSECTED;
+var mouse = new THREE.Vector2(),
+    INTERSECTED;
 var frustumSize = 1000;
 
 init();
@@ -104,11 +110,13 @@ function init() {
     raycaster = new THREE.Raycaster();
 
     //THREE_RENDERER
-    renderer = new THREE.WebGLRenderer( {antialias: true});
+    renderer = new THREE.WebGLRenderer({
+        antialias: true
+    });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     container.appendChild(renderer.domElement);
-    
+
     //THREE_CONTROLS
     cameraControls = new OrbitControls(camera, renderer.domElement);
     cameraControls.addEventListener('change', render);
@@ -119,10 +127,10 @@ function init() {
 
     document.addEventListener('mousemove', onDocumentMouseMove, false);
     window.addEventListener('resize', onWindowResize, false);
-    
+
     //TWEAKPANE_PANELS
     initTweakPane();
-    
+
 }
 
 //INITIALIZE TWEAKPANE PANELS
@@ -233,14 +241,21 @@ function updateParams() {
         // count++;
     } while (selectedObject != null)
 
+    var selectedObject = scene.getObjectByName("window");
+    do {
+        scene.remove(selectedObject);
+        selectedObject = scene.getObjectByName("window");
+        // count++;
+    } while (selectedObject != null)
+
     updateRoom()
 
-    
+
     animate();
 }
 
 //UPDATE ROOM SIZE
-function updateRoom(){
+function updateRoom() {
 
     //CREATE GRID AT Z-HEIGHT 0
     const gridMaterial = new THREE.MeshLambertMaterial({
@@ -276,74 +291,74 @@ function updateRoom(){
     const corner4 = []
     const floor = []
     const ceil = []
-    
+
     const points = [];
-    corner1.push( new THREE.Vector3( ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / -2 - .5, - ROOM_PARAMS.gridHeight ) );
-    corner1.push( new THREE.Vector3( ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / -2 - .5, ROOM_PARAMS.ceilHeight - ROOM_PARAMS.gridHeight ) );
+    corner1.push(new THREE.Vector3(ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / -2 - .5, -ROOM_PARAMS.gridHeight));
+    corner1.push(new THREE.Vector3(ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / -2 - .5, ROOM_PARAMS.ceilHeight - ROOM_PARAMS.gridHeight));
 
-    let lineGeometry = new THREE.BufferGeometry().setFromPoints( corner1 );
-    let line = new THREE.Line( lineGeometry, lineMaterial );
+    let lineGeometry = new THREE.BufferGeometry().setFromPoints(corner1);
+    let line = new THREE.Line(lineGeometry, lineMaterial);
     line.name = "outline"
-    scene.add( line );
+    scene.add(line);
 
-    corner2.push( new THREE.Vector3( ROOM_PARAMS.length / 2 - .5, ROOM_PARAMS.depth / 2 - .5, - ROOM_PARAMS.gridHeight ) );
-    corner2.push( new THREE.Vector3( ROOM_PARAMS.length / 2 - .5, ROOM_PARAMS.depth / 2 - .5, ROOM_PARAMS.ceilHeight - ROOM_PARAMS.gridHeight ) );
+    corner2.push(new THREE.Vector3(ROOM_PARAMS.length / 2 - .5, ROOM_PARAMS.depth / 2 - .5, -ROOM_PARAMS.gridHeight));
+    corner2.push(new THREE.Vector3(ROOM_PARAMS.length / 2 - .5, ROOM_PARAMS.depth / 2 - .5, ROOM_PARAMS.ceilHeight - ROOM_PARAMS.gridHeight));
 
-    lineGeometry = new THREE.BufferGeometry().setFromPoints( corner2 );
-    line = new THREE.Line( lineGeometry, lineMaterial );
+    lineGeometry = new THREE.BufferGeometry().setFromPoints(corner2);
+    line = new THREE.Line(lineGeometry, lineMaterial);
     line.name = "outline"
-    scene.add( line );
+    scene.add(line);
 
-    corner3.push( new THREE.Vector3( ROOM_PARAMS.length / 2 - .5, ROOM_PARAMS.depth / -2 - .5, - ROOM_PARAMS.gridHeight ) );
-    corner3.push( new THREE.Vector3( ROOM_PARAMS.length / 2 - .5, ROOM_PARAMS.depth / -2 - .5, ROOM_PARAMS.ceilHeight - ROOM_PARAMS.gridHeight ) );
+    corner3.push(new THREE.Vector3(ROOM_PARAMS.length / 2 - .5, ROOM_PARAMS.depth / -2 - .5, -ROOM_PARAMS.gridHeight));
+    corner3.push(new THREE.Vector3(ROOM_PARAMS.length / 2 - .5, ROOM_PARAMS.depth / -2 - .5, ROOM_PARAMS.ceilHeight - ROOM_PARAMS.gridHeight));
 
-    lineGeometry = new THREE.BufferGeometry().setFromPoints( corner3 );
-    line = new THREE.Line( lineGeometry, lineMaterial );
+    lineGeometry = new THREE.BufferGeometry().setFromPoints(corner3);
+    line = new THREE.Line(lineGeometry, lineMaterial);
     line.name = "outline"
-    scene.add( line );
+    scene.add(line);
 
-    corner4.push( new THREE.Vector3( ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / 2 - .5, - ROOM_PARAMS.gridHeight ) );
-    corner4.push( new THREE.Vector3( ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / 2 - .5, ROOM_PARAMS.ceilHeight - ROOM_PARAMS.gridHeight ) );
+    corner4.push(new THREE.Vector3(ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / 2 - .5, -ROOM_PARAMS.gridHeight));
+    corner4.push(new THREE.Vector3(ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / 2 - .5, ROOM_PARAMS.ceilHeight - ROOM_PARAMS.gridHeight));
 
-    lineGeometry = new THREE.BufferGeometry().setFromPoints( corner4 );
-    line = new THREE.Line( lineGeometry, lineMaterial );
+    lineGeometry = new THREE.BufferGeometry().setFromPoints(corner4);
+    line = new THREE.Line(lineGeometry, lineMaterial);
     line.name = "outline"
-    scene.add( line );
+    scene.add(line);
 
     //FLOOR OUTLINE
-    floor.push( new THREE.Vector3( ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / 2 - .5, - ROOM_PARAMS.gridHeight ) );
-    floor.push( new THREE.Vector3( ROOM_PARAMS.length / 2 - .5, ROOM_PARAMS.depth / 2 - .5, - ROOM_PARAMS.gridHeight ) );
-    floor.push( new THREE.Vector3( ROOM_PARAMS.length / 2 - .5, ROOM_PARAMS.depth / -2 - .5, - ROOM_PARAMS.gridHeight ) );
-    floor.push( new THREE.Vector3( ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / -2 - .5, - ROOM_PARAMS.gridHeight ) );
-    floor.push( new THREE.Vector3( ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / 2 - .5, - ROOM_PARAMS.gridHeight ) );
-    
-    lineGeometry = new THREE.BufferGeometry().setFromPoints( floor );
-    line = new THREE.Line( lineGeometry, lineMaterial );
+    floor.push(new THREE.Vector3(ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / 2 - .5, -ROOM_PARAMS.gridHeight));
+    floor.push(new THREE.Vector3(ROOM_PARAMS.length / 2 - .5, ROOM_PARAMS.depth / 2 - .5, -ROOM_PARAMS.gridHeight));
+    floor.push(new THREE.Vector3(ROOM_PARAMS.length / 2 - .5, ROOM_PARAMS.depth / -2 - .5, -ROOM_PARAMS.gridHeight));
+    floor.push(new THREE.Vector3(ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / -2 - .5, -ROOM_PARAMS.gridHeight));
+    floor.push(new THREE.Vector3(ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / 2 - .5, -ROOM_PARAMS.gridHeight));
+
+    lineGeometry = new THREE.BufferGeometry().setFromPoints(floor);
+    line = new THREE.Line(lineGeometry, lineMaterial);
     line.name = "outline"
-    scene.add( line );
+    scene.add(line);
 
     //CEILING OUTLINE
-    ceil.push( new THREE.Vector3( ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / 2 - .5, ROOM_PARAMS.ceilHeight - ROOM_PARAMS.gridHeight ) );
-    ceil.push( new THREE.Vector3( ROOM_PARAMS.length / 2 - .5, ROOM_PARAMS.depth / 2 - .5, ROOM_PARAMS.ceilHeight - ROOM_PARAMS.gridHeight ) );
-    ceil.push( new THREE.Vector3( ROOM_PARAMS.length / 2 - .5, ROOM_PARAMS.depth / -2 - .5, ROOM_PARAMS.ceilHeight - ROOM_PARAMS.gridHeight ) );
-    ceil.push( new THREE.Vector3( ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / -2 - .5, ROOM_PARAMS.ceilHeight - ROOM_PARAMS.gridHeight ) );
-    ceil.push( new THREE.Vector3( ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / 2 - .5, ROOM_PARAMS.ceilHeight - ROOM_PARAMS.gridHeight ) );
+    ceil.push(new THREE.Vector3(ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / 2 - .5, ROOM_PARAMS.ceilHeight - ROOM_PARAMS.gridHeight));
+    ceil.push(new THREE.Vector3(ROOM_PARAMS.length / 2 - .5, ROOM_PARAMS.depth / 2 - .5, ROOM_PARAMS.ceilHeight - ROOM_PARAMS.gridHeight));
+    ceil.push(new THREE.Vector3(ROOM_PARAMS.length / 2 - .5, ROOM_PARAMS.depth / -2 - .5, ROOM_PARAMS.ceilHeight - ROOM_PARAMS.gridHeight));
+    ceil.push(new THREE.Vector3(ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / -2 - .5, ROOM_PARAMS.ceilHeight - ROOM_PARAMS.gridHeight));
+    ceil.push(new THREE.Vector3(ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / 2 - .5, ROOM_PARAMS.ceilHeight - ROOM_PARAMS.gridHeight));
 
-    lineGeometry = new THREE.BufferGeometry().setFromPoints( ceil );
-    line = new THREE.Line( lineGeometry, lineMaterial );
+    lineGeometry = new THREE.BufferGeometry().setFromPoints(ceil);
+    line = new THREE.Line(lineGeometry, lineMaterial);
     line.name = "outline"
-    scene.add( line );
+    scene.add(line);
 
     //GEO Result - TAKES DATA FROM THE GEO.JS FILE
     //geo.createGlazingForRect = function(rectHeight, wallLength, glazingRatio, windowWidth, winHeight, silHeight, distBreakup, ratioOrWidth, changedVar)
     var geoResult = geo.createGlazingForRect(
-        parseFloat(ROOM_PARAMS.ceilHeight), 
-        parseFloat(ROOM_PARAMS.length), 
-        WINDOW_PARAMS.glazingRatio/100.0, 
-        parseFloat(WINDOW_PARAMS.width), 
-        parseFloat(WINDOW_PARAMS.heightFromSill), 
-        parseFloat(WINDOW_PARAMS.sillHeight), 
-        parseFloat(WINDOW_PARAMS.separation), 
+        parseFloat(ROOM_PARAMS.ceilHeight),
+        parseFloat(ROOM_PARAMS.length),
+        WINDOW_PARAMS.glazingRatio / 100.0,
+        parseFloat(WINDOW_PARAMS.width),
+        parseFloat(WINDOW_PARAMS.heightFromSill),
+        parseFloat(WINDOW_PARAMS.sillHeight),
+        parseFloat(WINDOW_PARAMS.separation),
         WINDOW_PARAMS.glazingBy
     );
     var r = {}
@@ -355,21 +370,34 @@ function updateRoom(){
     r.sillHeight = geoResult.sillHeight;
     r.centLineDist = geoResult.centLineDist;
 
-    
 
-    for(let i = 0; i < r.glzCoords.length; i++){
+    let windowMaterial = new THREE.MeshLambertMaterial({
+        color: 0xeeeeff,
+        transparent: true,
+        opacity: 0.7,
+        side: THREE.DoubleSide
+    });
+    for (let i = 0; i < r.glzCoords.length; i++) {
         const window = [];
 
-            window.push( new THREE.Vector3( r.glzCoords[i][0][0] - 0.5, r.glzCoords[i][0][1] - ROOM_PARAMS.depth / 2 - 0.5, r.glzCoords[i][0][2] - ROOM_PARAMS.gridHeight) );
-            window.push( new THREE.Vector3( r.glzCoords[i][1][0] - 0.5, r.glzCoords[i][1][1] - ROOM_PARAMS.depth / 2 - 0.5, r.glzCoords[i][1][2] - ROOM_PARAMS.gridHeight) );
-            window.push( new THREE.Vector3( r.glzCoords[i][2][0] - 0.5, r.glzCoords[i][2][1] - ROOM_PARAMS.depth / 2 - 0.5, r.glzCoords[i][2][2] - ROOM_PARAMS.gridHeight) );
-            window.push( new THREE.Vector3( r.glzCoords[i][3][0] - 0.5, r.glzCoords[i][3][1] - ROOM_PARAMS.depth / 2 - 0.5, r.glzCoords[i][3][2] - ROOM_PARAMS.gridHeight) );
-            window.push( new THREE.Vector3( r.glzCoords[i][0][0] - 0.5, r.glzCoords[i][0][1] - ROOM_PARAMS.depth / 2 - 0.5, r.glzCoords[i][0][2] - ROOM_PARAMS.gridHeight) );
-            
-            lineGeometry = new THREE.BufferGeometry().setFromPoints( window );
-            line = new THREE.Line( lineGeometry, lineMaterial );
-            line.name = "outline"
-            scene.add( line );
+        window.push(new THREE.Vector3(r.glzCoords[i][0][0] - 0.5, r.glzCoords[i][0][1] - ROOM_PARAMS.depth / 2 - 0.5, r.glzCoords[i][0][2] - ROOM_PARAMS.gridHeight));
+        window.push(new THREE.Vector3(r.glzCoords[i][1][0] - 0.5, r.glzCoords[i][1][1] - ROOM_PARAMS.depth / 2 - 0.5, r.glzCoords[i][1][2] - ROOM_PARAMS.gridHeight));
+        window.push(new THREE.Vector3(r.glzCoords[i][2][0] - 0.5, r.glzCoords[i][2][1] - ROOM_PARAMS.depth / 2 - 0.5, r.glzCoords[i][2][2] - ROOM_PARAMS.gridHeight));
+        window.push(new THREE.Vector3(r.glzCoords[i][3][0] - 0.5, r.glzCoords[i][3][1] - ROOM_PARAMS.depth / 2 - 0.5, r.glzCoords[i][3][2] - ROOM_PARAMS.gridHeight));
+        window.push(new THREE.Vector3(r.glzCoords[i][0][0] - 0.5, r.glzCoords[i][0][1] - ROOM_PARAMS.depth / 2 - 0.5, r.glzCoords[i][0][2] - ROOM_PARAMS.gridHeight));
+
+        lineGeometry = new THREE.BufferGeometry().setFromPoints(window);
+        line = new THREE.Line(lineGeometry, lineMaterial);
+        line.name = "outline"
+        scene.add(line);
+
+        const geometry1 = new THREE.PlaneBufferGeometry(r.windowWidth, r.windowHeight);
+        geometry1.translate(((r.glzCoords[i][0][0] + r.glzCoords[i][1][0]) / 2) - 0.5, -ROOM_PARAMS.gridHeight + r.windowHeight / 2 + WINDOW_PARAMS.sillHeight, r.glzCoords[i][0][1] + ROOM_PARAMS.depth / 2 + 0.5);
+        geometry1.rotateX(Math.PI * 0.5);
+        const plane1 = new THREE.Mesh(geometry1, windowMaterial);
+
+        plane1.name = "window";
+        scene.add(plane1);
     }
 
     console.log(r);
@@ -385,7 +413,7 @@ function render() {
 
             // if (INTERSECTED) INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
 
-            if(INTERSECTED != null && INTERSECTED.name == "grid"){
+            if (INTERSECTED != null && INTERSECTED.name == "grid") {
                 // console.log(INTERSECTED)
                 console.log(INTERSECTED.userData.loc_i, INTERSECTED.userData.loc_j)
             }
