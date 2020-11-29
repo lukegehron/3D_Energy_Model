@@ -271,3 +271,171 @@ geo.createGlazingForRect = function(rectHeight, wallLength, glazingRatio, window
     r.glzCoords = finalGlzCoords;
 	return r
 }
+
+//This formula for calculating solid angles and view factors to orthagonal surfaces comes from:
+//Tredre, Barbara. (1965). Assessment of Mean Radiant Temperature in Indoor Envrionments.
+//Britich Journal of Indutrial Medecine, 22, 58.
+geo.calcViewFacs = function(srfCoords, locPts) {
+    // Define a list to be filled up with view factors.
+	var viewFact = []
+
+	for (var i = 0; i < locPts.length; i++) {
+		var pt = locPts[i]
+        //Define variables to catch when we should be subtracting quadrants instead of summing them.
+        var removeLowQuads = false
+        var removeHiQuads = false
+        var removeLeftQuads = false
+        var removeRightQuads = false
+
+        //Define the dimensions of the windows in relation to the point.
+        var a = pt[0]-srfCoords[0][0] //a = left
+        var b = srfCoords[1][0]-pt[0] //b = right
+        var c = srfCoords[2][2]-pt[2] //c = upper
+        var d = pt[2]-srfCoords[1][2] //d = lower
+        var z = pt[1]
+
+        //Check to see if any value are negative, indicating that we must subtract quads instead of summing them.
+        if (d < 0){
+            d = -d;
+            removeLowQuads = true;
+		}
+        if (c < 0){
+            c = -c;
+            removeHiQuads = true;
+		}
+        if (a < 0){
+            a = -a;
+            removeLeftQuads = true;
+		}
+        if (b < 0){
+            b = -b;
+            removeRightQuads = true;
+		}
+
+        //Compute the product of the dimensions.
+        var ac = a*c
+        var bc = b*c
+        var ad = a*d
+        var bd = b*d
+
+		// Compute the P distances by pythagorean theorem.
+        var PA = sqrt((a*a)+(d*d))
+        var distP4 = sqrt((PA*PA)+(z*z))
+
+        var PB = sqrt((a*a)+(c*c))
+        var distP1 = sqrt((PB*PB)+(z*z))
+
+        var PC = sqrt((b*b)+(c*c))
+        var distP2 = sqrt((PC*PC)+(z*z))
+
+        var PD = sqrt((b*b)+(d*d))
+        var distP3 = sqrt((PD*PD)+(z*z))
+
+		// Compute the solid angles to the quadrants.
+		var viewP1 = atan(ac/(z*distP1)) // Upper Left
+		var viewP2 = atan(bc/(z*distP2)) // Upper Right
+		var viewP3 = atan(bd/(z*distP3)) // Lower Right
+		var viewP4 = atan(ad/(z*distP4)) // Lower Left
+
+        //Make sure that the quadrant solid angles have the right sign for computing the full solid angle to the window.
+        if (removeLowQuads == true && removeLeftQuads == true){
+			var solid1 = -viewP1, solid2 = viewP2, solid3 = -viewP3, solid4 = viewP4
+		} else if (removeLowQuads == true && removeRightQuads == true){
+			var solid1 = viewP1, solid2 = -viewP2, solid3 = viewP3, solid4 = -viewP4
+		} else if (removeLowQuads == true){
+			var solid1 = viewP1, solid2 = viewP2, solid3 = -viewP3, solid4 = -viewP4
+		} else if (removeHiQuads == true && removeLeftQuads == true){
+			var solid1 = viewP1, solid2 = -viewP2, solid3 = viewP3, solid4 = -viewP4
+		} else if (removeHiQuads == true && removeRightQuads == true){
+			var solid1 = -viewP1, solid2 = viewP2, solid3 = -viewP3, solid4 = viewP4
+		} else if (removeHiQuads == true){
+			var solid1 = -viewP1, solid2 = -viewP2, solid3 = viewP3, solid4 = viewP4
+		} else if (removeLeftQuads == true){
+			var solid1 = -viewP1, solid2 = viewP2, solid3 = viewP3, solid4 = -viewP4
+		} else if (removeRightQuads == true){
+			var solid1 = viewP1, solid2 = -viewP2, solid3 = -viewP3, solid4 = viewP4
+		} else {
+			var solid1 = viewP1, solid2 = viewP2, solid3 = viewP3, solid4 = viewP4
+		}
+
+        //Compute the view factors by summin and dividing by 4*Pi
+        var srfView = (solid1+solid2+solid3+solid4)/12.566
+
+        viewFact.push(srfView)
+    }
+
+    return viewFact
+}
+
+
+let occDistFromFacade = 3;
+//Calculate all viewFactors for the graph.
+geo.computeAllViewFac = function(wallCoords, glazingCoords, occDistToWall){
+	var facadeDist = []// The distance from the facade at which we are evaluating comfort.
+	var locationPts = [] // The pointlocations in relation to the facade where we are evaluating comfort.
+
+	if (unitSys == "IP"){
+		var seatH = 2 // The average height above the ground that the occupan is located in feet.
+		var numPts = 12 // The number of points to generate.  They will be generated at each foot.
+	} else {
+		var seatH = 0.6096 // The average height above the ground that the occupan is located in meters.
+		var numPts = 8 // The number of points to generate.  They will be generated at 50 cm.
+	}
+
+	for (var i = 0; i < numPts; i++) {
+		if (unitSys == "IP"){
+			var dist = i+1
+		} else {
+			var dist = (i+1)*0.5
+		}
+		facadeDist.push(dist)
+		locationPts.push([parseFloat(occDistToWall),dist,seatH])
+	}
+	// Add a point for the occupant distance from facade.
+	facadeDist.push(parseFloat(occDistFromFacade))
+	locationPts.push([parseFloat(occDistToWall),parseFloat(occDistFromFacade),seatH])
+
+	// Calculate the view factor to the glazing
+	var glzViewFac = geo.calcViewFacs(glazingCoords[0], locationPts)
+	for (var i = 1; i < glazingCoords.length; i++){
+		var viewFa = geo.calcViewFacs(glazingCoords[i], locationPts)
+		for (var j = 0; j < viewFa.length; j++){
+			glzViewFac[j] +=  viewFa[j]
+		}
+	}
+
+	// Calculate the view factor to the wall.
+	var fullWallViewFac = geo.calcViewFacs(wallCoords, locationPts)
+	var wallViewFac = []
+	for (var i = 0; i < fullWallViewFac.length; i++){
+		var wallView = fullWallViewFac[i]
+		wallViewFac.push(wallView - glzViewFac[i])
+	}
+
+	// Calculate the intervals along the facade where the occupant is directly in front of the window.
+	var windIntervals = [[],[]]
+	if (parseInt(glazingCoords.length/2) != glazingCoords.length/2) {
+		for (var i = 0; i < parseInt(glazingCoords.length/2)+1; i++) {
+			if (i == 0){
+				windIntervals[0].push(0)
+				windIntervals[1].push(glazingCoords[parseInt(glazingCoords.length/2)][1][0])
+			} else {
+				windIntervals[1].push(abs(glazingCoords[parseInt(glazingCoords.length/2) + i][0][0]))
+				windIntervals[0].push(abs(glazingCoords[parseInt(glazingCoords.length/2) + i][1][0]))
+			}
+		}
+	} else {
+		for (var i = 0; i < glazingCoords.length/2; i++) {
+			windIntervals[1].push(abs(glazingCoords[parseInt(glazingCoords.length/2) + i][0][0]))
+			windIntervals[0].push(abs(glazingCoords[parseInt(glazingCoords.length/2) + i][1][0]))
+		}
+	}
+
+	//Return the coordinates of the wall.
+	var r = {}
+    r.wallViews = wallViewFac;
+    r.glzViews = glzViewFac;
+	r.facadeDist = facadeDist;
+	r.windIntervals = windIntervals;
+	return r
+}

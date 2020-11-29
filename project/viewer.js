@@ -33,7 +33,7 @@ const ROOM_PARAMS = {
     ceilHeight: 12,
     gridHeight: 2,
     length: 30,
-    depth: 20
+    depth: 16
 };
 
 const WINDOW_PARAMS = {
@@ -67,6 +67,24 @@ const VERTICAL_SHADE_PARAMS = {
     angle: 90
 }
 
+const WINTER_COMFORT_PARAMS = {
+	occDistToWallCenter: 3,
+
+	uvalueValue: 0.35,
+	calcUVal: 0.29,
+	intLowEChecked: 0,
+	intLowEEmissivity: 0,
+
+	outdoorTempValue: 10,
+	airtempValue: 72,
+	humidityValue: 20,
+
+	rvalueValue: 15,
+	airspeedValue: 10,
+	clothingValue: 0.85,
+	metabolic: 1.2
+}
+
 var mouse = new THREE.Vector2(),
     INTERSECTED;
 var frustumSize = 1000;
@@ -84,6 +102,32 @@ let myCheck = 1;
 let r;
 
 let gridColorArray = [];
+
+var case1Data = {
+	ceilingHeightValue: ROOM_PARAMS.ceilHeight,
+	wallLen: ROOM_PARAMS.length,
+	windowHeightValue: WINDOW_PARAMS.heightFromSill,
+	windowWidthValue: WINDOW_PARAMS.width,
+	glzRatioValue: WINDOW_PARAMS.glazingRatio,
+	sillHeightValue: WINDOW_PARAMS.sillHeight,
+	distanceWindows: WINDOW_PARAMS.separation,
+
+	occDistToWallCenter: WINTER_COMFORT_PARAMS.occDistToWallCenter,
+
+	uvalueValue: WINTER_COMFORT_PARAMS.uvalueValue,
+	calcUVal: WINTER_COMFORT_PARAMS.calcUVal,
+	intLowEChecked: WINTER_COMFORT_PARAMS.intLowEChecked,
+	intLowEEmissivity: WINTER_COMFORT_PARAMS.intLowEEmissivity,
+
+	outdoorTempValue: WINTER_COMFORT_PARAMS.outdoorTempValue,
+	airtempValue: WINTER_COMFORT_PARAMS.airtempValue,
+	humidityValue: WINTER_COMFORT_PARAMS.humidityValue,
+
+	rvalueValue: WINTER_COMFORT_PARAMS.rvalueValue,
+	airspeedValue: WINTER_COMFORT_PARAMS.airspeedValue,
+	clothingValue: WINTER_COMFORT_PARAMS.clothingValue,
+	metabolic: WINTER_COMFORT_PARAMS.metabolic
+}
 
 
 
@@ -265,8 +309,6 @@ function updateParams() {
 }
 
 //UPDATE ROOM SIZE
-
-
 function updateRoom() {
     var geoResult = geo.createGlazingForRect(
         parseFloat(ROOM_PARAMS.ceilHeight),
@@ -290,6 +332,8 @@ function updateRoom() {
     console.log(r);
     getSolar();
     doTrig();
+    updateData(case1Data);
+    // console.log(case1Data);
 
     let colorCount = 0;
 
@@ -299,6 +343,8 @@ function updateRoom() {
         transparent: true,
         opacity: 0.7
     });
+
+    let prevN = ROOM_PARAMS.length / 2;
     for (let i = ROOM_PARAMS.depth / -2; i < ROOM_PARAMS.depth / 2; i++) {
         for (let j = ROOM_PARAMS.length / -2; j < ROOM_PARAMS.length / 2; j++) {
             // const material = new THREE.MeshBasicMaterial({
@@ -309,8 +355,50 @@ function updateRoom() {
             if(isNaN(gridColorArray[colorCount])){
                 gridColorArray[colorCount] = 0;
             }
+            
+
+            if(typeof resultsArray[colorCount] === 'undefined' || isNaN(resultsArray[colorCount].mrt)){
+                resultsArray[colorCount] = resultsArray[colorCount - 1];
+            }
+
+            // console.log(resultsArray[colorCount].mrt)
+            // console.log(colorCount)
+            // console.log(multiDimResults)
+            // console.log(i*-2 / ROOM_PARAMS.depth -1 )
+            let k = ROOM_PARAMS.length / 2 + j
+            let m = ROOM_PARAMS.depth / 2 + i
+
+            let n = 14 - k;
+            if(n < 0){
+                n = Math.abs(n+1)
+            }
+            
+            // let n = Math.abs((14-k) % 15);
+
+            // if(Math.abs(n - prevN) > 2){
+            //     n = prevN
+            // }
+            
+
+            // if(prevN == 0){
+            //     n = 0
+            //     prevN = 1;
+            // }else{
+            //     prevN = n
+            // }
+
+            console.log(n,m)
+            
+
+            
+
+            if(typeof multiDimResults[n][m] === 'undefined' || isNaN(multiDimResults[n][m].ppd)){
+                multiDimResults[n][m] = multiDimResults[n][m-1];
+            }
+
             const plane = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
-                    color: new THREE.Color(`rgb(255,`+(255 - gridColorArray[colorCount]*2)+`,`+(255 - gridColorArray[colorCount]*2)+`)`),
+                    color: new THREE.Color(`rgb(255,`+parseInt(255 -multiDimResults[n][m].ppd*2)+`,`+parseInt(255 -multiDimResults[n][m].ppd*2)+`)`),
+                    // color: new THREE.Color(`rgb(255,`+(255 - gridColorArray[colorCount]*2)+`,`+(255 - gridColorArray[colorCount]*2)+`)`),
                     side: THREE.DoubleSide
                 }));
             plane.position.x = j;
@@ -324,6 +412,7 @@ function updateRoom() {
             colorCount++;
         }
     }
+    console.log(multiDimResults)
 
     const lineMaterial = new THREE.LineBasicMaterial({
         color: 0xaaaaaa
@@ -490,8 +579,6 @@ function animate() {
 
 }
 
-
-
 function getSolar() {
     Lon = CLIMATE_PARAMS.longitude;
     Lat = CLIMATE_PARAMS.latitude;
@@ -517,7 +604,7 @@ function getSolar() {
     var date2;
     for (let i = 1; i <= 24 * timestep; i++) {
         hour = i / timestep;
-        console.log(hour)
+        // console.log(hour)
         if (i == ((parseInt(24 - Hour)) * timestep)) {
             date = new Date(2000, Month - 1, Day, hour - offset - TimeZone, (hour % parseInt(hour)) * 60);
             console.log((hour%parseInt(hour))*60 + " " + Hour);
@@ -525,10 +612,10 @@ function getSolar() {
             date2 = new Date(2000, Month - 1, Day, Hour - offset - TimeZone, 0);
         }
         dates.push(new Date(2000, Month - 1, Day, hour - offset - TimeZone, (hour % parseInt(hour)) * 60));
-        console.log(2000, Month - 1, Day, hour - offset - TimeZone, (hour % parseInt(hour)) * 60);
-        console.log(offset, TimeZone)
+        // console.log(2000, Month - 1, Day, hour - offset - TimeZone, (hour % parseInt(hour)) * 60);
+        // console.log(offset, TimeZone)
     }
-    console.log(dates);
+    // console.log(dates);
     //console.log(date);
 
 
@@ -1200,3 +1287,53 @@ console.log(gridColorArray)
 
   //END OF TRIG
 }
+
+/* ------ FUNCTIONS TO UPDATE DATA ------ */
+  // Called after adjusting values based on change events
+  function updateData(object) {
+    // Re-run the functions with the new inputs.
+    var fullData = script.computeData(object);
+
+    //update datasets with new value
+    var newDataset = fullData.dataSet;
+
+    var newGlzCoords = fullData.glzCoords;
+    var newGlzWidth = fullData.windowWidth;
+    var newGlzHeight = fullData.windowHeight;
+    var newGlzRatio = fullData.glzRatio;
+    var newSillHeight = fullData.sillHeight;
+    var newCentLineDist = fullData.centLineDist;
+    var newOccLocData = fullData.occPtInfo;
+    var newCondensation = fullData.condensation;
+
+
+    // Update values in object
+    //update window width
+    object.windowWidthValue = newGlzWidth;
+    //update glazing ratio
+    object.glzRatioValue = newGlzRatio*100;
+    //update window height
+    object.windowHeightValue = newGlzHeight;
+    //update sill height
+    object.sillHeightValue = newSillHeight;
+    //update dist btwn windows.
+    object.distanceWindows = newCentLineDist;
+
+    autocalcUValues();
+
+
+
+  }
+
+
+  function autocalcUValues() {
+    // Re-run the functions with the new inputs.
+    var fullDataCase1 = script.computeData(case1Data);
+
+    //Compute the U-Value required to make the occupant comfortable.
+    var numPtsLen = (fullDataCase1.wallViews.length)-1
+    case1Data.calcUVal = uVal.uValFinal(fullDataCase1.wallViews[numPtsLen], fullDataCase1.glzViews[numPtsLen], fullDataCase1.facadeDist[numPtsLen], fullDataCase1.dwnPPDFac, parseFloat(case1Data.windowHeightValue), parseFloat(case1Data.sillHeightValue), case1Data.airtempValue, case1Data.outdoorTempValue, case1Data.rvalueValue, case1Data.intLowEChecked, case1Data.intLowEEmissivity, case1Data.airspeedValue, case1Data.humidityValue, case1Data.metabolic, case1Data.clothingValue, ppdValue, ppdValue2);
+
+  }
+
+
