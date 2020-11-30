@@ -20,7 +20,7 @@ const TIME_PARAMS = {
 const ROOM_PARAMS = {
     orientation: 0,
     ceilHeight: 12,
-    gridHeight: 2,
+    gridHeight: 1,
     length: 32,
     depth: 16
 };

@@ -476,7 +476,7 @@ function updateRoom() {
         scene.add(line);
 
         const geometry1 = new THREE.PlaneBufferGeometry(r.windowWidth, r.windowHeight);
-        geometry1.translate(((r.glzCoords[i][0][0] + r.glzCoords[i][1][0]) / 2) - 0.5, -ROOM_PARAMS.gridHeight - r.windowHeight / 2 + WINDOW_PARAMS.sillHeight, r.glzCoords[i][0][1] - ROOM_PARAMS.depth / 2 - 0.5);
+        geometry1.translate(((r.glzCoords[i][0][0] + r.glzCoords[i][1][0]) / 2) - 0.5, +ROOM_PARAMS.gridHeight - r.windowHeight / 2 - WINDOW_PARAMS.sillHeight, r.glzCoords[i][0][1] - ROOM_PARAMS.depth / 2 - 0.5);
         geometry1.rotateX(Math.PI * -0.5);
         const plane1 = new THREE.Mesh(geometry1, windowMaterial);
 
