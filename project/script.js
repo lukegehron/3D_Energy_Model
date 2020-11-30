@@ -26,7 +26,7 @@ script.computeData = function(object) {
             multiDimResults[i].push(0);
         }
     }
-    console.log(multiDimResults[0].length)
+    // console.log(multiDimResults[0].length)
 
 
     for(let i = 0; i < halfWall; i++){

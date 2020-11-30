@@ -292,7 +292,7 @@ function updateRoom() {
     r.sillHeight = geoResult.sillHeight;
     r.centLineDist = geoResult.centLineDist;
 
-    console.log(r);
+    // console.log(r);
     getSolar();
     doTrig();
     updateData(case1Data);
@@ -316,7 +316,7 @@ function updateRoom() {
             // });
             // const plane = new THREE.Mesh(geometry, gridMaterial);
             if(isNaN(gridColorArray[colorCount])){
-                gridColorArray[colorCount] = 0;
+                gridColorArray[colorCount] = gridColorArray[ROOM_PARAMS.length];
             }
             
 
@@ -575,7 +575,7 @@ function getSolar() {
         // console.log(hour)
         if (i == ((parseInt(24 - Hour)) * timestep)) {
             date = new Date(2000, Month - 1, Day, hour - offset - TimeZone, (hour % parseInt(hour)) * 60);
-            console.log((hour%parseInt(hour))*60 + " " + Hour);
+            // console.log((hour%parseInt(hour))*60 + " " + Hour);
             let mytime = 24 - hour;
             date2 = new Date(2000, Month - 1, Day, Hour - offset - TimeZone, 0);
         }
@@ -624,7 +624,7 @@ function getSolar() {
         }
     }
 
-    console.log(coordinates)
+    // console.log(coordinates)
 }
 
 function doTrig(){
@@ -1259,8 +1259,8 @@ let decider = 0;
 
 
 
-console.log(gridColorArray.length);
-console.log(gridColorArray)
+// console.log(gridColorArray.length);
+// console.log(gridColorArray)
 
 
 
