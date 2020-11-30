@@ -1,28 +1,35 @@
 var script = script || {}
 
-let glzOrWidth = 0;
+let glzOrWidth = WINDOW_PARAMS.glazingBy;
 let changedVar = "sillHeightValue";
-let unitSys = "IP"
-let radiantFloorChecked = false;
+let unitSys = UNIT_PARAMS.unitSys
+let radiantFloorChecked = WINTER_COMFORT_PARAMS.intRadiantFloorChecked;
 let ppdValue = 20;
 let ppdValue2 = 10;
 let resultsArray = [];
+let multiDimResults;
 //make a multi-dim array to store the results array
 //it will only be [len/2][13] by defalut (or flipped... not sure)
 //you will need to double the len/2 but flip it on the first half.
 //extend the 13 to be the actual room depth somehow... repeating last??
-let multiDimResults = [];
-for(let i = 0; i < 15; i++){
-    let nDimResults = []
-    multiDimResults.push(nDimResults)
-    for(let j = 0; j < 13; j++){
-        multiDimResults[i].push(0);
-    }
-}
-console.log(multiDimResults[0].length)
+
+
 
 script.computeData = function(object) {
-    for(let i = 0; i < 15; i++){
+    multiDimResults = [];
+    let halfWall = parseInt(ROOM_PARAMS.length / 2)
+
+    for(let i = 0; i < halfWall; i++){
+        let nDimResults = []
+        multiDimResults.push(nDimResults)
+        for(let j = 0; j < 13; j++){
+            multiDimResults[i].push(0);
+        }
+    }
+    console.log(multiDimResults[0].length)
+
+
+    for(let i = 0; i < halfWall; i++){
         object.occDistToWallCenter = i;
 
         var geoResult = geo.createGlazingForRect(parseFloat(object.ceilingHeightValue), 

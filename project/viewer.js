@@ -9,82 +9,6 @@ var camera, scene, raycaster, renderer, geometry;
 var cameraControls;
 
 
-// TWEAKPANE Parameter objects
-const PARAMS1 = {
-    model: 0,
-};
-
-const CLIMATE_PARAMS = {
-    longitude: -71,
-    latitude: 42,
-    timeZoneOffset: -5
-};
-
-const TIME_PARAMS = {
-    studyType: 1,
-    hour: 12,
-    day: 21,
-    month: 9,
-    timeStep: 4
-};
-
-const ROOM_PARAMS = {
-    orientation: 0,
-    ceilHeight: 12,
-    gridHeight: 2,
-    length: 30,
-    depth: 16
-};
-
-const WINDOW_PARAMS = {
-    heightFromSill: 7.0,
-    sillHeight: 2.0,
-    glazingBy: 0,
-    glazingRatio: 40,
-    width: 7,
-    separation: 12
-}
-
-const HORIZONTAL_SHADE_PARAMS = {
-    depth: 1,
-    number: 0,
-    spacing: 3,
-    dist: 0,
-    heightAbove: 0,
-    angle: 90
-}
-
-const VERTICAL_SHADE_PARAMS = {
-    depth: 3,
-    number: 0,
-    spacing: 3,
-    leftRight: 0,
-    lrShift: 0,
-    dist: 0,
-    fullHeight: 1,
-    heightAbove: 0,
-    relativeHeight: 0,
-    angle: 90
-}
-
-const WINTER_COMFORT_PARAMS = {
-	occDistToWallCenter: 3,
-
-	uvalueValue: 0.35,
-	calcUVal: 0.29,
-	intLowEChecked: 0,
-	intLowEEmissivity: 0,
-
-	outdoorTempValue: 10,
-	airtempValue: 72,
-	humidityValue: 20,
-
-	rvalueValue: 15,
-	airspeedValue: 10,
-	clothingValue: 0.85,
-	metabolic: 1.2
-}
-
 var mouse = new THREE.Vector2(),
     INTERSECTED;
 var frustumSize = 1000;
@@ -310,6 +234,32 @@ function updateParams() {
 
 //UPDATE ROOM SIZE
 function updateRoom() {
+    case1Data = {
+        ceilingHeightValue: ROOM_PARAMS.ceilHeight,
+        wallLen: ROOM_PARAMS.length,
+        windowHeightValue: WINDOW_PARAMS.heightFromSill,
+        windowWidthValue: WINDOW_PARAMS.width,
+        glzRatioValue: WINDOW_PARAMS.glazingRatio,
+        sillHeightValue: WINDOW_PARAMS.sillHeight,
+        distanceWindows: WINDOW_PARAMS.separation,
+    
+        occDistToWallCenter: WINTER_COMFORT_PARAMS.occDistToWallCenter,
+    
+        uvalueValue: WINTER_COMFORT_PARAMS.uvalueValue,
+        calcUVal: WINTER_COMFORT_PARAMS.calcUVal,
+        intLowEChecked: WINTER_COMFORT_PARAMS.intLowEChecked,
+        intLowEEmissivity: WINTER_COMFORT_PARAMS.intLowEEmissivity,
+    
+        outdoorTempValue: WINTER_COMFORT_PARAMS.outdoorTempValue,
+        airtempValue: WINTER_COMFORT_PARAMS.airtempValue,
+        humidityValue: WINTER_COMFORT_PARAMS.humidityValue,
+    
+        rvalueValue: WINTER_COMFORT_PARAMS.rvalueValue,
+        airspeedValue: WINTER_COMFORT_PARAMS.airspeedValue,
+        clothingValue: WINTER_COMFORT_PARAMS.clothingValue,
+        metabolic: WINTER_COMFORT_PARAMS.metabolic
+    }
+
     var geoResult = geo.createGlazingForRect(
         parseFloat(ROOM_PARAMS.ceilHeight),
         parseFloat(ROOM_PARAMS.length),
@@ -368,26 +318,25 @@ function updateRoom() {
             let k = ROOM_PARAMS.length / 2 + j
             let m = ROOM_PARAMS.depth / 2 + i
 
-            let n = 14 - k;
-            if(n < 0){
-                n = Math.abs(n+1)
+            let n = parseInt(ROOM_PARAMS.length / 2 - 1) - k;
+
+            if(ROOM_PARAMS.length % 2 != 1){
+                if(n < 0){
+                    n = Math.abs(n+1)
+                   
+                }
+            }else{
+                if(n < 0){
+                    n = Math.abs(n+1)
+                    if(n >= Math.floor(ROOM_PARAMS.length / 2)){
+                        n= Math.floor(ROOM_PARAMS.length / 2-1)
+                        // console.log(n)
+                    }
+                }
             }
             
-            // let n = Math.abs((14-k) % 15);
-
-            // if(Math.abs(n - prevN) > 2){
-            //     n = prevN
-            // }
             
-
-            // if(prevN == 0){
-            //     n = 0
-            //     prevN = 1;
-            // }else{
-            //     prevN = n
-            // }
-
-            console.log(n,m)
+            // console.log(n,m)
             
 
             
