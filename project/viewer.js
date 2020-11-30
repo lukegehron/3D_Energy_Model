@@ -531,6 +531,8 @@ function render() {
             if (INTERSECTED != null && INTERSECTED.name == "grid") {
                 // console.log(INTERSECTED)
                 console.log(INTERSECTED.userData);
+                let myDiv = document.getElementById("mdata");
+                myDiv.innerText = "MRT: " + INTERSECTED.userData.mrtppd.toString();
             }
 
             INTERSECTED = intersects[0].object;
