@@ -239,6 +239,13 @@ function updateParams() {
         // count++;
     } while (selectedObject != null)
 
+    var selectedObject = scene.getObjectByName("shade");
+    do {
+        scene.remove(selectedObject);
+        selectedObject = scene.getObjectByName("shade");
+        // count++;
+    } while (selectedObject != null)
+
     updateRoom()
 
 
@@ -458,7 +465,7 @@ function updateRoom() {
     let windowMaterial = new THREE.MeshLambertMaterial({
         color: 0xeeeeff,
         transparent: true,
-        opacity: 0.7,
+        opacity: 0.6,
         // side: THREE.DoubleSide
     });
     for (let i = 0; i < r.glzCoords.length; i++) {
@@ -483,6 +490,29 @@ function updateRoom() {
         plane1.name = "window";
         scene.add(plane1);
     }
+
+    //HORIZONTAL SHADES
+
+    let shadeMaterial = new THREE.MeshLambertMaterial({
+      color: 0xeeeeee,
+      // transparent: true,
+      // opacity: 0.7,
+      side: THREE.DoubleSide
+  });
+
+    for (let i = 0; i < r.glzCoords.length; i++) {
+      for(let j = 0; j < HORIZONTAL_SHADE_PARAMS.number; j++){
+        const geometry1 = new THREE.PlaneBufferGeometry(r.windowWidth, HORIZONTAL_SHADE_PARAMS.depth);
+        geometry1.rotateX(0);
+      geometry1.translate(((r.glzCoords[i][0][0] + r.glzCoords[i][1][0]) / 2) - 0.5,ROOM_PARAMS.depth/-2 - 0.5 - HORIZONTAL_SHADE_PARAMS.depth/2 - .01 - HORIZONTAL_SHADE_PARAMS.dist, WINDOW_PARAMS.sillHeight - ROOM_PARAMS.gridHeight + WINDOW_PARAMS.heightFromSill - (HORIZONTAL_SHADE_PARAMS.spacing*j));
+      // geometry1.rotateOnAxis()
+      // geometry1.rotateX(Math.PI * -0.5);
+      const plane1 = new THREE.Mesh(geometry1, shadeMaterial);
+
+      plane1.name = "shade";
+      scene.add(plane1);
+      }
+  }
 
     
 
