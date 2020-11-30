@@ -333,14 +333,10 @@ function updateRoom() {
                         // console.log(n)
                     }
                 }
-            }
-            
+            }           
             
             // console.log(n,m)
             
-
-            
-
             if(typeof multiDimResults[n][m] === 'undefined' || isNaN(multiDimResults[n][m].ppd)){
                 multiDimResults[n][m] = multiDimResults[n][m-1];
             }
@@ -355,7 +351,17 @@ function updateRoom() {
             plane.name = "grid";
             plane.userData = {
                 loc_i: ROOM_PARAMS.depth / 2 + i,
-                loc_j: ROOM_PARAMS.length / 2 + j
+                loc_j: ROOM_PARAMS.length / 2 + j,
+                direct_solar: gridColorArray[colorCount],
+                dwnSpd: multiDimResults[n][m].dwnSpd,
+                dwnTmp: multiDimResults[n][m].dwnTmp,
+                glzfac: multiDimResults[n][m].glzfac,
+                govPPD: multiDimResults[n][m].govPPD,
+                mrt: multiDimResults[n][m].mrt,
+                mrtppd: multiDimResults[n][m].mrtppd,
+                pmv: multiDimResults[n][m].pmv,
+                ppd: multiDimResults[n][m].ppd,
+                tarDist: multiDimResults[n][m].tarDist,
             }
             scene.add(plane);
             colorCount++;
@@ -481,7 +487,7 @@ function render() {
 
             if (INTERSECTED != null && INTERSECTED.name == "grid") {
                 // console.log(INTERSECTED)
-                console.log(INTERSECTED.userData.loc_i, INTERSECTED.userData.loc_j)
+                console.log(INTERSECTED.userData);
             }
 
             INTERSECTED = intersects[0].object;
