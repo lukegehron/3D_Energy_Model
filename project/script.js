@@ -6,7 +6,7 @@ let unitSys = UNIT_PARAMS.unitSys
 let radiantFloorChecked = WINTER_COMFORT_PARAMS.intRadiantFloorChecked;
 let ppdValue = 20;
 let ppdValue2 = 10;
-let resultsArray = [];
+// let resultsArray = [];
 let multiDimResults;
 //make a multi-dim array to store the results array
 //it will only be [len/2][13] by defalut (or flipped... not sure)
@@ -67,13 +67,13 @@ script.computeData = function(object) {
             ppdValue, 
             ppdValue2)
             for(let j = 0; j < 13; j++){
-                resultsArray.push(comfortResult.myDataset[j]);
+                // resultsArray.push(comfortResult.myDataset[j]);
                 multiDimResults[i][j] = comfortResult.myDataset[j]
             }
 
             // console.log(comfortResult.myDataset[0])
     }
-    console.log(resultsArray)
+    // console.log(resultsArray)
 
     object.occDistToWallCenter = 0;
 	// Compute the window and wall geometry.

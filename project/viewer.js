@@ -195,9 +195,22 @@ function initTweakPane() {
     vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'relativeHeight');
     vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'angle');
 
+    climate_pane.on('change', (value) => {
+        // console.log('changed: ' + String(value));
+        // console.log(ROOM_PARAMS)
+        updateParams();
+    });
+
+    time_pane.on('change', (value) => {
+        // console.log('changed: ' + String(value));
+        // console.log(ROOM_PARAMS)
+        updateParams();
+    });
+
+
     geometry_pane.on('change', (value) => {
-        console.log('changed: ' + String(value));
-        console.log(ROOM_PARAMS)
+        // console.log('changed: ' + String(value));
+        // console.log(ROOM_PARAMS)
         updateParams();
     });
 }
@@ -307,9 +320,9 @@ function updateRoom() {
             }
             
 
-            if(typeof resultsArray[colorCount] === 'undefined' || isNaN(resultsArray[colorCount].mrt)){
-                resultsArray[colorCount] = resultsArray[colorCount - 1];
-            }
+            // if(typeof resultsArray[colorCount] === 'undefined' || isNaN(resultsArray[colorCount].mrt)){
+            //     resultsArray[colorCount] = resultsArray[colorCount - 1];
+            // }
 
             // console.log(resultsArray[colorCount].mrt)
             // console.log(colorCount)
@@ -342,8 +355,8 @@ function updateRoom() {
             }
 
             const plane = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
-                    color: new THREE.Color(`rgb(255,`+parseInt(255 -multiDimResults[n][m].ppd*2)+`,`+parseInt(255 -multiDimResults[n][m].ppd*2)+`)`),
-                    // color: new THREE.Color(`rgb(255,`+(255 - gridColorArray[colorCount]*2)+`,`+(255 - gridColorArray[colorCount]*2)+`)`),
+                    // color: new THREE.Color(`rgb(255,`+parseInt(255 -multiDimResults[n][m].ppd*2)+`,`+parseInt(255 -multiDimResults[n][m].ppd*2)+`)`),
+                    color: new THREE.Color(`rgb(255,`+(255 - gridColorArray[colorCount]*2)+`,`+(255 - gridColorArray[colorCount]*2)+`)`),
                     side: THREE.DoubleSide
                 }));
             plane.position.x = j;
@@ -367,7 +380,7 @@ function updateRoom() {
             colorCount++;
         }
     }
-    console.log(multiDimResults)
+    // console.log(multiDimResults)
 
     const lineMaterial = new THREE.LineBasicMaterial({
         color: 0xaaaaaa
@@ -619,11 +632,24 @@ function doTrig(){
     let gridX = ROOM_PARAMS.depth;
     let gridY = ROOM_PARAMS.length;
 
-    let vertShadeNum = VERTICAL_SHADE_PARAMS.number;
+    // let vertShadeNum = VERTICAL_SHADE_PARAMS.number;
     let wallDepVal = ROOM_PARAMS.length;
     let gridHt = ROOM_PARAMS.gridHeight;
     let horzShadeNum = HORIZONTAL_SHADE_PARAMS.number;
+    let horzShadeDist = HORIZONTAL_SHADE_PARAMS.dist;
+    let horzShadeDep = HORIZONTAL_SHADE_PARAMS.depth;
+    let horzShadeAngle = HORIZONTAL_SHADE_PARAMS.angle;
+    let horzShadeHeight = HORIZONTAL_SHADE_PARAMS.heightAbove;
+    let horzShadeSpace = HORIZONTAL_SHADE_PARAMS.spacing;
     let bigArrayColor = [];
+
+    let vertShadeDep = VERTICAL_SHADE_PARAMS.depth;
+    let vertShadeDist = VERTICAL_SHADE_PARAMS.dist;
+    let vertShadeHeight = VERTICAL_SHADE_PARAMS.fullHeight;
+    let vertShadeNum = VERTICAL_SHADE_PARAMS.number;
+    let vertShadeShift = VERTICAL_SHADE_PARAMS.lrShift;
+    let vertShadeStart = VERTICAL_SHADE_PARAMS.leftRight; 
+    let vertShadeSpace = VERTICAL_SHADE_PARAMS.spacing;
 
     //TIME FOR SOME TRIG
     let VecXArray = [];
@@ -797,7 +823,7 @@ function doTrig(){
                 let sinLawDist = (horzShadeDist*(Math.sin(3.1415926-(((90)-coordinates[k][1])*(3.1415926 / 180))-(90*(3.1415926 / 180)))))/Math.sin(((90)-coordinates[k][1])*(3.1415926 / 180));
                 let sinLawAngle = (horzShadeDep*(Math.sin(3.1415926-(((90)-coordinates[k][1])*(3.1415926 / 180))-(horzShadeAngle*(3.1415926 / 180)))))/Math.sin(((90)-coordinates[k][1])*(3.1415926 / 180));
 
-                if (angleHeight < (r.glzCoords[0][2][2]-gridHt)-(horzShadeSpace*n)-(sinLawDist)+(p.float(horzShadeHeight)*.5) && angleHeight > ((r.glzCoords[0][2][2]-gridHt)-(horzShadeSpace*n)-(sinLawDist)-(sinLawAngle)+(p.float(horzShadeHeight)*.5))){
+                if (angleHeight < (r.glzCoords[0][2][2]-gridHt)-(horzShadeSpace*n)-(sinLawDist)+(parseFloat(horzShadeHeight)*.5) && angleHeight > ((r.glzCoords[0][2][2]-gridHt)-(horzShadeSpace*n)-(sinLawDist)-(sinLawAngle)+(parseFloat(horzShadeHeight)*.5))){
                   testArray1.push(0);
                 }else{
                   testArray1.push(1);
@@ -819,7 +845,7 @@ function doTrig(){
 
       //START XY and Z check
       let gridColor;
-      //let gridColorArray = []
+      gridColorArray = []
       for (let i = 0; i < XYtest.length; i++){
 
         let XYLouv = LouverList1[i];
