@@ -735,3 +735,278 @@ comf.getFullPPD = function(wallViewFac, glzViewFac, facadeDist, windIntervals, o
 
 	return r
 }
+
+
+
+
+
+
+if (typeof module !== "undefined" && module.exports) {
+  var psy = require("./psychrometrics.js").psy;
+  var util = require("./util.js").util;
+  module.exports.comf = comf;
+}
+
+comf.validation_table = function () {
+  var cases = [
+    [25, 25, 0.15, 50, 1, 0.5],
+    [0, 25, 0.15, 50, 1, 0.5],
+    [10, 25, 0.15, 50, 1, 0.5],
+    [15, 25, 0.15, 50, 1, 0.5],
+    [20, 25, 0.15, 50, 1, 0.5],
+    [30, 25, 0.15, 50, 1, 0.5],
+    [40, 25, 0.15, 50, 1, 0.5],
+    [25, 25, 0.15, 10, 1, 0.5],
+    [25, 25, 0.15, 90, 1, 0.5],
+    [25, 25, 0.1, 50, 1, 0.5],
+    [25, 25, 0.6, 50, 1, 0.5],
+    [25, 25, 1.1, 50, 1, 0.5],
+    [25, 25, 3.0, 50, 1, 0.5],
+    [25, 10, 0.15, 50, 1, 0.5],
+    [25, 40, 0.15, 50, 1, 0.5],
+    [25, 25, 0.15, 50, 1, 0.1],
+    [25, 25, 0.15, 50, 1, 1],
+    [25, 25, 0.15, 50, 1, 2],
+    [25, 25, 0.15, 50, 1, 4],
+    [25, 25, 0.15, 50, 0.8, 0.5],
+    [25, 25, 0.15, 50, 2, 0.5],
+    [25, 25, 0.15, 50, 4, 0.5],
+  ];
+  for (var i = 0; i < cases.length; i++) {
+    var c = cases[i];
+    var s = comf.pmvElevatedAirspeed(c[0], c[1], c[2], c[3], c[4], c[5], 0);
+    console.log(s.set, util.CtoF(s.set));
+  }
+};
+
+comf.calc_set_contours = function (still_air_threshold, clo) {
+  comf.still_air_threshold = still_air_threshold;
+  var hr = 0.01;
+  var met = 1.1;
+  var vel = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8];
+
+  // first, solve for t_op where pmv = -0.5 at still air;
+
+  var fn = function (t) {
+    var rh = psy.convert(hr, t, "w", "rh");
+    var pmv = comf.pmv(t, t, 0.1, rh, met, clo, 0);
+    return pmv.pmv;
+  };
+  var eps = 0.01;
+  var t_op_L = util.bisect(15, 40, fn, eps, -0.5);
+  var t_op_R = util.bisect(15, 40, fn, eps, 0.5);
+  console.log(t_op_L, t_op_R);
+
+  var rh_L = psy.convert(hr, t_op_L, "w", "rh");
+  var set0_L = comf.pierceSET(t_op_L, t_op_L, 0.1, rh_L, met, clo, 0);
+  var rh_R = psy.convert(hr, t_op_R, "w", "rh");
+  var set0_R = comf.pierceSET(t_op_R, t_op_R, 0.1, rh_R, met, clo, 0);
+
+  var a = {
+    clo: clo,
+    still_air: still_air_threshold,
+    contour_L: [],
+    contour_R: [],
+  };
+
+  for (var i = 0; i < vel.length; i++) {
+    var vel_i = vel[i];
+    var fn_set = function (t) {
+      var rh = psy.convert(hr, t, "w", "rh");
+      var set = comf.pierceSET(t, t, vel_i, rh, met, clo, 0);
+      return set;
+    };
+
+    var LL = util.bisect(15, 40, fn_set, eps, set0_L);
+    var RR = util.bisect(15, 40, fn_set, eps, set0_R);
+    a.contour_L.push(LL);
+    a.contour_R.push(RR);
+  }
+  return a;
+};
+
+comf.go = function () {
+  var r = [];
+  r[0] = comf.calc_set_contours(0.1, 0.5);
+  r[1] = comf.calc_set_contours(0.1, 1.0);
+  r[2] = comf.calc_set_contours(0.15, 0.5);
+  r[3] = comf.calc_set_contours(0.15, 1.0);
+  r[4] = comf.calc_set_contours(0.2, 0.5);
+  r[5] = comf.calc_set_contours(0.2, 1.0);
+  return r;
+};
+
+comf.still_air_threshold = 0.1; // m/s
+
+comf.test = function () {
+  // reproduces the bug related to sweat saturation and heat loss from skin
+  met_values = [
+    1.7,
+    1.71,
+    1.72,
+    1.73,
+    1.74,
+    1.75,
+    1.76,
+    1.77,
+    1.78,
+    1.79,
+    1.8,
+    1.81,
+    1.82,
+    1.83,
+    1.84,
+    1.85,
+    1.86,
+    1.87,
+    1.88,
+    1.89,
+    1.9,
+  ];
+  for (var i = 0; i < met_values.length; i++) {
+    console.log("MET:", met_values[i]);
+    var x = comf.pierceSET(34, 34, 4, 80, met_values[i], 0.4, 0); // not normal
+    //var x = comf.pierceSET(34.08, 34.08, 4, 80, met_values[i], 0.4, 0) // normal
+    console.log(x);
+  }
+};
+
+comf.between = function (x, l, r) {
+  return x > l && x < r;
+};
+
+comf.globeTemperature = function (tw, tr, ta) {
+  // calculate composite globe temperature
+  return 0.7 * tw + 0.2 * tr + 0.1 * ta;
+};
+
+comf.adaptiveComfortASH55 = function (ta, tr, runningMean, vel) {
+  var r = {};
+  var to = (ta + tr) / 2;
+  var coolingEffect = 0;
+  if ((vel > 0.3) & (to >= 25)) {
+    // calculate cooling effect of elevated air speed
+    // when top > 25 degC.
+    switch (vel) {
+      case 0.6:
+        coolingEffect = 1.2;
+        break;
+      case 0.9:
+        coolingEffect = 1.8;
+        break;
+      case 1.2:
+        coolingEffect = 2.2;
+        break;
+    }
+  }
+  var tComf = 0.31 * runningMean + 17.8;
+  r.tComf80Lower = tComf - 3.5;
+  r.tComf80Upper = tComf + 3.5 + coolingEffect;
+  r.tComf90Lower = tComf - 2.5;
+  r.tComf90Upper = tComf + 2.5 + coolingEffect;
+  var acceptability80, acceptability90;
+
+  if (comf.between(to, r.tComf90Lower, r.tComf90Upper)) {
+    // compliance at 80% and 90% levels
+    acceptability80 = acceptability90 = true;
+  } else if (comf.between(to, r.tComf80Lower, r.tComf80Upper)) {
+    // compliance at 80% only
+    acceptability80 = true;
+    acceptability90 = false;
+  } else {
+    // neither
+    acceptability80 = acceptability90 = false;
+  }
+  r.acceptability90 = acceptability90;
+  r.acceptability80 = acceptability80;
+  return r;
+};
+
+
+comf.FindSaturatedVaporPressureTorr = function (T) {
+  //calculates Saturated Vapor Pressure (Torr) at Temperature T  (C)
+  return exp(18.6686 - 4030.183 / (T + 235.0));
+};
+
+comf.schiavonClo = function (ta6) {
+  var clo_r;
+  if (!isCelsius) ta6 = util.FtoC(ta6);
+  if (ta6 < -5) {
+    clo_r = 1;
+  } else if (ta6 < 5) {
+    clo_r = 0.818 - 0.0364 * ta6;
+  } else if (ta6 < 26) {
+    clo_r = Math.pow(10, -0.1635 - 0.0066 * ta6);
+  } else {
+    clo_r = 0.46;
+  }
+  return clo_r;
+};
+
+comf.adaptiveComfortEN15251 = function (ta, tr, runningMean, vel) {
+  var to = (ta + tr) / 2;
+  var coolingEffect = 0;
+  if (vel >= 0.2 && to > 25) {
+    // calculate cooling effect of elevated air speed
+    // when top > 25 degC.
+    var coolingEffect = 1.7856 * Math.log(vel) + 2.9835;
+  }
+  var tComf = 0.33 * runningMean + 18.8;
+  if (runningMean > 15) {
+    var tComfILower = tComf - 2;
+    var tComfIUpper = tComf + 2 + coolingEffect;
+    var tComfIILower = tComf - 3;
+    var tComfIIUpper = tComf + 3 + coolingEffect;
+    var tComfIIILower = tComf - 4;
+    var tComfIIIUpper = tComf + 4 + coolingEffect;
+  } else if (12.73 < runningMean && runningMean < 15) {
+    var tComfLow = 0.33 * 15 + 18.8;
+    var tComfILower = tComfLow - 2;
+    var tComfIUpper = tComf + 2 + coolingEffect;
+    var tComfIILower = tComfLow - 3;
+    var tComfIIUpper = tComf + 3 + coolingEffect;
+    var tComfIIILower = tComfLow - 4;
+    var tComfIIIUpper = tComf + 4 + coolingEffect;
+  } else {
+    var tComfLow = 0.33 * 15 + 18.8;
+    var tComfILower = tComfLow - 2;
+    var tComfIUpper = tComf + 2;
+    var tComfIILower = tComfLow - 3;
+    var tComfIIUpper = tComf + 3 + coolingEffect;
+    var tComfIIILower = tComfLow - 4;
+    var tComfIIIUpper = tComf + 4 + coolingEffect;
+  }
+  var acceptabilityI, acceptabilityII, acceptabilityIII;
+
+  if (comf.between(to, tComfILower, tComfIUpper)) {
+    // compliance at all levels
+    acceptabilityI = acceptabilityII = acceptabilityIII = true;
+  } else if (comf.between(to, tComfIILower, tComfIIUpper)) {
+    // compliance at II and III only
+    acceptabilityII = acceptabilityIII = true;
+    acceptabilityI = false;
+  } else if (comf.between(to, tComfIIILower, tComfIIIUpper)) {
+    // compliance at III only
+    acceptabilityIII = true;
+    acceptabilityI = acceptabilityII = false;
+  } else {
+    // neither
+    acceptabilityI = acceptabilityII = acceptabilityIII = false;
+  }
+  r = {};
+  r.acceptabilityI = acceptabilityI;
+  r.acceptabilityII = acceptabilityII;
+  r.acceptabilityIII = acceptabilityIII;
+  r.tComfILower = tComfILower;
+  r.tComfIILower = tComfIILower;
+  r.tComfIIILower = tComfIIILower;
+  r.tComfIUpper = tComfIUpper;
+  r.tComfIIUpper = tComfIIUpper;
+  r.tComfIIIUpper = tComfIIIUpper;
+  return r;
+  return [
+    [acceptabilityIII, tComfIIILower, tComfIIIUpper],
+    [acceptabilityII, tComfIILower, tComfIIUpper],
+    [acceptabilityI, tComfILower, tComfIUpper],
+  ];
+};

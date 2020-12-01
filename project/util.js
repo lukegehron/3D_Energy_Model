@@ -39,3 +39,21 @@ util.secant = function(a, b, fn, epsilon) {
   }
   return 100
 }
+
+util.getSensation = function (pmv) {
+  if (pmv < -2.5) return "Cold";
+  else if (pmv < -1.5) return "Cool";
+  else if (pmv < -0.5) return "Slightly Cool";
+  else if (pmv < 0.5) return "Neutral";
+  else if (pmv < 1.5) return "Slightly Warm";
+  else if (pmv < 2.5) return "Warm";
+  else return "Hot";
+};
+
+util.CtoF = function (x) {
+  return (x * 9) / 5 + 32;
+};
+
+util.FtoC = function (x) {
+  return ((x - 32) * 5) / 9;
+};

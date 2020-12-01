@@ -10,7 +10,7 @@ const CLIMATE_PARAMS = {
 };
 
 const TIME_PARAMS = {
-    studyType: 1,
+    studyType: false,
     hour: 12,
     day: 21,
     month: 9,

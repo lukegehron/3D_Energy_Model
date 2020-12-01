@@ -138,7 +138,7 @@ function initTweakPane() {
         container: document.getElementById('time_pane'),
         title: 'Time',
     })
-
+    time_pane.addInput(TIME_PARAMS, 'studyType');
     time_pane.addInput(TIME_PARAMS, 'hour');
     time_pane.addInput(TIME_PARAMS, 'day');
     time_pane.addInput(TIME_PARAMS, 'month');
@@ -532,7 +532,7 @@ function render() {
                 // console.log(INTERSECTED)
                 console.log(INTERSECTED.userData);
                 let myDiv = document.getElementById("mdata");
-                myDiv.innerText = "MRT: " + INTERSECTED.userData.mrtppd.toString();
+                myDiv.innerText = "MRT: " + INTERSECTED.userData.mrt.toString();
             }
 
             INTERSECTED = intersects[0].object;
@@ -593,7 +593,9 @@ function getSolar() {
     annualCoordinates = [];
     currentFrame = 0;
 
-    singleHour = 2;
+    singleHour = TIME_PARAMS.studyType;
+
+    
 
     //SunVectors - TAKEN FROM THE OLD SUNVECTORS.JS FILE
 
