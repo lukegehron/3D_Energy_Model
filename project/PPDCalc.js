@@ -1004,9 +1004,9 @@ comf.adaptiveComfortEN15251 = function (ta, tr, runningMean, vel) {
   r.tComfIIUpper = tComfIIUpper;
   r.tComfIIIUpper = tComfIIIUpper;
   return r;
-  return [
-    [acceptabilityIII, tComfIIILower, tComfIIIUpper],
-    [acceptabilityII, tComfIILower, tComfIIUpper],
-    [acceptabilityI, tComfILower, tComfIUpper],
-  ];
+  // return [
+  //   [acceptabilityIII, tComfIIILower, tComfIIIUpper],
+  //   [acceptabilityII, tComfIILower, tComfIIUpper],
+  //   [acceptabilityI, tComfILower, tComfIUpper],
+  // ];
 };

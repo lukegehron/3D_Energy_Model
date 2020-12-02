@@ -514,6 +514,28 @@ function updateRoom() {
       }
   }
 
+   //VERTICAL SHADES
+
+
+  for (let i = 0; i < r.glzCoords.length; i++) {
+    for(let j = 0; j < VERTICAL_SHADE_PARAMS.number; j++){
+      let shadeHeight = r.windowHeight;
+      if(VERTICAL_SHADE_PARAMS.fullHeight == 1){
+        shadeHeight = ROOM_PARAMS.ceilHeight;
+      }
+      const geometry1 = new THREE.PlaneBufferGeometry(VERTICAL_SHADE_PARAMS.depth, shadeHeight);
+      geometry1.rotateX(Math.PI * -0.5);
+      geometry1.rotateZ(Math.PI * -0.5);
+    geometry1.translate(((r.glzCoords[i][0][0] + r.glzCoords[i][1][0])/2) - 0.5 +WINDOW_PARAMS.width/2 - (VERTICAL_SHADE_PARAMS.spacing*j) - VERTICAL_SHADE_PARAMS.lrShift, ROOM_PARAMS.depth/-2 - 0.5 - VERTICAL_SHADE_PARAMS.depth/2 - .01 - VERTICAL_SHADE_PARAMS.dist, WINDOW_PARAMS.sillHeight - ROOM_PARAMS.gridHeight + WINDOW_PARAMS.heightFromSill/2);
+    // geometry1.rotateOnAxis()
+    // geometry1.rotateX(Math.PI * -0.5);
+    const plane1 = new THREE.Mesh(geometry1, shadeMaterial);
+
+    plane1.name = "shade";
+    scene.add(plane1);
+    }
+}
+
     
 
 }
