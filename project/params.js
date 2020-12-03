@@ -78,3 +78,24 @@ const WINTER_COMFORT_PARAMS = {
 const UNIT_PARAMS = {
     unitSys: "IP"
 }
+
+const OCCUPANT_PARAMS = {
+    position: { x: 1, y: 1 },
+    azimuth: 0.0,
+    posture: "seated",
+  };
+  
+  
+  const MRT_PARAMS = {
+    azimuth: 0,
+    opacity: 0,
+    temperature: 21.0,
+    emissivity: 0.9,
+    tsol: 0.8,
+    temperature: 40.0,
+    emissivity: 0.9,
+    width: 8.0,
+    height: 1.8,
+    xposition: 1.0,
+    yposition: 0.4,
+}
