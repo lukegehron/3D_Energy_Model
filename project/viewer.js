@@ -554,7 +554,23 @@ function render() {
                 // console.log(INTERSECTED)
                 console.log(INTERSECTED.userData);
                 let myDiv = document.getElementById("mdata");
-                myDiv.innerText = "MRT: " + INTERSECTED.userData.mrt.toString();
+                let txt = "";
+                txt += "MRT: " + INTERSECTED.userData.mrt.toString() + "\n";
+                txt += "Direct Solar: " + INTERSECTED.userData.direct_solar.toString() + "\n";
+                txt += "Location: " + INTERSECTED.userData.loc_i.toString() + ", " + INTERSECTED.userData.loc_j.toString() + "\n";
+                txt += "Glazing Factor " + INTERSECTED.userData.glzfac.toString() + "\n";
+                txt += "MRTPPD: " + INTERSECTED.userData.mrtppd.toString() + "\n";
+                txt += "PMV: " + INTERSECTED.userData.pmv.toString() + "\n";
+                txt += "PPD: " + INTERSECTED.userData.ppd.toString() + "\n";
+                
+                if(TIME_PARAMS.studyType == 1){
+                  txt += "Azmuth Altitute: " + coordinates[0] + "\n";
+                  var mRes = coordinates[0].toString().split(",");
+                  var mNum = parseFloat(mRes[1])
+                  txt += "Direct Normal Irradiance: " + directNormalIrradiance(parseFloat(mNum)).toString();
+                }
+                
+                myDiv.innerText = txt;
             }
 
             INTERSECTED = intersects[0].object;
@@ -680,7 +696,7 @@ function getSolar() {
         }
     }
 
-    // console.log(coordinates)
+    console.log(coordinates)
 }
 
 function doTrig(){
@@ -1371,6 +1387,39 @@ let decider = 0;
     var numPtsLen = (fullDataCase1.wallViews.length)-1
     case1Data.calcUVal = uVal.uValFinal(fullDataCase1.wallViews[numPtsLen], fullDataCase1.glzViews[numPtsLen], fullDataCase1.facadeDist[numPtsLen], fullDataCase1.dwnPPDFac, parseFloat(case1Data.windowHeightValue), parseFloat(case1Data.sillHeightValue), case1Data.airtempValue, case1Data.outdoorTempValue, case1Data.rvalueValue, case1Data.intLowEChecked, case1Data.intLowEEmissivity, case1Data.airspeedValue, case1Data.humidityValue, case1Data.metabolic, case1Data.clothingValue, ppdValue, ppdValue2);
 
+  }
+
+
+  function directNormalIrradiance(solarAngle){
+    let Idir;
+    if(solarAngle <= 5){
+      Idir = map_range(solarAngle, 0, 5, 0, 210);
+    } else if(solarAngle <= 10){
+      Idir = map_range(solarAngle, 5, 10, 210, 390);
+    }else if(solarAngle <= 20){
+      Idir = map_range(solarAngle, 10, 20, 390, 620);
+    }else if(solarAngle <= 30){
+      Idir = map_range(solarAngle, 20, 30, 620, 740);
+    }else if(solarAngle <= 40){
+      Idir = map_range(solarAngle, 30, 40, 740, 810);
+    }else if(solarAngle <= 50){
+      Idir = map_range(solarAngle, 40, 50, 810, 860);
+    }else if(solarAngle <= 60){
+      Idir = map_range(solarAngle, 50, 60, 860, 890);
+    }else if(solarAngle <= 70){
+      Idir = map_range(solarAngle, 60, 70, 890, 910);
+    }else if(solarAngle <= 80){
+      Idir = map_range(solarAngle, 70, 80, 910, 920);
+    }else if(solarAngle <= 90){
+      Idir = map_range(solarAngle, 80, 90, 920, 925);
+    }
+    return Idir;
+    
+  }
+  
+  
+  function map_range(value, low1, high1, low2, high2) {
+    return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
   }
 
 

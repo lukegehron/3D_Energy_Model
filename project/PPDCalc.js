@@ -471,9 +471,6 @@ comf.calcFulldonwDppd = function(distSI, mrtpmv, windowHeadHgt, filmCoeff, airTe
   return r
 }
 
-
-
-
 // ***FUNCTIONS THAT COMPUTE CALCUALTE COMFORT FOR LISTS OF POINTS IN SPACE.***
 //Calculates the MRT and radiant assymetry PPD given a set of interior conditions and points
 comf.getMRTPPD = function(winViewFacs, opaqueViewFacs, winFilmCoeff, airTemp, outdoorTemp, indoorSrfTemp, wallRVal, windowUVal, intLowE, lowEmissivity, clo, met, airSpeed, rh){
@@ -520,8 +517,6 @@ comf.getDowndraftPPD = function(distToFacade, mrtPMV, windowHgt, sillHgt, filmCo
   r.ddTemp = DDTemp
 	return r
 }
-
-
 
 
 /// ***FUNCTION THAT COMPUTE FINAL RESULTS THE INTERFACE.***
@@ -1010,3 +1005,4 @@ comf.adaptiveComfortEN15251 = function (ta, tr, runningMean, vel) {
   //   [acceptabilityI, tComfILower, tComfIUpper],
   // ];
 };
+

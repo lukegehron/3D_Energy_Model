@@ -99,3 +99,13 @@ const OCCUPANT_PARAMS = {
     xposition: 1.0,
     yposition: 0.4,
 }
+
+const SUMMER_COMFORT_PARAMS = {
+    directNormalIrradiance: 850,
+    fractionOfBodyExposed: 0.3,
+    shortWaveAbsorpivity: 0.7,
+    TSol: 1,
+    SHGCIndirect: 1,
+    SHGC: this.TSol + this.SHGHIndirect,
+    TSolShading:1
+    }
