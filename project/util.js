@@ -57,3 +57,9 @@ util.CtoF = function (x) {
 util.FtoC = function (x) {
   return ((x - 32) * 5) / 9;
 };
+
+util.degrees_to_radians = function(degrees)
+{
+  var pi = Math.PI;
+  return degrees * (pi/180);
+}

@@ -76,8 +76,20 @@ function init() {
     scene.background = new THREE.Color(0xffffff);
 
     //THREE_LIGHTS
-    var light = new THREE.DirectionalLight(0xffffff, 1);
+    var light = new THREE.DirectionalLight(0xffffff, 0.45);
     light.position.set(1, 1, 1).normalize();
+    scene.add(light);
+
+    light = new THREE.DirectionalLight(0xffffff, 0.45);
+    light.position.set(1, -1, 1).normalize();
+    scene.add(light);
+
+    light = new THREE.DirectionalLight(0xffffff, 0.45);
+    light.position.set(-1, -1, 1).normalize();
+    scene.add(light);
+
+    light = new THREE.DirectionalLight(0xffffff, 0.45);
+    light.position.set(-1, 1, 1).normalize();
     scene.add(light);
     scene.add(new THREE.AmbientLight(0xffffff, 0.40));
 
@@ -195,6 +207,19 @@ function initTweakPane() {
     vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'relativeHeight');
     vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'angle');
 
+    const mrt_pane = new Tweakpane({
+      container: document.getElementById('mrt_pane'),
+      title: 'MRT',
+  })
+
+  mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'directNormalIrradiance');
+  mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'fractionOfBodyExposed');
+  mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'shortWaveAbsorpivity');
+  mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'TSol');
+  mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'SHGCIndirect');
+  mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'TSolShading');
+  
+
     climate_pane.on('change', (value) => {
         // console.log('changed: ' + String(value));
         // console.log(ROOM_PARAMS)
@@ -213,6 +238,13 @@ function initTweakPane() {
         // console.log(ROOM_PARAMS)
         updateParams();
     });
+
+    mrt_pane.on('change', (value) => {
+      // console.log('changed: ' + String(value));
+      // console.log(ROOM_PARAMS)
+      updateParams();
+  });
+
 }
 
 //UPDATE TWEAKPANE PARAMETERS
@@ -362,12 +394,16 @@ function updateRoom() {
             }
 
             const plane = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
-                    // color: new THREE.Color(`rgb(255,`+parseInt(255 -multiDimResults[n][m].ppd*2)+`,`+parseInt(255 -multiDimResults[n][m].ppd*2)+`)`),
+                    // color: new THREE.Color(`rgb(255,`+parseInt(255 -multiDimResults[n][m].dwnSpd*2)+`,`+parseInt(255 -multiDimResults[n][m].dwnSpd*2)+`)`),
                     color: new THREE.Color(`rgb(255,`+(255 - gridColorArray[colorCount]*2)+`,`+(255 - gridColorArray[colorCount]*2)+`)`),
                     side: THREE.DoubleSide
                 }));
-            plane.position.x = j;
-            plane.position.y = i;
+                
+            
+            plane.setRotationFromAxisAngle(new THREE.Vector3(0,0,1), util.degrees_to_radians(ROOM_PARAMS.orientation));
+            plane.translateX (j);
+            plane.translateY(i);
+            
             plane.name = "grid";
             plane.userData = {
                 loc_i: ROOM_PARAMS.depth / 2 + i,
@@ -407,6 +443,7 @@ function updateRoom() {
     let lineGeometry = new THREE.BufferGeometry().setFromPoints(corner1);
     let line = new THREE.Line(lineGeometry, lineMaterial);
     line.name = "outline"
+    line.setRotationFromAxisAngle(new THREE.Vector3(0,0,1), util.degrees_to_radians(ROOM_PARAMS.orientation));
     scene.add(line);
 
     corner2.push(new THREE.Vector3(ROOM_PARAMS.length / 2 - .5, ROOM_PARAMS.depth / 2 - .5, -ROOM_PARAMS.gridHeight));
@@ -415,6 +452,7 @@ function updateRoom() {
     lineGeometry = new THREE.BufferGeometry().setFromPoints(corner2);
     line = new THREE.Line(lineGeometry, lineMaterial);
     line.name = "outline"
+    line.setRotationFromAxisAngle(new THREE.Vector3(0,0,1), util.degrees_to_radians(ROOM_PARAMS.orientation));
     scene.add(line);
 
     corner3.push(new THREE.Vector3(ROOM_PARAMS.length / 2 - .5, ROOM_PARAMS.depth / -2 - .5, -ROOM_PARAMS.gridHeight));
@@ -423,6 +461,7 @@ function updateRoom() {
     lineGeometry = new THREE.BufferGeometry().setFromPoints(corner3);
     line = new THREE.Line(lineGeometry, lineMaterial);
     line.name = "outline"
+    line.setRotationFromAxisAngle(new THREE.Vector3(0,0,1), util.degrees_to_radians(ROOM_PARAMS.orientation));
     scene.add(line);
 
     corner4.push(new THREE.Vector3(ROOM_PARAMS.length / -2 - .5, ROOM_PARAMS.depth / 2 - .5, -ROOM_PARAMS.gridHeight));
@@ -431,6 +470,7 @@ function updateRoom() {
     lineGeometry = new THREE.BufferGeometry().setFromPoints(corner4);
     line = new THREE.Line(lineGeometry, lineMaterial);
     line.name = "outline"
+    line.setRotationFromAxisAngle(new THREE.Vector3(0,0,1), util.degrees_to_radians(ROOM_PARAMS.orientation));
     scene.add(line);
 
     //FLOOR OUTLINE
@@ -443,6 +483,7 @@ function updateRoom() {
     lineGeometry = new THREE.BufferGeometry().setFromPoints(floor);
     line = new THREE.Line(lineGeometry, lineMaterial);
     line.name = "outline"
+    line.setRotationFromAxisAngle(new THREE.Vector3(0,0,1), util.degrees_to_radians(ROOM_PARAMS.orientation));
     scene.add(line);
 
     //CEILING OUTLINE
@@ -455,6 +496,7 @@ function updateRoom() {
     lineGeometry = new THREE.BufferGeometry().setFromPoints(ceil);
     line = new THREE.Line(lineGeometry, lineMaterial);
     line.name = "outline"
+    line.setRotationFromAxisAngle(new THREE.Vector3(0,0,1), util.degrees_to_radians(ROOM_PARAMS.orientation));
     scene.add(line);
 
     //GEO Result - TAKES DATA FROM THE GEO.JS FILE
@@ -463,10 +505,10 @@ function updateRoom() {
 
 
     let windowMaterial = new THREE.MeshLambertMaterial({
-        color: 0xeeeeff,
+        color: 0xccccff,
         transparent: true,
-        opacity: 0.6,
-        // side: THREE.DoubleSide
+        opacity: 0.4,
+        side: THREE.DoubleSide
     });
     for (let i = 0; i < r.glzCoords.length; i++) {
         const window = [];
@@ -480,6 +522,7 @@ function updateRoom() {
         lineGeometry = new THREE.BufferGeometry().setFromPoints(window);
         line = new THREE.Line(lineGeometry, lineMaterial);
         line.name = "outline"
+        line.setRotationFromAxisAngle(new THREE.Vector3(0,0,1), util.degrees_to_radians(ROOM_PARAMS.orientation));
         scene.add(line);
 
         const geometry1 = new THREE.PlaneBufferGeometry(r.windowWidth, r.windowHeight);
@@ -488,13 +531,14 @@ function updateRoom() {
         const plane1 = new THREE.Mesh(geometry1, windowMaterial);
 
         plane1.name = "window";
+        plane1.setRotationFromAxisAngle(new THREE.Vector3(0,0,1), util.degrees_to_radians(ROOM_PARAMS.orientation));
         scene.add(plane1);
     }
 
     //HORIZONTAL SHADES
 
     let shadeMaterial = new THREE.MeshLambertMaterial({
-      color: 0xeeeeee,
+      color: 0x999999,
       // transparent: true,
       // opacity: 0.7,
       side: THREE.DoubleSide
@@ -503,18 +547,27 @@ function updateRoom() {
     for (let i = 0; i < r.glzCoords.length; i++) {
       for(let j = 0; j < HORIZONTAL_SHADE_PARAMS.number; j++){
         const geometry1 = new THREE.PlaneBufferGeometry(r.windowWidth, HORIZONTAL_SHADE_PARAMS.depth);
-        geometry1.rotateX(0);
-      geometry1.translate(((r.glzCoords[i][0][0] + r.glzCoords[i][1][0]) / 2) - 0.5,ROOM_PARAMS.depth/-2 - 0.5 - HORIZONTAL_SHADE_PARAMS.depth/2 - .01 - HORIZONTAL_SHADE_PARAMS.dist, WINDOW_PARAMS.sillHeight - ROOM_PARAMS.gridHeight + WINDOW_PARAMS.heightFromSill - (HORIZONTAL_SHADE_PARAMS.spacing*j));
+        geometry1.translate(0,-HORIZONTAL_SHADE_PARAMS.depth/2,0);
+        geometry1.rotateX(util.degrees_to_radians(HORIZONTAL_SHADE_PARAMS.angle));
+      geometry1.translate(((r.glzCoords[i][0][0] + r.glzCoords[i][1][0]) / 2) - 0.5,ROOM_PARAMS.depth/-2 - 0.5 - .01 - HORIZONTAL_SHADE_PARAMS.dist, WINDOW_PARAMS.sillHeight - ROOM_PARAMS.gridHeight + WINDOW_PARAMS.heightFromSill - (HORIZONTAL_SHADE_PARAMS.spacing*j));
       // geometry1.rotateOnAxis()
       // geometry1.rotateX(Math.PI * -0.5);
       const plane1 = new THREE.Mesh(geometry1, shadeMaterial);
 
       plane1.name = "shade";
+      plane1.setRotationFromAxisAngle(new THREE.Vector3(0,0,1), util.degrees_to_radians(ROOM_PARAMS.orientation));
       scene.add(plane1);
       }
   }
 
    //VERTICAL SHADES
+
+   shadeMaterial = new THREE.MeshLambertMaterial({
+    color: 0xeeeeee,
+    // transparent: true,
+    // opacity: 0.7,
+    side: THREE.DoubleSide
+});
 
 
   for (let i = 0; i < r.glzCoords.length; i++) {
@@ -532,6 +585,7 @@ function updateRoom() {
     const plane1 = new THREE.Mesh(geometry1, shadeMaterial);
 
     plane1.name = "shade";
+    plane1.setRotationFromAxisAngle(new THREE.Vector3(0,0,1), util.degrees_to_radians(ROOM_PARAMS.orientation));
     scene.add(plane1);
     }
 }
@@ -562,6 +616,7 @@ function render() {
                 txt += "MRTPPD: " + INTERSECTED.userData.mrtppd.toString() + "\n";
                 txt += "PMV: " + INTERSECTED.userData.pmv.toString() + "\n";
                 txt += "PPD: " + INTERSECTED.userData.ppd.toString() + "\n";
+                txt += "PMV2: " + determinePPD(INTERSECTED.userData.ppd) + "\n";
                 
                 if(TIME_PARAMS.studyType == 1){
                   txt += "Azmuth Altitute: " + coordinates[0] + "\n";
@@ -696,7 +751,7 @@ function getSolar() {
         }
     }
 
-    console.log(coordinates)
+    // console.log(coordinates)
 }
 
 function doTrig(){
@@ -1423,3 +1478,9 @@ let decider = 0;
   }
 
 
+  function determinePPD(PMV){
+
+    let PPD = 100 - 95^(-1*(0.03353*(PMV^4)+0.2179*(PMV^2)))
+    return PPD;
+  
+  }
