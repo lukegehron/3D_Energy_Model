@@ -616,7 +616,7 @@ function render() {
                 txt += "MRTPPD: " + INTERSECTED.userData.mrtppd.toString() + "\n";
                 txt += "PMV: " + INTERSECTED.userData.pmv.toString() + "\n";
                 txt += "PPD: " + INTERSECTED.userData.ppd.toString() + "\n";
-                txt += "PMV2: " + determinePPD(INTERSECTED.userData.ppd) + "\n";
+                txt += "PPD2: " + determinePPD(INTERSECTED.userData.pmv) + "\n";
                 
                 if(TIME_PARAMS.studyType == 1){
                   txt += "Azmuth Altitute: " + coordinates[0] + "\n";
@@ -1480,7 +1480,7 @@ let decider = 0;
 
   function determinePPD(PMV){
 
-    let PPD = 100 - 95^(-1*(0.03353*(PMV^4)+0.2179*(PMV^2)))
+    let PPD = 100 - 95*Math.E**(-1*(0.03353*(PMV**4)+0.2179*(PMV**2)))
     return PPD;
   
   }
