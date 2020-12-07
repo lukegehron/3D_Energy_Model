@@ -833,6 +833,17 @@ function getSolar() {
     coordinates.push(solarCalculator([Lon, Lat]).position(dates[i]));
   }
 
+  let suncoordinates = [];
+    for (let i = 1; i <= 23; i++) {
+      let currentCal = solarCalculator([Lon, Lat]).position(dates[i*4]);
+      if(currentCal[1] > 0){
+        suncoordinates.push(currentCal);
+      }
+        
+    }
+
+    console.log(suncoordinates)
+
 
   for (let i = 0; i < coordinates.length; i += parseInt(timestep)) {
     if (coordinates[i][1] > 0) {
