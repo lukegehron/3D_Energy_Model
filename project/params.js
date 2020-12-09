@@ -134,7 +134,7 @@ let params = {
       tsol: 0.8,
       temperature: 40.0,
       emissivity: 0.9,
-      width: 8.0,
+      width: 2.0,
       height: 1.8,
       xposition: 1.0,
       yposition: 0.4,
