@@ -20,6 +20,8 @@ let solarcal = {
   asa: 0.7,
 };
 
+let showModel = "dwnSpd";
+
 let alt_rad, az_rad;
 
 let sun;
@@ -198,24 +200,40 @@ function init() {
   //   update_visualization();
   // }
 
-//   //TWEAKPANE_PANELS
-//   initTweakPane();
+  //TWEAKPANE_PANELS
+  initTweakPane();
 
-// }
+}
 
-// //INITIALIZE TWEAKPANE PANELS
-// function initTweakPane() {
-//   const global_pane = new Tweakpane({
-//     container: document.getElementById('global_pane'),
-//     title: 'Model Type',
-//   });
-//   global_pane.addInput(PARAMS1, 'model', {
-//     options: {
-//       directSolar: 0,
-//       meanRadiantTemp: 1,
-//       winterComfort: 2,
-//     },
-//   });
+//INITIALIZE TWEAKPANE PANELS
+function initTweakPane() {
+  const global_pane = new Tweakpane({
+    container: document.getElementById('global_pane'),
+    title: 'Model Type',
+  });
+  global_pane.addInput(PARAMS1, 'model', {
+    options: {
+      loc_i: 0,
+        loc_j: 1,
+        direct_solar: 2,
+        dwnSpd: 3,
+        dwnTmp: 4,
+        glzfac: 5,
+        govPPD: 6,
+        mrt: 7,
+        mrtppd: 8,
+        pmv: 9,
+        ppd: 10,
+        tarDist: 11,
+        longwaveMRT: 12,
+        mrt1: 13,
+        shortwaveMRT: 14,
+        directShortwaveMRT: 15,
+        diffuseShortwaveMRT: 16,
+        reflectedShortwaveMRT: 17,
+        pmv1: 18
+    },
+  });
 
 //   const climate_pane = new Tweakpane({
 //     container: document.getElementById('climate_pane'),
@@ -300,11 +318,17 @@ function init() {
 //   mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'TSolShading');
 
 
-//   climate_pane.on('change', (value) => {
-//     // console.log('changed: ' + String(value));
-//     // console.log(ROOM_PARAMS)
-//     updateParams();
-//   });
+  global_pane.on('change', (value) => {
+    // console.log('changed: ' + String(value));
+    // console.log(ROOM_PARAMS)
+    updateParams();
+  });
+
+  // climate_pane.on('change', (value) => {
+  //   // console.log('changed: ' + String(value));
+  //   // console.log(ROOM_PARAMS)
+  //   updateParams();
+  // });
 
 //   time_pane.on('change', (value) => {
 //     // console.log('changed: ' + String(value));
@@ -366,6 +390,7 @@ function updateParams() {
     selectedObject = scene.getObjectByName("shade");
     // count++;
   } while (selectedObject != null)
+
 
   updateRoom()
 
@@ -481,10 +506,51 @@ function updateRoom() {
       if (typeof multiDimResults[n][m] === 'undefined' || isNaN(multiDimResults[n][m].ppd)) {
         multiDimResults[n][m] = multiDimResults[n][m - 1];
       }
+      let da;
+      if(PARAMS1.model == 0){
+        da = multiDimResults[n][m].loc_i;
+      }else if(PARAMS1.model == 1){
+        da = multiDimResults[n][m].loc_j;
+      }else if(PARAMS1.model == 2){
+        da = multiDimResults[n][m].direct_solar;
+      }else if(PARAMS1.model == 3){
+        da = multiDimResults[n][m].dwnSpd;
+      }else if(PARAMS1.model == 4){
+        da = multiDimResults[n][m].dwnTmp;
+      }else if(PARAMS1.model == 5){
+        da = multiDimResults[n][m].glzfac;
+      }else if(PARAMS1.model == 6){
+        da = multiDimResults[n][m].govPPD;
+      }else if(PARAMS1.model == 7){
+        da = multiDimResults[n][m].mrt;
+      }else if(PARAMS1.model == 8){
+        da = multiDimResults[n][m].mrtppd;
+      }else if(PARAMS1.model == 9){
+        da = multiDimResults[n][m].pmv;
+      }else if(PARAMS1.model == 10){
+        da = multiDimResults[n][m].ppd;
+      }else if(PARAMS1.model == 11){
+        da = multiDimResults[n][m].tarDist;
+      }else if(PARAMS1.model == 12){
+        da = multiDimResults[n][m].longwaveMRT;
+      }else if(PARAMS1.model == 13){
+        da = multiDimResults[n][m].mrt1;
+      }else if(PARAMS1.model == 14){
+        da = multiDimResults[n][m].shortwaveMRT;
+      }else if(PARAMS1.model == 15){
+        da = multiDimResults[n][m].directShortwaveMRT;
+      }else if(PARAMS1.model == 16){
+        da = multiDimResults[n][m].diffuseShortwaveMRT;
+      }else if(PARAMS1.model == 17){
+        da = multiDimResults[n][m].reflectedShortwaveMRT;
+      }else{
+        da = multiDimResults[n][m].pmv1;
+      }
 
       let plane = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
         // color: new THREE.Color(`rgb(255,`+parseInt(255 -multiDimResults[n][m].dwnSpd*2)+`,`+parseInt(255 -multiDimResults[n][m].dwnSpd*2)+`)`),
-        color: new THREE.Color(`rgb(255,` + (255 - gridColorArray[colorCount] * 2) + `,` + (255 - gridColorArray[colorCount] * 2) + `)`),
+        color: new THREE.Color(`rgb(255,`+parseInt(255 -da*2)+`,`+parseInt(255 -da*2)+`)`),
+        // color: new THREE.Color(`rgb(255,` + (255 - gridColorArray[colorCount] * 2) + `,` + (255 - gridColorArray[colorCount] * 2) + `)`),
         side: THREE.DoubleSide
       }));
 
@@ -506,7 +572,7 @@ function updateRoom() {
 
 
       let my_point = new THREE.Vector3(0, 0, 0);
-      let cursorPoint = new THREE.Vector3(m + 0.5, n + 0.5, 0)
+      let cursorPoint = new THREE.Vector3(n + 0.5, m + 0.5, 0)
       my_point.x = cursorPoint.x - mrt.room.width / 2;
       my_point.y = cursorPoint.y - mrt.room.depth / 2;
       my_point.z = 0;
@@ -586,6 +652,14 @@ function updateRoom() {
       // plane.translateY(n - mrt.room.depth/2);
       // plane.translateZ(-1);
 
+      multiDimResults[n][m].longwaveMRT = longwave_mrt;
+      multiDimResults[n][m].mrt1 = longwave_mrt + my_erf.dMRT;
+      multiDimResults[n][m].shortwaveMRT = my_erf.dMRT;
+      multiDimResults[n][m].directShortwaveMRT = my_erf.dMRT_direct;
+      multiDimResults[n][m].diffuseShortwaveMRT = my_erf.dMRT_diff;
+      multiDimResults[n][m].reflectedShortwaveMRT= my_erf.dMRT_refl;
+      multiDimResults[n][m].pmv1 = my_pmv.pmv;
+
       // plane.name = "grid1";
       plane.name = "grid";
       plane.userData = {
@@ -607,7 +681,7 @@ function updateRoom() {
         directShortwaveMRT: my_erf.dMRT_direct,
         diffuseShortwaveMRT: my_erf.dMRT_diff,
         reflectedShortwaveMRT: my_erf.dMRT_refl,
-        pmv: my_pmv.pmv
+        pmv1: my_pmv.pmv
       }
       // scene.add(plane);
       // plane.userData = {
@@ -831,7 +905,7 @@ function render() {
         txt += "directShortwaveMRT: " + INTERSECTED.userData.directShortwaveMRT.toString() + "\n";
         txt += "diffuseShortwaveMRT: " + INTERSECTED.userData.diffuseShortwaveMRT.toString() + "\n";
         txt += "reflectedShortwaveMRT: " + INTERSECTED.userData.reflectedShortwaveMRT.toString() + "\n";
-        txt += "pmv: " + INTERSECTED.userData.pmv + "\n";
+        txt += "pmv1: " + INTERSECTED.userData.pmv1 + "\n";
 
 
         myDiv.innerText = txt;
@@ -2765,6 +2839,7 @@ function render_zone() {
     mesh.geometry.computeVertexNormals();
 
     mesh.name = p.name;
+    mesh.translateZ(50)
     scene.add(mesh);
     surfaces.push(mesh);
 
