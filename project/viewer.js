@@ -492,11 +492,19 @@ function updateRoom() {
       plane.translateX(j);
       plane.translateY(i);
 
+      let dSolar = 0;
+
+      if(isNaN(gridColorArray[colorCount]) == false || typeof gridColorArray[colorCount] !== 'undefined'){
+        dSolar = gridColorArray[colorCount];
+      }
+
+      // console.log(dSolar)
+
       plane.name = "grid";
       plane.userData = {
         loc_i: ROOM_PARAMS.depth / 2 + i,
         loc_j: ROOM_PARAMS.length / 2 + j,
-        direct_solar: gridColorArray[colorCount],
+        direct_solar: dSolar,
         dwnSpd: multiDimResults[n][m].dwnSpd,
         dwnTmp: multiDimResults[n][m].dwnTmp,
         glzfac: multiDimResults[n][m].glzfac,
@@ -689,12 +697,16 @@ function render() {
   if (intersects.length > 0) {
 
     if (INTERSECTED != intersects[0].object) {
+      if (INTERSECTED != null && INTERSECTED.name != null){
+        // console.log(INTERSECTED.name)
+      }
+
 
       // if (INTERSECTED) INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
 
       if (INTERSECTED != null && INTERSECTED.name == "grid") {
         // console.log(INTERSECTED)
-        console.log(INTERSECTED.userData);
+        // console.log(INTERSECTED.userData.direct_solar);
         let myDiv = document.getElementById("mdata");
         let txt = "";
         txt += "MRT: " + INTERSECTED.userData.mrt.toString() + "\n";
@@ -715,12 +727,29 @@ function render() {
 
         myDiv.innerText = txt;
 
+      }else if (INTERSECTED != null && INTERSECTED.name == "grid1") {
+        // console.log(INTERSECTED)
+        console.log(INTERSECTED.userData);
+        let myDiv = document.getElementById("mdata");
+        let txt = "";
+        txt += "MRT: " + INTERSECTED.userData.mrt.toString() + "\n";
+        // txt += "Direct Solar: " + INTERSECTED.userData.direct_solar.toString() + "\n";
+        txt += "LongwaveMRT: " + INTERSECTED.userData.longwaveMRT.toString() + "\n";
+        txt += "shortwaveMRT: " + INTERSECTED.userData.shortwaveMRT.toString() + "\n";
+        txt += "directShortwaveMRT: " + INTERSECTED.userData.directShortwaveMRT.toString() + "\n";
+        txt += "diffuseShortwaveMRT: " + INTERSECTED.userData.diffuseShortwaveMRT.toString() + "\n";
+        txt += "reflectedShortwaveMRT: " + INTERSECTED.userData.reflectedShortwaveMRT.toString() + "\n";
+        txt += "pmv: " + INTERSECTED.userData.pmv + "\n";
+
+        myDiv.innerText = txt;
       }
 
       INTERSECTED = intersects[0].object;
       // INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
       // INTERSECTED.material.color.setHex(0xff0000);
     }
+    
+
 
   } else {
     // if (INTERSECTED) INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
@@ -1081,6 +1110,8 @@ function doTrig() {
       } else {
         gridColor = gridColor + 0;
       }
+
+      console.log(gridColor)
       if (i % coordinates.length == (coordinates.length) - 1) {
         gridColorArray.push(gridColor);
         gridColor = 0;
@@ -1677,10 +1708,10 @@ function drawGrid() {
     opacity: 0.7
   });
 
-  let geometry = new THREE.PlaneBufferGeometry(0.9, 0.9);
+  let geometry = new THREE.PlaneBufferGeometry(0.49, 0.49);
 
-  for (let i = 0; i < mrt.room.width; i++) {
-    for (let j = 0; j < mrt.room.depth; j++) {
+  for (let i = 0; i < mrt.room.width; i+=0.5) {
+    for (let j = 0; j < mrt.room.depth; j+=0.5) {
       let my_point = new THREE.Vector3(0, 0, 0);
       let cursorPoint = new THREE.Vector3(i + 0.5, j + 0.5, 0)
       my_point.x = cursorPoint.x - mrt.room.width / 2;
@@ -1758,10 +1789,11 @@ function drawGrid() {
         color: new THREE.Color(`rgb(255,` + (255 - parseInt(display_value * 2)) + `,` + (255 - parseInt(display_value * 2)) + `)`),
         side: THREE.DoubleSide
       }));
-      plane.translateX(i);
-      plane.translateY(j);
+      plane.translateX(i - mrt.room.width/2 - .25);
+      plane.translateY(j - mrt.room.depth/2 - .25);
+      plane.translateZ(-1);
 
-      plane.name = "grid";
+      plane.name = "grid1";
       plane.userData = {
         longwaveMRT: longwave_mrt,
         mrt: longwave_mrt + my_erf.dMRT,
@@ -1771,7 +1803,7 @@ function drawGrid() {
         reflectedShortwaveMRT: my_erf.dMRT_refl,
         pmv: my_pmv.pmv
       }
-      console.log(cursorPoint.x, cursorPoint.z, plane.userData)
+      // console.log(cursorPoint.x, cursorPoint.z, plane.userData)
       scene.add(plane);
       colorCount++;
     }

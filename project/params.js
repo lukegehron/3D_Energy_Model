@@ -19,19 +19,19 @@ const TIME_PARAMS = {
 
 const ROOM_PARAMS = {
   orientation: 0,
-  ceilHeight: 12,
+  ceilHeight: 4,
   gridHeight: 1,
-  length: 32,
-  depth: 16
+  length: 10,
+  depth: 5
 };
 
 const WINDOW_PARAMS = {
-  heightFromSill: 7.0,
-  sillHeight: 2.0,
+  heightFromSill: 2,
+  sillHeight: 1,
   glazingBy: 0,
   glazingRatio: 40,
-  width: 7,
-  separation: 12
+  width: 2,
+  separation: 5
 }
 
 const HORIZONTAL_SHADE_PARAMS = {
@@ -76,7 +76,7 @@ const WINTER_COMFORT_PARAMS = {
 }
 
 const UNIT_PARAMS = {
-  unitSys: "IP"
+  unitSys: "IP" // IP or SI
 }
 
 const OCCUPANT_PARAMS = {
