@@ -130,7 +130,7 @@ function init() {
 
   //THREE_GEOMETRY
   geometry = new THREE.PlaneBufferGeometry(0.9, 0.9);
-  updateRoom();
+  // updateRoom();
 
   raycaster = new THREE.Raycaster();
 
@@ -198,140 +198,141 @@ function init() {
   //   update_visualization();
   // }
 
-  //TWEAKPANE_PANELS
-  initTweakPane();
+//   //TWEAKPANE_PANELS
+//   initTweakPane();
 
-}
+// }
 
-//INITIALIZE TWEAKPANE PANELS
-function initTweakPane() {
-  const global_pane = new Tweakpane({
-    container: document.getElementById('global_pane'),
-    title: 'Model Type',
-  });
-  global_pane.addInput(PARAMS1, 'model', {
-    options: {
-      directSolar: 0,
-      meanRadiantTemp: 1,
-      winterComfort: 2,
-    },
-  });
+// //INITIALIZE TWEAKPANE PANELS
+// function initTweakPane() {
+//   const global_pane = new Tweakpane({
+//     container: document.getElementById('global_pane'),
+//     title: 'Model Type',
+//   });
+//   global_pane.addInput(PARAMS1, 'model', {
+//     options: {
+//       directSolar: 0,
+//       meanRadiantTemp: 1,
+//       winterComfort: 2,
+//     },
+//   });
 
-  const climate_pane = new Tweakpane({
-    container: document.getElementById('climate_pane'),
-    title: 'Climate',
-  })
+//   const climate_pane = new Tweakpane({
+//     container: document.getElementById('climate_pane'),
+//     title: 'Climate',
+//   })
 
-  climate_pane.addInput(CLIMATE_PARAMS, 'longitude');
-  climate_pane.addInput(CLIMATE_PARAMS, 'latitude');
-  climate_pane.addInput(CLIMATE_PARAMS, 'timeZoneOffset');
+//   climate_pane.addInput(CLIMATE_PARAMS, 'longitude');
+//   climate_pane.addInput(CLIMATE_PARAMS, 'latitude');
+//   climate_pane.addInput(CLIMATE_PARAMS, 'timeZoneOffset');
 
-  const time_pane = new Tweakpane({
-    container: document.getElementById('time_pane'),
-    title: 'Time',
-  })
-  time_pane.addInput(TIME_PARAMS, 'studyType');
-  time_pane.addInput(TIME_PARAMS, 'hour');
-  time_pane.addInput(TIME_PARAMS, 'day');
-  time_pane.addInput(TIME_PARAMS, 'month');
+//   const time_pane = new Tweakpane({
+//     container: document.getElementById('time_pane'),
+//     title: 'Time',
+//   })
+//   time_pane.addInput(TIME_PARAMS, 'studyType');
+//   time_pane.addInput(TIME_PARAMS, 'hour');
+//   time_pane.addInput(TIME_PARAMS, 'day');
+//   time_pane.addInput(TIME_PARAMS, 'month');
 
-  const geometry_pane = new Tweakpane({
-    container: document.getElementById('room_pane'),
-  });
+//   const geometry_pane = new Tweakpane({
+//     container: document.getElementById('room_pane'),
+//   });
 
-  const room_pane = geometry_pane.addFolder({
-    title: 'Geometry',
-  });
+//   const room_pane = geometry_pane.addFolder({
+//     title: 'Geometry',
+//   });
 
-  const roomPanel = room_pane.addFolder({
-    title: 'Room',
-  });
-  roomPanel.addInput(ROOM_PARAMS, 'orientation');
-  roomPanel.addInput(ROOM_PARAMS, 'ceilHeight');
-  roomPanel.addInput(ROOM_PARAMS, 'gridHeight');
-  roomPanel.addInput(ROOM_PARAMS, 'depth');
-  roomPanel.addInput(ROOM_PARAMS, 'length');
+//   const roomPanel = room_pane.addFolder({
+//     title: 'Room',
+//   });
+//   roomPanel.addInput(ROOM_PARAMS, 'orientation');
+//   roomPanel.addInput(ROOM_PARAMS, 'ceilHeight');
+//   roomPanel.addInput(ROOM_PARAMS, 'gridHeight');
+//   roomPanel.addInput(ROOM_PARAMS, 'depth');
+//   roomPanel.addInput(ROOM_PARAMS, 'length');
 
-  const windowPanel = room_pane.addFolder({
-    expanded: false,
-    title: 'Window',
-  });
-  windowPanel.addInput(WINDOW_PARAMS, 'heightFromSill');
-  windowPanel.addInput(WINDOW_PARAMS, 'sillHeight');
-  windowPanel.addInput(WINDOW_PARAMS, 'glazingBy');
-  windowPanel.addInput(WINDOW_PARAMS, 'separation');
+//   const windowPanel = room_pane.addFolder({
+//     expanded: false,
+//     title: 'Window',
+//   });
+//   windowPanel.addInput(WINDOW_PARAMS, 'heightFromSill');
+//   windowPanel.addInput(WINDOW_PARAMS, 'sillHeight');
+//   windowPanel.addInput(WINDOW_PARAMS, 'glazingBy');
+//   windowPanel.addInput(WINDOW_PARAMS, 'separation');
 
-  const hshadePanel = room_pane.addFolder({
-    expanded: false,
-    title: 'Horizontal Shade',
-  });
-  hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'depth');
-  hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'number');
-  hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'spacing');
-  hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'dist');
-  hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'heightAbove');
-  hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'angle');
+//   const hshadePanel = room_pane.addFolder({
+//     expanded: false,
+//     title: 'Horizontal Shade',
+//   });
+//   hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'depth');
+//   hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'number');
+//   hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'spacing');
+//   hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'dist');
+//   hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'heightAbove');
+//   hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'angle');
 
-  const vshadePanel = room_pane.addFolder({
-    expanded: false,
-    title: 'Vertical Shade',
-  });
-  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'depth');
-  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'number');
-  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'spacing');
-  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'leftRight');
-  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'lrShift');
-  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'dist');
-  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'fullHeight');
-  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'heightAbove');
-  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'relativeHeight');
-  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'angle');
+//   const vshadePanel = room_pane.addFolder({
+//     expanded: false,
+//     title: 'Vertical Shade',
+//   });
+//   vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'depth');
+//   vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'number');
+//   vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'spacing');
+//   vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'leftRight');
+//   vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'lrShift');
+//   vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'dist');
+//   vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'fullHeight');
+//   vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'heightAbove');
+//   vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'relativeHeight');
+//   vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'angle');
 
-  const mrt_pane = new Tweakpane({
-    container: document.getElementById('mrt_pane'),
-    title: 'MRT',
-  })
+//   const mrt_pane = new Tweakpane({
+//     container: document.getElementById('mrt_pane'),
+//     title: 'MRT',
+//   })
 
-  mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'directNormalIrradiance');
-  mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'fractionOfBodyExposed');
-  mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'shortWaveAbsorpivity');
-  mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'TSol');
-  mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'SHGCIndirect');
-  mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'TSolShading');
-
-
-  climate_pane.on('change', (value) => {
-    // console.log('changed: ' + String(value));
-    // console.log(ROOM_PARAMS)
-    updateParams();
-  });
-
-  time_pane.on('change', (value) => {
-    // console.log('changed: ' + String(value));
-    // console.log(ROOM_PARAMS)
-    updateParams();
-  });
+//   mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'directNormalIrradiance');
+//   mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'fractionOfBodyExposed');
+//   mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'shortWaveAbsorpivity');
+//   mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'TSol');
+//   mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'SHGCIndirect');
+//   mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'TSolShading');
 
 
-  geometry_pane.on('change', (value) => {
-    // console.log('changed: ' + String(value));
-    // console.log(ROOM_PARAMS)
-    updateParams();
-  });
+//   climate_pane.on('change', (value) => {
+//     // console.log('changed: ' + String(value));
+//     // console.log(ROOM_PARAMS)
+//     updateParams();
+//   });
 
-  mrt_pane.on('change', (value) => {
-    // console.log('changed: ' + String(value));
-    // console.log(ROOM_PARAMS)
-    updateParams();
-  });
+//   time_pane.on('change', (value) => {
+//     // console.log('changed: ' + String(value));
+//     // console.log(ROOM_PARAMS)
+//     updateParams();
+//   });
+
+
+//   geometry_pane.on('change', (value) => {
+//     // console.log('changed: ' + String(value));
+//     // console.log(ROOM_PARAMS)
+//     updateParams();
+//   });
+
+//   mrt_pane.on('change', (value) => {
+//     // console.log('changed: ' + String(value));
+//     // console.log(ROOM_PARAMS)
+//     updateParams();
+//   });
 
   set_wall_properties();
   render_zone();
   update_view_factors();
   update_shortwave_components();
   update_visualization();
-  drawGrid();
+  // drawGrid();
   // calculate_all();
+  updateRoom();
 
 }
 
@@ -475,13 +476,13 @@ function updateRoom() {
         }
       }
 
-      // console.log(n,m)
+      // console.log(n,m) //m = i, n = j
 
       if (typeof multiDimResults[n][m] === 'undefined' || isNaN(multiDimResults[n][m].ppd)) {
         multiDimResults[n][m] = multiDimResults[n][m - 1];
       }
 
-      const plane = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
+      let plane = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
         // color: new THREE.Color(`rgb(255,`+parseInt(255 -multiDimResults[n][m].dwnSpd*2)+`,`+parseInt(255 -multiDimResults[n][m].dwnSpd*2)+`)`),
         color: new THREE.Color(`rgb(255,` + (255 - gridColorArray[colorCount] * 2) + `,` + (255 - gridColorArray[colorCount] * 2) + `)`),
         side: THREE.DoubleSide
@@ -500,6 +501,92 @@ function updateRoom() {
 
       // console.log(dSolar)
 
+      
+      // colorCount++;
+
+
+      let my_point = new THREE.Vector3(0, 0, 0);
+      let cursorPoint = new THREE.Vector3(m + 0.5, n + 0.5, 0)
+      my_point.x = cursorPoint.x - mrt.room.width / 2;
+      my_point.y = cursorPoint.y - mrt.room.depth / 2;
+      my_point.z = 0;
+
+      var point_view_factors = calculate_view_factors(cursorPoint);
+      var longwave_mrt = mrt.calc(point_view_factors);
+
+      var window_objects = get_window_objects();
+
+      if (window_objects) {
+        var window_object_vfs = _.map(window_objects, function (w) {
+          return _.find(point_view_factors, function (o) {
+            return o.name == w.name;
+          }).view_factor;
+        });
+        var my_erf = calculate_erf_point(
+          my_point,
+          solarcal.skydome_center,
+          window_objects,
+          window_object_vfs
+        );
+      } else {
+        my_erf = {
+          dMRT_direct: 0,
+          dMRT_diff: 0,
+          dMRT_refl: 0,
+          dMRT: 0,
+          ERF: 0
+        };
+      }
+
+      if (params.display === "Longwave MRT") {
+        display_value = longwave_mrt;
+      } else if (params.display === "MRT") {
+        display_value = longwave_mrt + my_erf.dMRT;
+      } else if (params.display === "Shortwave dMRT") {
+        display_value = my_erf.dMRT;
+      } else if (params.display === "Direct shortwave dMRT") {
+        display_value = my_erf.dMRT_direct;
+      } else if (params.display === "Diffuse shortwave dMRT") {
+        display_value = my_erf.dMRT_diff;
+      } else if (params.display === "Reflected shortwave dMRT") {
+        display_value = my_erf.dMRT_refl;
+      } else if (params.display === "PMV") {
+        var mrt_total = longwave_mrt + my_erf.dMRT;
+        var my_pmv = comf.pmvElevatedAirspeed(
+          comfort.ta,
+          mrt_total,
+          comfort.vel,
+          comfort.rh,
+          comfort.met,
+          comfort.clo,
+          0
+        );
+        display_value = my_pmv.pmv;
+      }
+      // console.log(cursorPoint.x, cursorPoint.z, display_value.toFixed(1));
+
+      var mrt_total = longwave_mrt + my_erf.dMRT;
+      var my_pmv = comf.pmvElevatedAirspeed(
+        comfort.ta,
+        mrt_total,
+        comfort.vel,
+        comfort.rh,
+        comfort.met,
+        comfort.clo,
+        0
+      );
+
+
+      // plane = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
+      //   // color: new THREE.Color(`rgb(255,`+parseInt(255 -multiDimResults[n][m].dwnSpd*2)+`,`+parseInt(255 -multiDimResults[n][m].dwnSpd*2)+`)`),
+      //   color: new THREE.Color(`rgb(255,` + (255 - parseInt(display_value * 2)) + `,` + (255 - parseInt(display_value * 2)) + `)`),
+      //   side: THREE.DoubleSide
+      // }));
+      // plane.translateX(m - mrt.room.width/2);
+      // plane.translateY(n - mrt.room.depth/2);
+      // plane.translateZ(-1);
+
+      // plane.name = "grid1";
       plane.name = "grid";
       plane.userData = {
         loc_i: ROOM_PARAMS.depth / 2 + i,
@@ -514,7 +601,19 @@ function updateRoom() {
         pmv: multiDimResults[n][m].pmv,
         ppd: multiDimResults[n][m].ppd,
         tarDist: multiDimResults[n][m].tarDist,
+        longwaveMRT: longwave_mrt,
+        mrt1: longwave_mrt + my_erf.dMRT,
+        shortwaveMRT: my_erf.dMRT,
+        directShortwaveMRT: my_erf.dMRT_direct,
+        diffuseShortwaveMRT: my_erf.dMRT_diff,
+        reflectedShortwaveMRT: my_erf.dMRT_refl,
+        pmv: my_pmv.pmv
       }
+      // scene.add(plane);
+      // plane.userData = {
+        
+      // }
+      // console.log(cursorPoint.x, cursorPoint.z, plane.userData)
       scene.add(plane);
       colorCount++;
     }
@@ -725,14 +824,7 @@ function render() {
           txt += "Direct Normal Irradiance: " + directNormalIrradiance(parseFloat(mNum)).toString();
         }
 
-        myDiv.innerText = txt;
-
-      }else if (INTERSECTED != null && INTERSECTED.name == "grid1") {
-        // console.log(INTERSECTED)
-        console.log(INTERSECTED.userData);
-        let myDiv = document.getElementById("mdata");
-        let txt = "";
-        txt += "MRT: " + INTERSECTED.userData.mrt.toString() + "\n";
+        txt += "MRT: " + INTERSECTED.userData.mrt1.toString() + "\n";
         // txt += "Direct Solar: " + INTERSECTED.userData.direct_solar.toString() + "\n";
         txt += "LongwaveMRT: " + INTERSECTED.userData.longwaveMRT.toString() + "\n";
         txt += "shortwaveMRT: " + INTERSECTED.userData.shortwaveMRT.toString() + "\n";
@@ -741,13 +833,17 @@ function render() {
         txt += "reflectedShortwaveMRT: " + INTERSECTED.userData.reflectedShortwaveMRT.toString() + "\n";
         txt += "pmv: " + INTERSECTED.userData.pmv + "\n";
 
+
         myDiv.innerText = txt;
       }
+
+      
 
       INTERSECTED = intersects[0].object;
       // INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
       // INTERSECTED.material.color.setHex(0xff0000);
     }
+    
     
 
 
@@ -843,7 +939,7 @@ function getSolar() {
 
   }
 
-  console.log(suncoordinates)
+  // console.log(suncoordinates)
 
 
   for (let i = 0; i < coordinates.length; i += parseInt(timestep)) {
@@ -1111,7 +1207,7 @@ function doTrig() {
         gridColor = gridColor + 0;
       }
 
-      console.log(gridColor)
+      // console.log(gridColor)
       if (i % coordinates.length == (coordinates.length) - 1) {
         gridColorArray.push(gridColor);
         gridColor = 0;
@@ -1708,10 +1804,10 @@ function drawGrid() {
     opacity: 0.7
   });
 
-  let geometry = new THREE.PlaneBufferGeometry(0.49, 0.49);
+  let geometry = new THREE.PlaneBufferGeometry(0.9, 0.9);
 
-  for (let i = 0; i < mrt.room.width; i+=0.5) {
-    for (let j = 0; j < mrt.room.depth; j+=0.5) {
+  for (let i = 0; i < mrt.room.width; i++) {
+    for (let j = 0; j < mrt.room.depth; j++) {
       let my_point = new THREE.Vector3(0, 0, 0);
       let cursorPoint = new THREE.Vector3(i + 0.5, j + 0.5, 0)
       my_point.x = cursorPoint.x - mrt.room.width / 2;
@@ -1789,8 +1885,8 @@ function drawGrid() {
         color: new THREE.Color(`rgb(255,` + (255 - parseInt(display_value * 2)) + `,` + (255 - parseInt(display_value * 2)) + `)`),
         side: THREE.DoubleSide
       }));
-      plane.translateX(i - mrt.room.width/2 - .25);
-      plane.translateY(j - mrt.room.depth/2 - .25);
+      plane.translateX(i - mrt.room.width/2);
+      plane.translateY(j - mrt.room.depth/2);
       plane.translateZ(-1);
 
       plane.name = "grid1";
@@ -1804,7 +1900,7 @@ function drawGrid() {
         pmv: my_pmv.pmv
       }
       // console.log(cursorPoint.x, cursorPoint.z, plane.userData)
-      scene.add(plane);
+      // scene.add(plane);
       colorCount++;
     }
   }
@@ -2536,7 +2632,7 @@ function render_zone() {
   });
   var line = new THREE.Line(geometry, material);
   line.type = THREE.LinePieces;
-  scene.add(line);
+  // scene.add(line);
 
   var z = gen_zone_geometry();
 
@@ -2568,7 +2664,7 @@ function render_zone() {
   plane.position.z = mrt.room.depth / 2;
   plane.geometry.dynamic = true; // so that we can change the vertex colors
   plane.name = "visualization";
-  scene.add(plane);
+  // scene.add(plane);
   plane.updateMatrixWorld();
 
   // Surfaces
@@ -2677,6 +2773,6 @@ function render_zone() {
     // edges
     var egh = new THREE.EdgesHelper(mesh, 0x444444);
     egh.material.linewidth = 2;
-    scene.add(egh);
+    // scene.add(egh);
   }
 }
