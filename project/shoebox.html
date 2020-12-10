@@ -10,6 +10,70 @@
 	<script src="//d3js.org/d3.v3.min.js"></script>
 	<link type="text/css" rel="stylesheet" href="main.css">
 
+	<style>
+
+body {
+   margin:0;
+   padding:0;
+   height:100%;
+}
+		#footer{
+			border-top: solid;
+	
+  /* background-color: black; */
+  /* color:white; */
+   position:fixed;
+   bottom:0;
+   width:100%;
+   height:300px;   /* Height of the footer */
+    -webkit-transition: height 1s, visibility 1s;
+		transition: height 1s, visibility 1s;
+		z-index: 50;
+}
+#footerbuttondown{
+	/* background-color: black; */
+	color:red;
+  font-size: 35px;
+  width:35px;
+  margin-left:auto;
+  margin-right:auto;
+  text-align: center;
+	position: relative;
+  top:-40px;
+  border-radius:5px;
+	border-radius:5px;
+	z-index: 50
+}
+#footerbuttonup{
+	/* background-color: black; */
+	color:red;
+  font-size: 35px;
+  width:35px;
+  margin-left:auto;
+  margin-right:auto;
+  text-align: center;
+	position: relative;
+  top:-60px;
+  border-radius:5px;
+  border-radius:5px;
+	visibility:hidden;
+	z-index: 50
+}
+#footercont{
+  position:absolute;
+  top:0px;
+  opacity:1;
+	transition: opacity 1s, visibility 2s, display 2s;
+	z-index: 50
+}
+#centerbutton{
+	align:center;
+  width:100%;
+	content-align: center;
+	z-index: 50
+}
+	</style>
+
 	<script type="text/javascript" charset="utf-8" src="./ladybug.js"></script>
 	<script type="text/javascript" charset="utf-8" src="./mrt.js"></script>
 	<script type="text/javascript" charset="utf-8" src="./erf.js"></script>
@@ -111,6 +175,54 @@
 	<script src="./viewer.js" type="module"></script>
 	<script src = "./script.js"></script>
 	<script src = "./solarCalculator.js"></script>
+
+	
+
+	Click the triangle to toggle the footer :)
+<div id="footer"> 
+
+  <div id="footerbuttondown">&#9660;</div>
+  <div id="footerbuttonup">&#9650;</div>
+
+  
+  <div id="footercont">
+	 Click the triangle to toggle the footer size<p>
+   blah blah blah<p>
+   blah blah blah<p>
+  </div>
+</div><!--end of footer-->
+
+<script>
+	document.getElementById("footerbuttondown").onclick = function(){shrink()};
+document.getElementById("footerbuttonup").onclick = function(){ expand()};
+document.getElementById("footer").style.height= "300px"; 
+
+function shrink(){
+if(document.getElementById("footer").style.height= "300px"){
+
+	document.getElementById("footer").style.height= "30px";
+	document.getElementById("footerbuttondown").style.visibility="hidden";  
+ document.getElementById("footerbuttonup").style.visibility="visible";  
+	document.getElementById("footercont").style.opacity="0";  
+	document.getElementById("footercont").style.visibility="hidden";
+																		
+}
+}
+
+function expand(){
+if(document.getElementById("footer").style.height= "30px"){
+	
+	document.getElementById("footer").style.height= "300px";
+	document.getElementById("footerbuttondown").style.visibility="visible";  
+ document.getElementById("footerbuttonup").style.visibility="hidden";  
+	document.getElementById("footercont").style.opacity="1";  
+	document.getElementById("footercont").style.visibility="visible";
+
+																								
+}
+}
+
+</script>
 	
 
 </body>
