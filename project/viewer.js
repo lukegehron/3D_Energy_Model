@@ -501,64 +501,16 @@ function updateRoom() {
         }
       }
 
-      // console.log(n,m) //m = i, n = j
+      console.log(n,m) //m = i, n = j
+      let j_1 = i + ROOM_PARAMS.depth / 2;
+      let i_1 = j + ROOM_PARAMS.length / 2;
 
       if (typeof multiDimResults[n][m] === 'undefined' || isNaN(multiDimResults[n][m].ppd)) {
         multiDimResults[n][m] = multiDimResults[n][m - 1];
       }
-      let da;
-      if(PARAMS1.model == 0){
-        da = multiDimResults[n][m].loc_i;
-      }else if(PARAMS1.model == 1){
-        da = multiDimResults[n][m].loc_j;
-      }else if(PARAMS1.model == 2){
-        da = multiDimResults[n][m].direct_solar;
-      }else if(PARAMS1.model == 3){
-        da = multiDimResults[n][m].dwnSpd;
-      }else if(PARAMS1.model == 4){
-        da = multiDimResults[n][m].dwnTmp;
-      }else if(PARAMS1.model == 5){
-        da = multiDimResults[n][m].glzfac;
-      }else if(PARAMS1.model == 6){
-        da = multiDimResults[n][m].govPPD;
-      }else if(PARAMS1.model == 7){
-        da = multiDimResults[n][m].mrt;
-      }else if(PARAMS1.model == 8){
-        da = multiDimResults[n][m].mrtppd;
-      }else if(PARAMS1.model == 9){
-        da = multiDimResults[n][m].pmv;
-      }else if(PARAMS1.model == 10){
-        da = multiDimResults[n][m].ppd;
-      }else if(PARAMS1.model == 11){
-        da = multiDimResults[n][m].tarDist;
-      }else if(PARAMS1.model == 12){
-        da = multiDimResults[n][m].longwaveMRT;
-      }else if(PARAMS1.model == 13){
-        da = multiDimResults[n][m].mrt1;
-      }else if(PARAMS1.model == 14){
-        da = multiDimResults[n][m].shortwaveMRT;
-      }else if(PARAMS1.model == 15){
-        da = multiDimResults[n][m].directShortwaveMRT;
-      }else if(PARAMS1.model == 16){
-        da = multiDimResults[n][m].diffuseShortwaveMRT;
-      }else if(PARAMS1.model == 17){
-        da = multiDimResults[n][m].reflectedShortwaveMRT;
-      }else{
-        da = multiDimResults[n][m].pmv1;
-      }
+      
 
-      let plane = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
-        // color: new THREE.Color(`rgb(255,`+parseInt(255 -multiDimResults[n][m].dwnSpd*2)+`,`+parseInt(255 -multiDimResults[n][m].dwnSpd*2)+`)`),
-        color: new THREE.Color(`rgb(255,`+parseInt(255 -da*2)+`,`+parseInt(255 -da*2)+`)`),
-        // color: new THREE.Color(`rgb(255,` + (255 - gridColorArray[colorCount] * 2) + `,` + (255 - gridColorArray[colorCount] * 2) + `)`),
-        side: THREE.DoubleSide
-      }));
-
-
-      plane.setRotationFromAxisAngle(new THREE.Vector3(0, 0, 1), util.degrees_to_radians(ROOM_PARAMS.orientation));
-      plane.translateX(j);
-      plane.translateY(i);
-
+      
       let dSolar = 0;
 
       if(isNaN(gridColorArray[colorCount]) == false || typeof gridColorArray[colorCount] !== 'undefined'){
@@ -572,7 +524,7 @@ function updateRoom() {
 
 
       let my_point = new THREE.Vector3(0, 0, 0);
-      let cursorPoint = new THREE.Vector3(n + 0.5, m + 0.5, 0)
+      let cursorPoint = new THREE.Vector3(i_1 + 0.5, j_1 + 0.5, 0)
       my_point.x = cursorPoint.x - mrt.room.width / 2;
       my_point.y = cursorPoint.y - mrt.room.depth / 2;
       my_point.z = 0;
@@ -660,11 +612,70 @@ function updateRoom() {
       multiDimResults[n][m].reflectedShortwaveMRT= my_erf.dMRT_refl;
       multiDimResults[n][m].pmv1 = my_pmv.pmv;
 
+
+      let da;
+      if(PARAMS1.model == 0){
+        da = multiDimResults[n][m].loc_i;
+      }else if(PARAMS1.model == 1){
+        da = multiDimResults[n][m].loc_j;
+      }else if(PARAMS1.model == 2){
+        da = multiDimResults[n][m].direct_solar;
+      }else if(PARAMS1.model == 3){
+        da = multiDimResults[n][m].dwnSpd;
+      }else if(PARAMS1.model == 4){
+        da = multiDimResults[n][m].dwnTmp;
+      }else if(PARAMS1.model == 5){
+        da = multiDimResults[n][m].glzfac;
+      }else if(PARAMS1.model == 6){
+        da = multiDimResults[n][m].govPPD;
+      }else if(PARAMS1.model == 7){
+        da = multiDimResults[n][m].mrt;
+      }else if(PARAMS1.model == 8){
+        da = multiDimResults[n][m].mrtppd;
+      }else if(PARAMS1.model == 9){
+        da = multiDimResults[n][m].pmv;
+      }else if(PARAMS1.model == 10){
+        da = multiDimResults[n][m].ppd;
+      }else if(PARAMS1.model == 11){
+        da = multiDimResults[n][m].tarDist;
+      }else if(PARAMS1.model == 12){
+        da = multiDimResults[n][m].longwaveMRT;
+      }else if(PARAMS1.model == 13){
+        da = multiDimResults[n][m].mrt1;
+      }else if(PARAMS1.model == 14){
+        da = multiDimResults[n][m].shortwaveMRT;
+      }else if(PARAMS1.model == 15){
+        da = multiDimResults[n][m].directShortwaveMRT;
+      }else if(PARAMS1.model == 16){
+        da = multiDimResults[n][m].diffuseShortwaveMRT;
+      }else if(PARAMS1.model == 17){
+        da = multiDimResults[n][m].reflectedShortwaveMRT;
+      }else{
+        da = multiDimResults[n][m].pmv1;
+      }
+
+
+
+      let plane = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
+        // color: new THREE.Color(`rgb(255,`+parseInt(255 -multiDimResults[n][m].dwnSpd*2)+`,`+parseInt(255 -multiDimResults[n][m].dwnSpd*2)+`)`),
+        color: new THREE.Color(`rgb(255,`+parseInt(255 -da*2)+`,`+parseInt(255 -da*2)+`)`),
+        // color: new THREE.Color(`rgb(255,` + (255 - gridColorArray[colorCount] * 2) + `,` + (255 - gridColorArray[colorCount] * 2) + `)`),
+        side: THREE.DoubleSide
+      }));
+
+
+      plane.setRotationFromAxisAngle(new THREE.Vector3(0, 0, 1), util.degrees_to_radians(ROOM_PARAMS.orientation));
+      plane.translateX(j);
+      plane.translateY(i);
+
+
+
+
       // plane.name = "grid1";
       plane.name = "grid";
       plane.userData = {
-        loc_i: ROOM_PARAMS.depth / 2 + i,
-        loc_j: ROOM_PARAMS.length / 2 + j,
+        loc_i: parseInt(ROOM_PARAMS.depth / 2 + i),
+        loc_j: parseInt(ROOM_PARAMS.length / 2 + j),
         direct_solar: dSolar,
         dwnSpd: multiDimResults[n][m].dwnSpd,
         dwnTmp: multiDimResults[n][m].dwnTmp,
