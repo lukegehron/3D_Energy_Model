@@ -19,13 +19,14 @@ body {
 }
 		#footer{
 			border-top: solid;
+			/* overflow: scroll; */
 	
   background-color: rgba(255,255,255,0.8);
   /* color:white; */
    position:fixed;
    bottom:0;
    width:100%;
-   height:300px;   /* Height of the footer */
+   height:500px;   /* Height of the footer */
     -webkit-transition: height 1s, visibility 1s;
 		transition: height 1s, visibility 1s;
 		z-index: 50;
@@ -42,7 +43,7 @@ body {
   top:-40px;
   border-radius:5px;
 	border-radius:5px;
-	z-index: 50
+	z-index: 150
 }
 #footerbuttonup{
 	/* background-color: black; */
@@ -70,8 +71,75 @@ body {
 	align:center;
   width:100%;
 	content-align: center;
-	z-index: 50
+	z-index: 50;
 }
+
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+
+* { box-sizing: border-box; }
+
+body { 
+  font-family: 'Open Sans', sans-serif;
+  color: #666;
+}
+
+/* STRUCTURE */
+
+.wrapper {
+	padding: 5px;
+	/* max-width: 960px; */
+	width: 95%;
+	margin: 20px auto;
+}
+header {
+	padding: 0 15px;
+}
+
+.columns {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+	margin: 5px 0;
+	
+}
+
+.column {
+	flex: 1;
+	border: 1px solid gray;
+	margin: 5px;
+	padding: 10px;
+	max-height: 360px;
+	overflow: scroll;
+
+	
+}
+
+
+@media screen and (max-width: 680px) {
+	.columns .column {
+		flex-basis: 100%;
+		margin: 0 0 5px 0;
+	}
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button {  
+
+	 -webkit-appearance: "Always Show Up/Down Arrows";
+	 opacity: 1;
+
+}
+
+input[type=number]{
+	float: right; width:20%; text-align: center; margin-right: 20px;
+}
+label{
+	padding-left: 20px;
+	font-weight: 600;
+	/* font-size: 1.2em; */
+}
+
+
 	</style>
 
 	<script type="text/javascript" charset="utf-8" src="./ladybug.js"></script>
@@ -186,19 +254,93 @@ body {
 
   
   <div id="footercont">
-	 Click the triangle to toggle the footer size<p>
-   blah blah blah<p>
-   blah blah blah<p>
+	 
+		<div class="wrapper">
+
+			<header>
+				<h1>Solar Comfort Tool</h1>
+				<div id="visualization"></div>
+			</header>
+				
+		<section class="columns">
+			
+			<div class="column">
+				<h2>Geometry</h2>
+				<h3>Room</h3>
+				<p>Enter the overall dimensions of the room. Make sure to select the correct units before proceeding. By default the windows face due South. Rotate the room orientation to adjust</p>
+				<label for="quantity">Orientation:</label>
+	<input type="number" id="quantity" name="quantity" value="0" min="-360" max="360"><br>
+	<label for="quantity">Width (of window wall):</label>
+	<input type="number" id="quantity" name="quantity" value="2" min="1" max="5"><br>
+				<label for="quantity">Depth (from windows):</label>
+	<input type="number" id="quantity" name="quantity" value="2" min="1" max="5"><br>
+	
+	<label for="quantity">Ceiling Height:</label>
+	<input type="number" id="quantity" name="quantity" value="2" min="1" max="5"><br>
+	<label for="quantity">Grid Height:</label>
+	<input type="number" id="quantity" name="quantity" value="2" min="1" max="5"><br>
+	<hr>
+	<h3>Windows</h3>
+	<label for="quantity">Quantity (between 1 and 5):</label>
+	<input type="number" id="quantity" name="quantity" value="2" min="1" max="5"><br>
+	<label for="quantity">Quantity (between 1 and 5):</label>
+	<input type="number" id="quantity" name="quantity" value="2" min="1" max="5"><br>
+	<label for="quantity">Quantity (between 1 and 5):</label>
+	<input type="number" id="quantity" name="quantity" value="2" min="1" max="5"><br>
+	<label for="quantity">Quantity (between 1 and 5):</label>
+	<input type="number" id="quantity" name="quantity" value="2" min="1" max="5"><br>
+				<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi ratione architecto necessitatibus cum praesentium dolor totam voluptatibus recusandae?</p>
+			</div>
+			
+			<div class="column">
+				<h2>Climate</h2>
+				<h3>Location</h3>
+				<p>Enter the location of the study. If you do not know the lat, long, and timezone, click the button below</p>
+			
+				<label for="latitude">Latitude:</label>
+	<input type="number" id="latitude" name="latitude" value="-71" min="-180" max="180"><br>
+				<label for="quantity">Longitude:</label>
+	<input type="number" id="quantity" name="quantity" value="42" min="-180" max="180"><br>
+	<label for="quantity">Timezone Offset:</label>
+	<input type="number" id="quantity" name="quantity" value="-5" min="-14" max="14"><br>
+	<button style="width: 90%; margin-left:5%; height: 30px; margin-top: 5px; border-radius: 0px; border: none" >Chose Location from City Lookup</button><br>
+			
+	<hr>
+	<h3>Time</h3>
+				<label for="latitude">Hour:</label>
+	<input type="number" id="latitude" name="latitude" value="12" min="1" max="24"><br>
+				<label for="quantity">Day:</label>
+	<input type="number" id="quantity" name="quantity" value="21" min="1" max="31"><br>
+	<label for="quantity">Month:</label>
+	<input type="number" id="quantity" name="quantity" value="9" min="1" max="12"><br>
+	<label for="quantity">Time Step:</label>
+	<input type="number" id="quantity" name="quantity" value="4" min="1" max="8"><br>
+	<hr>
+				</div>
+			
+			<div class="column">
+				<h2>Parameters</h2>
+				<p>Illo quod nemo ratione itaque dolores laudantium error vero laborum blanditiis nostrum. Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi ratione architecto cum praesentium voluptatibus recusandae?</p>
+			</div>
+			
+		</section>	
+			
+		
+		
+		</div>
+
+
+
   </div>
 </div><!--end of footer-->
 
 <script>
 	document.getElementById("footerbuttondown").onclick = function(){shrink()};
 document.getElementById("footerbuttonup").onclick = function(){ expand()};
-document.getElementById("footer").style.height= "300px"; 
+document.getElementById("footer").style.height= "500px"; 
 
 function shrink(){
-if(document.getElementById("footer").style.height= "300px"){
+if(document.getElementById("footer").style.height= "500px"){
 
 	document.getElementById("footer").style.height= "30px";
 	document.getElementById("footerbuttondown").style.visibility="hidden";  
@@ -212,7 +354,7 @@ if(document.getElementById("footer").style.height= "300px"){
 function expand(){
 if(document.getElementById("footer").style.height= "30px"){
 	
-	document.getElementById("footer").style.height= "300px";
+	document.getElementById("footer").style.height= "500px";
 	document.getElementById("footerbuttondown").style.visibility="visible";  
  document.getElementById("footerbuttonup").style.visibility="hidden";  
 	document.getElementById("footercont").style.opacity="1";  
