@@ -104,9 +104,9 @@ function init() {
   // var aspect = window.innerWidth / window.innerHeight;
   // camera = new THREE.OrthographicCamera( frustumSize * aspect / - 2, frustumSize * aspect / 2, frustumSize / 2, frustumSize / - 2, 0.1, 10000 );
   camera = new THREE.PerspectiveCamera(1, window.innerWidth / window.innerHeight, 1, 100000);
-  camera.position.x = 2000;
-  camera.position.y = 2000;
-  camera.position.z = 2000;
+  camera.position.x = 500;
+  camera.position.y = 500;
+  camera.position.z = 500;
   camera.up.set(0, 0, 1);
 
   scene = new THREE.Scene();

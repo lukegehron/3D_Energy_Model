@@ -1,6 +1,6 @@
 // TWEAKPANE Parameter objects
 const PARAMS1 = {
-  model: 0,
+  model: 13,
 };
 
 const CLIMATE_PARAMS = {
