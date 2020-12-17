@@ -35,25 +35,25 @@ const WINDOW_PARAMS = {
 }
 
 const HORIZONTAL_SHADE_PARAMS = {
-  depth: 1,
+  depth: 0.5,
   number: 0,
-  spacing: 3,
+  spacing: 0.3,
   dist: 0,
   heightAbove: 0,
-  angle: 90
+  angle: 0
 }
 
 const VERTICAL_SHADE_PARAMS = {
-  depth: 3,
+  depth: 0.3,
   number: 0,
-  spacing: 3,
+  spacing: 0.3,
   leftRight: 0,
   lrShift: 0,
   dist: 0,
-  fullHeight: 1,
+  fullHeight: 0,
   heightAbove: 0,
   relativeHeight: 0,
-  angle: 90
+  angle: 0
 }
 
 const WINTER_COMFORT_PARAMS = {

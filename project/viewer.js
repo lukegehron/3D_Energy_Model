@@ -13,7 +13,7 @@ let plane, norm_factor;
 let view_factors_need_updating = true;
 
 let solarcal = {
-  alt: 45,
+  alt: 35,
   az: 270,
   fbes: 0.5,
   Idir: 700,
@@ -231,27 +231,28 @@ function initTweakPane() {
         directShortwaveMRT: 15,
         diffuseShortwaveMRT: 16,
         reflectedShortwaveMRT: 17,
-        pmv1: 18
+        pmv1: 18,
+        finalPPD:19
     },
   });
 
-//   const climate_pane = new Tweakpane({
-//     container: document.getElementById('climate_pane'),
-//     title: 'Climate',
-//   })
+  const climate_pane = new Tweakpane({
+    container: document.getElementById('climate_pane'),
+    title: 'Climate',
+  })
 
-//   climate_pane.addInput(CLIMATE_PARAMS, 'longitude');
-//   climate_pane.addInput(CLIMATE_PARAMS, 'latitude');
-//   climate_pane.addInput(CLIMATE_PARAMS, 'timeZoneOffset');
+  climate_pane.addInput(CLIMATE_PARAMS, 'longitude');
+  climate_pane.addInput(CLIMATE_PARAMS, 'latitude');
+  climate_pane.addInput(CLIMATE_PARAMS, 'timeZoneOffset');
 
-//   const time_pane = new Tweakpane({
-//     container: document.getElementById('time_pane'),
-//     title: 'Time',
-//   })
-//   time_pane.addInput(TIME_PARAMS, 'studyType');
-//   time_pane.addInput(TIME_PARAMS, 'hour');
-//   time_pane.addInput(TIME_PARAMS, 'day');
-//   time_pane.addInput(TIME_PARAMS, 'month');
+  const time_pane = new Tweakpane({
+    container: document.getElementById('time_pane'),
+    title: 'Time',
+  })
+  time_pane.addInput(TIME_PARAMS, 'studyType');
+  time_pane.addInput(TIME_PARAMS, 'hour');
+  time_pane.addInput(TIME_PARAMS, 'day');
+  time_pane.addInput(TIME_PARAMS, 'month');
 
   const geometry_pane = new Tweakpane({
     container: document.getElementById('room_pane'),
@@ -324,17 +325,17 @@ function initTweakPane() {
     updateParams();
   });
 
-  // climate_pane.on('change', (value) => {
-  //   // console.log('changed: ' + String(value));
-  //   // console.log(ROOM_PARAMS)
-  //   updateParams();
-  // });
+  climate_pane.on('change', (value) => {
+    // console.log('changed: ' + String(value));
+    // console.log(ROOM_PARAMS)
+    updateParams();
+  });
 
-//   time_pane.on('change', (value) => {
-//     // console.log('changed: ' + String(value));
-//     // console.log(ROOM_PARAMS)
-//     updateParams();
-//   });
+  time_pane.on('change', (value) => {
+    // console.log('changed: ' + String(value));
+    // console.log(ROOM_PARAMS)
+    updateParams();
+  });
 
 
   geometry_pane.on('change', (value) => {
@@ -613,6 +614,26 @@ function updateRoom() {
       multiDimResults[n][m].reflectedShortwaveMRT= my_erf.dMRT_refl;
       multiDimResults[n][m].pmv1 = my_pmv.pmv;
 
+      let combinedMRT = parseFloat(multiDimResults[n][m].mrt1)
+
+      let finalPPD = comf.pmv(
+        WINTER_COMFORT_PARAMS.airtempValue,
+         combinedMRT, 
+         WINTER_COMFORT_PARAMS.airspeedValue, 
+         WINTER_COMFORT_PARAMS.humidityValue, 
+         WINTER_COMFORT_PARAMS.metabolic, 
+         WINTER_COMFORT_PARAMS.clothingValue, 
+         0.001)
+        // comf.pmv(ta, tr, vel, rh, met, clo, wme)
+        // returns [pmv, ppd]
+        // ta, air temperature (°C)
+        // tr, mean radiant temperature (°C)
+        // vel, relative air velocity (m/s)
+        // rh, relative humidity (%) Used only this way to input humidity level
+        // met, metabolic rate (met)
+        // clo, clothing (clo)
+        // wme, external work, normally around 0 (met)
+
 
       let da;
       let colorMult = 2
@@ -627,10 +648,13 @@ function updateRoom() {
         colorMult = 7
       }else if(PARAMS1.model == 3){
         da = multiDimResults[n][m].dwnSpd;
+        colorMult = 100
       }else if(PARAMS1.model == 4){
         da = multiDimResults[n][m].dwnTmp;
+        colorMult = -100
       }else if(PARAMS1.model == 5){
         da = multiDimResults[n][m].glzfac;
+        colorMult = 4
       }else if(PARAMS1.model == 6){
         da = multiDimResults[n][m].govPPD;
       }else if(PARAMS1.model == 7){
@@ -640,9 +664,11 @@ function updateRoom() {
       }else if(PARAMS1.model == 9){
         da = multiDimResults[n][m].pmv;
       }else if(PARAMS1.model == 10){
+        colorMult = -100
         da = multiDimResults[n][m].ppd;
       }else if(PARAMS1.model == 11){
         da = multiDimResults[n][m].tarDist;
+        colorMult = 5
       }else if(PARAMS1.model == 12){
         da = multiDimResults[n][m].longwaveMRT;
       }else if(PARAMS1.model == 13){
@@ -653,10 +679,15 @@ function updateRoom() {
         da = multiDimResults[n][m].directShortwaveMRT;
       }else if(PARAMS1.model == 16){
         da = multiDimResults[n][m].diffuseShortwaveMRT;
+        colorMult = 5
       }else if(PARAMS1.model == 17){
         da = multiDimResults[n][m].reflectedShortwaveMRT;
-      }else{
+        colorMult = 5
+      }else if(PARAMS1.model == 18){
         da = multiDimResults[n][m].pmv1;
+        colorMult = 5
+      }else{
+        da = finalPPD.ppd
       }
 
       if(isNaN(parseFloat(da))){
@@ -680,25 +711,7 @@ function updateRoom() {
       plane.translateX(j);
       plane.translateY(i);
 
-      let combinedMRT = parseFloat(multiDimResults[n][m].mrt1) + parseFloat(multiDimResults[n][m].mrt)
-
-      let finalPPD = comf.pmv(
-        WINTER_COMFORT_PARAMS.airtempValue,
-         combinedMRT, 
-         WINTER_COMFORT_PARAMS.airspeedValue, 
-         WINTER_COMFORT_PARAMS.humidityValue, 
-         WINTER_COMFORT_PARAMS.metabolic, 
-         WINTER_COMFORT_PARAMS.clothingValue, 
-         0.001)
-        // comf.pmv(ta, tr, vel, rh, met, clo, wme)
-        // returns [pmv, ppd]
-        // ta, air temperature (°C)
-        // tr, mean radiant temperature (°C)
-        // vel, relative air velocity (m/s)
-        // rh, relative humidity (%) Used only this way to input humidity level
-        // met, metabolic rate (met)
-        // clo, clothing (clo)
-        // wme, external work, normally around 0 (met)
+      
       
 
 
@@ -954,6 +967,7 @@ function render() {
         txt += "PPD1: " + determinePPD(INTERSECTED.userData.pmv) + "\n";
         txt += "PPD2: " + determinePPD(INTERSECTED.userData.pmv1) + "\n";
         txt += "Solar Adjusted MRT: " + parseFloat(parseFloat(INTERSECTED.userData.mrt) + parseFloat(INTERSECTED.userData.mrt1)) + "\n";
+        txt += "Final PPD: " + INTERSECTED.userData.finalPPD.ppd;
 
 
         myDiv.innerText = txt;
