@@ -149,8 +149,8 @@ function init() {
   cameraControls.addEventListener('change', render);
 
   //THREE_STATS
-  stats = new Stats();
-  container.appendChild(stats.dom);
+  // stats = new Stats();
+  // container.appendChild(stats.dom);
 
   document.addEventListener('mousemove', onDocumentMouseMove, false);
   window.addEventListener('resize', onWindowResize, false);
@@ -164,7 +164,7 @@ function init() {
   var hex = 0x000000;
 
   var arrowHelper = new THREE.ArrowHelper(dir, origin, length, hex, 0.3, 0.3);
-  scene.add(arrowHelper);
+  // scene.add(arrowHelper);
 
   // var textGeo = new THREE.TextGeometry("N", {
   //   size: 1,
@@ -184,7 +184,7 @@ function init() {
     emissive: 0xffff00,
   });
   sun = new THREE.Mesh(sunGeometry, sunMaterial);
-  scene.add(sun);
+  // scene.add(sun);
 
   //Taken from MRT tool
   // function set_surface_property(surface_name, property, value, panel) {
@@ -253,57 +253,57 @@ function initTweakPane() {
 //   time_pane.addInput(TIME_PARAMS, 'day');
 //   time_pane.addInput(TIME_PARAMS, 'month');
 
-//   const geometry_pane = new Tweakpane({
-//     container: document.getElementById('room_pane'),
-//   });
+  const geometry_pane = new Tweakpane({
+    container: document.getElementById('room_pane'),
+  });
 
-//   const room_pane = geometry_pane.addFolder({
-//     title: 'Geometry',
-//   });
+  const room_pane = geometry_pane.addFolder({
+    title: 'Geometry',
+  });
 
-//   const roomPanel = room_pane.addFolder({
-//     title: 'Room',
-//   });
-//   roomPanel.addInput(ROOM_PARAMS, 'orientation');
-//   roomPanel.addInput(ROOM_PARAMS, 'ceilHeight');
-//   roomPanel.addInput(ROOM_PARAMS, 'gridHeight');
-//   roomPanel.addInput(ROOM_PARAMS, 'depth');
-//   roomPanel.addInput(ROOM_PARAMS, 'length');
+  const roomPanel = room_pane.addFolder({
+    title: 'Room',
+  });
+  roomPanel.addInput(ROOM_PARAMS, 'orientation');
+  roomPanel.addInput(ROOM_PARAMS, 'ceilHeight');
+  roomPanel.addInput(ROOM_PARAMS, 'gridHeight');
+  roomPanel.addInput(ROOM_PARAMS, 'depth');
+  roomPanel.addInput(ROOM_PARAMS, 'length');
 
-//   const windowPanel = room_pane.addFolder({
-//     expanded: false,
-//     title: 'Window',
-//   });
-//   windowPanel.addInput(WINDOW_PARAMS, 'heightFromSill');
-//   windowPanel.addInput(WINDOW_PARAMS, 'sillHeight');
-//   windowPanel.addInput(WINDOW_PARAMS, 'glazingBy');
-//   windowPanel.addInput(WINDOW_PARAMS, 'separation');
+  const windowPanel = room_pane.addFolder({
+    expanded: false,
+    title: 'Window',
+  });
+  windowPanel.addInput(WINDOW_PARAMS, 'heightFromSill');
+  windowPanel.addInput(WINDOW_PARAMS, 'sillHeight');
+  windowPanel.addInput(WINDOW_PARAMS, 'glazingBy');
+  windowPanel.addInput(WINDOW_PARAMS, 'separation');
 
-//   const hshadePanel = room_pane.addFolder({
-//     expanded: false,
-//     title: 'Horizontal Shade',
-//   });
-//   hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'depth');
-//   hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'number');
-//   hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'spacing');
-//   hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'dist');
-//   hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'heightAbove');
-//   hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'angle');
+  const hshadePanel = room_pane.addFolder({
+    expanded: false,
+    title: 'Horizontal Shade',
+  });
+  hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'depth');
+  hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'number');
+  hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'spacing');
+  hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'dist');
+  hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'heightAbove');
+  hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'angle');
 
-//   const vshadePanel = room_pane.addFolder({
-//     expanded: false,
-//     title: 'Vertical Shade',
-//   });
-//   vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'depth');
-//   vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'number');
-//   vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'spacing');
-//   vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'leftRight');
-//   vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'lrShift');
-//   vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'dist');
-//   vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'fullHeight');
-//   vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'heightAbove');
-//   vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'relativeHeight');
-//   vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'angle');
+  const vshadePanel = room_pane.addFolder({
+    expanded: false,
+    title: 'Vertical Shade',
+  });
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'depth');
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'number');
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'spacing');
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'leftRight');
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'lrShift');
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'dist');
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'fullHeight');
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'heightAbove');
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'relativeHeight');
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'angle');
 
 //   const mrt_pane = new Tweakpane({
 //     container: document.getElementById('mrt_pane'),
@@ -337,11 +337,11 @@ function initTweakPane() {
 //   });
 
 
-//   geometry_pane.on('change', (value) => {
-//     // console.log('changed: ' + String(value));
-//     // console.log(ROOM_PARAMS)
-//     updateParams();
-//   });
+  geometry_pane.on('change', (value) => {
+    // console.log('changed: ' + String(value));
+    // console.log(ROOM_PARAMS)
+    updateParams();
+  });
 
 //   mrt_pane.on('change', (value) => {
 //     // console.log('changed: ' + String(value));
@@ -501,7 +501,7 @@ function updateRoom() {
         }
       }
 
-      console.log(n,m) //m = i, n = j
+      // console.log(n,m) //m = i, n = j
       let j_1 = i + ROOM_PARAMS.depth / 2;
       let i_1 = j + ROOM_PARAMS.length / 2;
 
@@ -531,6 +531,7 @@ function updateRoom() {
 
       var point_view_factors = calculate_view_factors(cursorPoint);
       var longwave_mrt = mrt.calc(point_view_factors);
+      // console.log(longwave_mrt)
 
       var window_objects = get_window_objects();
 
@@ -614,12 +615,16 @@ function updateRoom() {
 
 
       let da;
+      let colorMult = 2
       if(PARAMS1.model == 0){
-        da = multiDimResults[n][m].loc_i;
+        da = ROOM_PARAMS.depth / 2 + i;
+        colorMult = 10
       }else if(PARAMS1.model == 1){
-        da = multiDimResults[n][m].loc_j;
+        da = ROOM_PARAMS.length / 2 + j;
+        colorMult = 10
       }else if(PARAMS1.model == 2){
-        da = multiDimResults[n][m].direct_solar;
+        da = dSolar;
+        colorMult = 7
       }else if(PARAMS1.model == 3){
         da = multiDimResults[n][m].dwnSpd;
       }else if(PARAMS1.model == 4){
@@ -654,19 +659,47 @@ function updateRoom() {
         da = multiDimResults[n][m].pmv1;
       }
 
+      if(isNaN(parseFloat(da))){
+        da = 0;
+      }
+      // console.log(n, m)
 
+      // console.log(parseInt(da))
 
       let plane = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
         // color: new THREE.Color(`rgb(255,`+parseInt(255 -multiDimResults[n][m].dwnSpd*2)+`,`+parseInt(255 -multiDimResults[n][m].dwnSpd*2)+`)`),
-        color: new THREE.Color(`rgb(255,`+parseInt(255 -da*2)+`,`+parseInt(255 -da*2)+`)`),
+        color: new THREE.Color(`rgb(255,`+parseInt(255 -da * colorMult)+`,`+parseInt(255 -da * colorMult)+`)`),
         // color: new THREE.Color(`rgb(255,` + (255 - gridColorArray[colorCount] * 2) + `,` + (255 - gridColorArray[colorCount] * 2) + `)`),
         side: THREE.DoubleSide
       }));
+
+      
 
 
       plane.setRotationFromAxisAngle(new THREE.Vector3(0, 0, 1), util.degrees_to_radians(ROOM_PARAMS.orientation));
       plane.translateX(j);
       plane.translateY(i);
+
+      let combinedMRT = parseFloat(multiDimResults[n][m].mrt1) + parseFloat(multiDimResults[n][m].mrt)
+
+      let finalPPD = comf.pmv(
+        WINTER_COMFORT_PARAMS.airtempValue,
+         combinedMRT, 
+         WINTER_COMFORT_PARAMS.airspeedValue, 
+         WINTER_COMFORT_PARAMS.humidityValue, 
+         WINTER_COMFORT_PARAMS.metabolic, 
+         WINTER_COMFORT_PARAMS.clothingValue, 
+         0.001)
+        // comf.pmv(ta, tr, vel, rh, met, clo, wme)
+        // returns [pmv, ppd]
+        // ta, air temperature (°C)
+        // tr, mean radiant temperature (°C)
+        // vel, relative air velocity (m/s)
+        // rh, relative humidity (%) Used only this way to input humidity level
+        // met, metabolic rate (met)
+        // clo, clothing (clo)
+        // wme, external work, normally around 0 (met)
+      
 
 
 
@@ -692,7 +725,8 @@ function updateRoom() {
         directShortwaveMRT: my_erf.dMRT_direct,
         diffuseShortwaveMRT: my_erf.dMRT_diff,
         reflectedShortwaveMRT: my_erf.dMRT_refl,
-        pmv1: my_pmv.pmv
+        pmv1: my_pmv.pmv,
+        finalPPD: finalPPD
       }
       // scene.add(plane);
       // plane.userData = {
@@ -900,7 +934,7 @@ function render() {
         txt += "MRTPPD: " + INTERSECTED.userData.mrtppd.toString() + "\n";
         txt += "PMV: " + INTERSECTED.userData.pmv.toString() + "\n";
         txt += "PPD: " + INTERSECTED.userData.ppd.toString() + "\n";
-        txt += "PPD2: " + determinePPD(INTERSECTED.userData.pmv) + "\n";
+        // txt += "PPD2: " + determinePPD(INTERSECTED.userData.pmv) + "\n";
 
         if (TIME_PARAMS.studyType == 1) {
           txt += "Azmuth Altitute: " + coordinates[0] + "\n";
@@ -917,6 +951,9 @@ function render() {
         txt += "diffuseShortwaveMRT: " + INTERSECTED.userData.diffuseShortwaveMRT.toString() + "\n";
         txt += "reflectedShortwaveMRT: " + INTERSECTED.userData.reflectedShortwaveMRT.toString() + "\n";
         txt += "pmv1: " + INTERSECTED.userData.pmv1 + "\n";
+        txt += "PPD1: " + determinePPD(INTERSECTED.userData.pmv) + "\n";
+        txt += "PPD2: " + determinePPD(INTERSECTED.userData.pmv1) + "\n";
+        txt += "Solar Adjusted MRT: " + parseFloat(parseFloat(INTERSECTED.userData.mrt) + parseFloat(INTERSECTED.userData.mrt1)) + "\n";
 
 
         myDiv.innerText = txt;
@@ -961,7 +998,7 @@ function animate() {
   requestAnimationFrame(animate);
 
   render();
-  stats.update();
+  // stats.update();
 
 }
 
@@ -1843,8 +1880,9 @@ function onDocumentMouseMove(event) {
 
 
 function calculate_view_factors(point) {
+  // console.log(point.x, point.y)
   mrt.occupant.position.x = point.x;
-  mrt.occupant.position.y = point.z;
+  mrt.occupant.position.y = point.y;
   var my_vfs = mrt.view_factors();
   return my_vfs;
 }
@@ -2071,6 +2109,8 @@ function calculate_erf_point(
   // Check direct exposure
   var my_vector = new THREE.Vector3();
   my_vector.copy(v);
+  my_vector.z = -my_vector.y;
+  my_vector.y = 1
   my_vector.applyMatrix4(plane.matrixWorld);
 
   // this vector is used for the sun's position in

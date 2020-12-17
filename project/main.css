@@ -32,7 +32,9 @@ canvas {
 	width: 100%;
 	padding: 10px;
 	box-sizing: border-box;
-	text-align: center;
+	text-align: left;
+	text-justify: left;
+	/* text-align: center; */
 	/* -moz-user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
@@ -48,7 +50,7 @@ top: 0px;
 /* width: 100%; */
 padding: 10px;
 /* box-sizing: border-box; */
-text-align: center;
+/* text-align: center; */
 /* -moz-user-select: none;
 -webkit-user-select: none;
 -ms-user-select: none;

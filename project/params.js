@@ -59,24 +59,24 @@ const VERTICAL_SHADE_PARAMS = {
 const WINTER_COMFORT_PARAMS = {
   occDistToWallCenter: 3,
 
-  uvalueValue: 0.35,
+  uvalueValue: 1.99,
   calcUVal: 0.29,
   intLowEChecked: 0,
   intLowEEmissivity: 0,
   intRadiantFloorChecked: 0,
 
-  outdoorTempValue: 10,
-  airtempValue: 72,
+  outdoorTempValue: -12,
+  airtempValue: 22,
   humidityValue: 20,
 
-  rvalueValue: 15,
-  airspeedValue: 10,
+  rvalueValue: 2.64,
+  airspeedValue: 0.05,
   clothingValue: 0.85,
   metabolic: 1.2
 }
 
 const UNIT_PARAMS = {
-  unitSys: "IP" // IP or SI
+  unitSys: "SI" // IP or SI
 }
 
 const OCCUPANT_PARAMS = {
