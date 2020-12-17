@@ -26,7 +26,7 @@ body {
    position:fixed;
    bottom:0;
    width:100%;
-   height:500px;   /* Height of the footer */
+   height:30px;   /* Height of the footer */
     -webkit-transition: height 1s, visibility 1s;
 		transition: height 1s, visibility 1s;
 		z-index: 50;
@@ -43,6 +43,7 @@ body {
   top:-40px;
   border-radius:5px;
 	border-radius:5px;
+	visibility:hidden;
 	z-index: 150
 }
 #footerbuttonup{
@@ -57,7 +58,7 @@ body {
   top:-60px;
   border-radius:5px;
   border-radius:5px;
-	visibility:hidden;
+	
 	z-index: 50
 }
 #footercont{
@@ -366,7 +367,44 @@ label{
 			
 			<div class="column">
 				<h2>Parameters</h2>
-				<p>Illo quod nemo ratione itaque dolores laudantium error vero laborum blanditiis nostrum. Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi ratione architecto cum praesentium voluptatibus recusandae?</p>
+				<h3>Occupant</h3>
+				<label for="latitude">Distance from wall:</label>
+	<input type="number" id="latitude" name="latitude" value="12" min="1" max="24"><br>
+				<label for="quantity">Distance from wall center:</label>
+	<input type="number" id="quantity" name="quantity" value="21" min="1" max="31"><br>
+	<label for="quantity">Posture:</label>
+	<input type="number" id="quantity" name="quantity" value="9" min="1" max="12"><br>
+	<label for="quantity">Clothing Value:</label>
+	<input type="number" id="quantity" name="quantity" value="4" min="1" max="8"><br>
+	<hr>	
+
+	<h3>Room/Window Values</h3>
+				<label for="latitude">U Value:</label>
+	<input type="number" id="latitude" name="latitude" value="12" min="1" max="24"><br>
+				<label for="quantity">Low E:</label>
+	<input type="number" id="quantity" name="quantity" value="21" min="1" max="31"><br>
+	<label for="quantity">Radiant Floors:</label>
+	<input type="number" id="quantity" name="quantity" value="9" min="1" max="12"><br>
+	<label for="quantity">Window Emissivity:</label>
+	<input type="number" id="quantity" name="quantity" value="4" min="1" max="8"><br>
+	<label for="quantity">Window Temp:</label>
+	<input type="number" id="quantity" name="quantity" value="4" min="1" max="8"><br>
+	<label for="quantity">Global Surface Temp:</label>
+	<input type="number" id="quantity" name="quantity" value="4" min="1" max="8"><br>
+	<hr>
+
+	<h3>Solar Heat Gain</h3>
+				<label for="latitude">TSol:</label>
+	<input type="number" id="latitude" name="latitude" value="12" min="1" max="24"><br>
+	<label for="latitude">TSol Shading:</label>
+	<input type="number" id="latitude" name="latitude" value="12" min="1" max="24"><br>
+				<label for="quantity">Direct Normal Irradiance:</label>
+	<input type="number" id="quantity" name="quantity" value="21" min="1" max="31"><br>
+	<label for="quantity">Shortwave Absorpivity:</label>
+	<input type="number" id="quantity" name="quantity" value="9" min="1" max="12"><br>
+	<label for="quantity">Indirect Solar Heat Gain :</label>
+	<input type="number" id="quantity" name="quantity" value="4" min="1" max="8"><br>
+	<hr>
 			</div>
 			
 		</section>	
@@ -383,7 +421,7 @@ label{
 <script>
 	document.getElementById("footerbuttondown").onclick = function(){shrink()};
 document.getElementById("footerbuttonup").onclick = function(){ expand()};
-document.getElementById("footer").style.height= "500px"; 
+document.getElementById("footer").style.height= "30px"; 
 
 function shrink(){
 if(document.getElementById("footer").style.height= "500px"){
@@ -405,6 +443,8 @@ if(document.getElementById("footer").style.height= "30px"){
  document.getElementById("footerbuttonup").style.visibility="hidden";  
 	document.getElementById("footercont").style.opacity="1";  
 	document.getElementById("footercont").style.visibility="visible";
+
+	// shrink();
 
 																								
 }
