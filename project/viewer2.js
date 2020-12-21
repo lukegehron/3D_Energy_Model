@@ -93,8 +93,8 @@ var case1Data = {
 
 
 
-// init('myCanvas');
-init('myCanvas00');
+init('myCanvas');
+// init('myCanvas00');
 // init();
 initTweakPane();
 animate();
@@ -221,104 +221,104 @@ function init(canva) {
 
 //INITIALIZE TWEAKPANE PANELS
 function initTweakPane() {
-  // const global_pane = new Tweakpane({
-  //   container: document.getElementById('global_pane'),
-  //   title: 'Model Type',
-  // });
-  // global_pane.addInput(PARAMS1, 'model', {
-  //   options: {
-  //     loc_i: 0,
-  //       loc_j: 1,
-  //       direct_solar: 2,
-  //       dwnSpd: 3,
-  //       dwnTmp: 4,
-  //       glzfac: 5,
-  //       govPPD: 6,
-  //       mrt: 7,
-  //       mrtppd: 8,
-  //       pmv: 9,
-  //       ppd: 10,
-  //       tarDist: 11,
-  //       longwaveMRT: 12,
-  //       mrt1: 13,
-  //       shortwaveMRT: 14,
-  //       directShortwaveMRT: 15,
-  //       diffuseShortwaveMRT: 16,
-  //       reflectedShortwaveMRT: 17,
-  //       pmv1: 18,
-  //       finalPPD:19
-  //   },
-  // });
+  const global_pane = new Tweakpane({
+    container: document.getElementById('global_pane'),
+    title: 'Model Type',
+  });
+  global_pane.addInput(PARAMS1, 'model', {
+    options: {
+      loc_i: 0,
+        loc_j: 1,
+        direct_solar: 2,
+        dwnSpd: 3,
+        dwnTmp: 4,
+        glzfac: 5,
+        govPPD: 6,
+        mrt: 7,
+        mrtppd: 8,
+        pmv: 9,
+        ppd: 10,
+        tarDist: 11,
+        longwaveMRT: 12,
+        mrt1: 13,
+        shortwaveMRT: 14,
+        directShortwaveMRT: 15,
+        diffuseShortwaveMRT: 16,
+        reflectedShortwaveMRT: 17,
+        pmv1: 18,
+        finalPPD:19
+    },
+  });
 
-  // const climate_pane = new Tweakpane({
-  //   container: document.getElementById('climate_pane'),
-  //   title: 'Climate',
-  // })
+  const climate_pane = new Tweakpane({
+    container: document.getElementById('climate_pane'),
+    title: 'Climate',
+  })
 
-  // climate_pane.addInput(CLIMATE_PARAMS, 'longitude');
-  // climate_pane.addInput(CLIMATE_PARAMS, 'latitude');
-  // climate_pane.addInput(CLIMATE_PARAMS, 'timeZoneOffset');
+  climate_pane.addInput(CLIMATE_PARAMS, 'longitude');
+  climate_pane.addInput(CLIMATE_PARAMS, 'latitude');
+  climate_pane.addInput(CLIMATE_PARAMS, 'timeZoneOffset');
 
-  // const time_pane = new Tweakpane({
-  //   container: document.getElementById('time_pane'),
-  //   title: 'Time',
-  // })
-  // time_pane.addInput(TIME_PARAMS, 'studyType');
-  // time_pane.addInput(TIME_PARAMS, 'hour');
-  // time_pane.addInput(TIME_PARAMS, 'day');
-  // time_pane.addInput(TIME_PARAMS, 'month');
+  const time_pane = new Tweakpane({
+    container: document.getElementById('time_pane'),
+    title: 'Time',
+  })
+  time_pane.addInput(TIME_PARAMS, 'studyType');
+  time_pane.addInput(TIME_PARAMS, 'hour');
+  time_pane.addInput(TIME_PARAMS, 'day');
+  time_pane.addInput(TIME_PARAMS, 'month');
 
-  // const geometry_pane = new Tweakpane({
-  //   container: document.getElementById('room_pane'),
-  // });
+  const geometry_pane = new Tweakpane({
+    container: document.getElementById('room_pane'),
+  });
 
-  // const room_pane = geometry_pane.addFolder({
-  //   title: 'Geometry',
-  // });
+  const room_pane = geometry_pane.addFolder({
+    title: 'Geometry',
+  });
 
-  // const roomPanel = room_pane.addFolder({
-  //   title: 'Room',
-  // });
-  // roomPanel.addInput(ROOM_PARAMS, 'orientation');
-  // roomPanel.addInput(ROOM_PARAMS, 'ceilHeight');
-  // roomPanel.addInput(ROOM_PARAMS, 'gridHeight');
-  // roomPanel.addInput(ROOM_PARAMS, 'depth');
-  // roomPanel.addInput(ROOM_PARAMS, 'length');
+  const roomPanel = room_pane.addFolder({
+    title: 'Room',
+  });
+  roomPanel.addInput(ROOM_PARAMS, 'orientation');
+  roomPanel.addInput(ROOM_PARAMS, 'ceilHeight');
+  roomPanel.addInput(ROOM_PARAMS, 'gridHeight');
+  roomPanel.addInput(ROOM_PARAMS, 'depth');
+  roomPanel.addInput(ROOM_PARAMS, 'length');
 
-  // const windowPanel = room_pane.addFolder({
-  //   expanded: false,
-  //   title: 'Window',
-  // });
-  // windowPanel.addInput(WINDOW_PARAMS, 'heightFromSill');
-  // windowPanel.addInput(WINDOW_PARAMS, 'sillHeight');
-  // windowPanel.addInput(WINDOW_PARAMS, 'glazingBy');
-  // windowPanel.addInput(WINDOW_PARAMS, 'separation');
+  const windowPanel = room_pane.addFolder({
+    expanded: false,
+    title: 'Window',
+  });
+  windowPanel.addInput(WINDOW_PARAMS, 'heightFromSill');
+  windowPanel.addInput(WINDOW_PARAMS, 'sillHeight');
+  windowPanel.addInput(WINDOW_PARAMS, 'glazingBy');
+  windowPanel.addInput(WINDOW_PARAMS, 'separation');
 
-  // const hshadePanel = room_pane.addFolder({
-  //   expanded: false,
-  //   title: 'Horizontal Shade',
-  // });
-  // hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'depth');
-  // hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'number');
-  // hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'spacing');
-  // hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'dist');
-  // hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'heightAbove');
-  // hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'angle');
+  const hshadePanel = room_pane.addFolder({
+    expanded: false,
+    title: 'Horizontal Shade',
+  });
+  hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'depth');
+  hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'number');
+  hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'spacing');
+  hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'dist');
+  hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'heightAbove');
+  hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'angle');
 
-  // const vshadePanel = room_pane.addFolder({
-  //   expanded: false,
-  //   title: 'Vertical Shade',
-  // });
-  // vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'depth');
-  // vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'number');
-  // vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'spacing');
-  // vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'leftRight');
-  // vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'lrShift');
-  // vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'dist');
-  // vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'fullHeight');
-  // vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'heightAbove');
-  // vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'relativeHeight');
-  // vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'angle');
+  const vshadePanel = room_pane.addFolder({
+    expanded: false,
+    title: 'Vertical Shade',
+  });
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'depth');
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'number');
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'spacing');
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'leftRight');
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'lrShift');
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'dist');
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'fullHeight');
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'heightAbove');
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'relativeHeight');
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'angle');
 
 //   const mrt_pane = new Tweakpane({
 //     container: document.getElementById('mrt_pane'),
@@ -333,30 +333,30 @@ function initTweakPane() {
 //   mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'TSolShading');
 
 
-  // global_pane.on('change', (value) => {
-  //   // console.log('changed: ' + String(value));
-  //   // console.log(ROOM_PARAMS)
-  //   updateParams();
-  // });
+  global_pane.on('change', (value) => {
+    // console.log('changed: ' + String(value));
+    // console.log(ROOM_PARAMS)
+    updateParams();
+  });
 
-  // climate_pane.on('change', (value) => {
-  //   // console.log('changed: ' + String(value));
-  //   // console.log(ROOM_PARAMS)
-  //   updateParams();
-  // });
+  climate_pane.on('change', (value) => {
+    // console.log('changed: ' + String(value));
+    // console.log(ROOM_PARAMS)
+    updateParams();
+  });
 
-  // time_pane.on('change', (value) => {
-  //   // console.log('changed: ' + String(value));
-  //   // console.log(ROOM_PARAMS)
-  //   updateParams();
-  // });
+  time_pane.on('change', (value) => {
+    // console.log('changed: ' + String(value));
+    // console.log(ROOM_PARAMS)
+    updateParams();
+  });
 
 
-  // geometry_pane.on('change', (value) => {
-  //   // console.log('changed: ' + String(value));
-  //   // console.log(ROOM_PARAMS)
-  //   updateParams();
-  // });
+  geometry_pane.on('change', (value) => {
+    // console.log('changed: ' + String(value));
+    // console.log(ROOM_PARAMS)
+    updateParams();
+  });
 
 //   mrt_pane.on('change', (value) => {
 //     // console.log('changed: ' + String(value));

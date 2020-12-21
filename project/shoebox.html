@@ -15,13 +15,15 @@
 body {
    margin:0;
    padding:0;
-   height:100%;
+	 height:100%;
+	 background-color: white;
 }
 		#footer{
 			border-top: solid;
 			/* overflow: scroll; */
 	
-  background-color: rgba(255,255,255,0.8);
+	background-color: rgba(255,255,255,0.8);
+	
   /* color:white; */
    position:fixed;
    bottom:0;
@@ -140,6 +142,14 @@ label{
 	/* font-size: 1.2em; */
 }
 
+.ca{
+display: inline-block;
+}
+
+canvas {
+  outline: none;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0); /* mobile webkit */
+}
 
 	</style>
 
@@ -241,7 +251,20 @@ label{
 			.attr("font-family", "sans-serif")
 			.attr("font-size", "12px")
 	</script>
+
+<div class="ca">
+  <!-- <p>div above myCanvas</p> -->
+  <canvas id="myCanvas" class="ca"></canvas>
+</div>
+
+<div class="ca">
+  <!-- <p>div above myCanvas00</p> -->
+  <canvas id="myCanvas00" class="ca"></canvas>
+</div>
+
 	<script src="./viewer.js" type="module"></script>
+	<script src="./viewer2.js" type="module"></script>
+	
 	<script src = "./script.js"></script>
 	<script src = "./solarCalculator.js"></script>
 
