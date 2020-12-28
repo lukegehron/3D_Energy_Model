@@ -96,7 +96,8 @@ var case1Data = {
 init('myCanvas');
 // init('myCanvas00');
 // init();
-initTweakPane();
+// initTweakPane();
+updateRoom();
 animate();
 
 // function renderCommon(canvas){}
@@ -114,9 +115,9 @@ function init(canva) {
   // var aspect = window.innerWidth / window.innerHeight;
   // camera = new THREE.OrthographicCamera( frustumSize * aspect / - 2, frustumSize * aspect / 2, frustumSize / 2, frustumSize / - 2, 0.1, 10000 );
   camera = new THREE.PerspectiveCamera(1, window.innerWidth / window.innerHeight, 1, 100000);
-  camera.position.x = 500;
-  camera.position.y = 500;
-  camera.position.z = 500;
+  camera.position.x = 400;
+  camera.position.y = 400;
+  camera.position.z = 400;
   camera.up.set(0, 0, 1);
 
   scene = new THREE.Scene();
@@ -154,7 +155,7 @@ function init(canva) {
   });
 
   renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(window.innerWidth/2.1, window.innerHeight/2.1);
+  renderer.setSize(window.innerWidth/2.2, window.innerHeight/2.2);
   // container.appendChild(renderer.domElement);
   // container2.appendChild(renderer.domElement);
 
@@ -364,14 +365,14 @@ function initTweakPane() {
 //     updateParams();
 //   });
 
-  set_wall_properties();
-  render_zone();
-  update_view_factors();
-  update_shortwave_components();
-  update_visualization();
+  // set_wall_properties();
+  // render_zone();
+  // update_view_factors();
+  // update_shortwave_components();
+  // update_visualization();
   // drawGrid();
   // calculate_all();
-  updateRoom();
+  // updateRoom();
 
 }
 
@@ -461,8 +462,8 @@ function updateRoom() {
   r.centLineDist = geoResult.centLineDist;
 
   // console.log(r);
-  getSolar();
-  doTrig();
+  // getSolar();
+  // doTrig();
   updateData(case1Data);
   // console.log(case1Data);
 
@@ -475,296 +476,7 @@ function updateRoom() {
     opacity: 0.7
   });
 
-  let prevN = ROOM_PARAMS.length / 2;
-  for (let i = ROOM_PARAMS.depth / -2; i < ROOM_PARAMS.depth / 2; i++) {
-    for (let j = ROOM_PARAMS.length / -2; j < ROOM_PARAMS.length / 2; j++) {
-      // const material = new THREE.MeshBasicMaterial({
-      //     color: 0x000000,
-      //     side: THREE.DoubleSide
-      // });
-      // const plane = new THREE.Mesh(geometry, gridMaterial);
-      if (isNaN(gridColorArray[colorCount])) {
-        gridColorArray[colorCount] = gridColorArray[ROOM_PARAMS.length];
-      }
-
-
-      // if(typeof resultsArray[colorCount] === 'undefined' || isNaN(resultsArray[colorCount].mrt)){
-      //     resultsArray[colorCount] = resultsArray[colorCount - 1];
-      // }
-
-      // console.log(resultsArray[colorCount].mrt)
-      // console.log(colorCount)
-      // console.log(multiDimResults)
-      // console.log(i*-2 / ROOM_PARAMS.depth -1 )
-      let k = ROOM_PARAMS.length / 2 + j
-      let m = ROOM_PARAMS.depth / 2 + i
-
-      let n = parseInt(ROOM_PARAMS.length / 2 - 1) - k;
-
-      if (ROOM_PARAMS.length % 2 != 1) {
-        if (n < 0) {
-          n = Math.abs(n + 1)
-
-        }
-      } else {
-        if (n < 0) {
-          n = Math.abs(n + 1)
-          if (n >= Math.floor(ROOM_PARAMS.length / 2)) {
-            n = Math.floor(ROOM_PARAMS.length / 2 - 1)
-            // console.log(n)
-          }
-        }
-      }
-
-      // console.log(n,m) //m = i, n = j
-      let j_1 = i + ROOM_PARAMS.depth / 2;
-      let i_1 = j + ROOM_PARAMS.length / 2;
-
-      if (typeof multiDimResults[n][m] === 'undefined' || isNaN(multiDimResults[n][m].ppd)) {
-        multiDimResults[n][m] = multiDimResults[n][m - 1];
-      }
-      
-
-      
-      let dSolar = 0;
-
-      if(isNaN(gridColorArray[colorCount]) == false || typeof gridColorArray[colorCount] !== 'undefined'){
-        dSolar = gridColorArray[colorCount];
-      }
-
-      // console.log(dSolar)
-
-      
-      // colorCount++;
-
-
-      let my_point = new THREE.Vector3(0, 0, 0);
-      let cursorPoint = new THREE.Vector3(i_1 + 0.5, j_1 + 0.5, 0)
-      my_point.x = cursorPoint.x - mrt.room.width / 2;
-      my_point.y = cursorPoint.y - mrt.room.depth / 2;
-      my_point.z = 0;
-
-      var point_view_factors = calculate_view_factors(cursorPoint);
-      var longwave_mrt = mrt.calc(point_view_factors);
-      // console.log(longwave_mrt)
-
-      var window_objects = get_window_objects();
-
-      if (window_objects) {
-        var window_object_vfs = _.map(window_objects, function (w) {
-          return _.find(point_view_factors, function (o) {
-            return o.name == w.name;
-          }).view_factor;
-        });
-        var my_erf = calculate_erf_point(
-          my_point,
-          solarcal.skydome_center,
-          window_objects,
-          window_object_vfs
-        );
-      } else {
-        my_erf = {
-          dMRT_direct: 0,
-          dMRT_diff: 0,
-          dMRT_refl: 0,
-          dMRT: 0,
-          ERF: 0
-        };
-      }
-
-      if (params.display === "Longwave MRT") {
-        display_value = longwave_mrt;
-      } else if (params.display === "MRT") {
-        display_value = longwave_mrt + my_erf.dMRT;
-      } else if (params.display === "Shortwave dMRT") {
-        display_value = my_erf.dMRT;
-      } else if (params.display === "Direct shortwave dMRT") {
-        display_value = my_erf.dMRT_direct;
-      } else if (params.display === "Diffuse shortwave dMRT") {
-        display_value = my_erf.dMRT_diff;
-      } else if (params.display === "Reflected shortwave dMRT") {
-        display_value = my_erf.dMRT_refl;
-      } else if (params.display === "PMV") {
-        var mrt_total = longwave_mrt + my_erf.dMRT;
-        var my_pmv = comf.pmvElevatedAirspeed(
-          comfort.ta,
-          mrt_total,
-          comfort.vel,
-          comfort.rh,
-          comfort.met,
-          comfort.clo,
-          0
-        );
-        display_value = my_pmv.pmv;
-      }
-      // console.log(cursorPoint.x, cursorPoint.z, display_value.toFixed(1));
-
-      var mrt_total = longwave_mrt + my_erf.dMRT;
-      var my_pmv = comf.pmvElevatedAirspeed(
-        comfort.ta,
-        mrt_total,
-        comfort.vel,
-        comfort.rh,
-        comfort.met,
-        comfort.clo,
-        0
-      );
-
-
-      // plane = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
-      //   // color: new THREE.Color(`rgb(255,`+parseInt(255 -multiDimResults[n][m].dwnSpd*2)+`,`+parseInt(255 -multiDimResults[n][m].dwnSpd*2)+`)`),
-      //   color: new THREE.Color(`rgb(255,` + (255 - parseInt(display_value * 2)) + `,` + (255 - parseInt(display_value * 2)) + `)`),
-      //   side: THREE.DoubleSide
-      // }));
-      // plane.translateX(m - mrt.room.width/2);
-      // plane.translateY(n - mrt.room.depth/2);
-      // plane.translateZ(-1);
-
-      multiDimResults[n][m].longwaveMRT = longwave_mrt;
-      multiDimResults[n][m].mrt1 = longwave_mrt + my_erf.dMRT;
-      multiDimResults[n][m].shortwaveMRT = my_erf.dMRT;
-      multiDimResults[n][m].directShortwaveMRT = my_erf.dMRT_direct;
-      multiDimResults[n][m].diffuseShortwaveMRT = my_erf.dMRT_diff;
-      multiDimResults[n][m].reflectedShortwaveMRT= my_erf.dMRT_refl;
-      multiDimResults[n][m].pmv1 = my_pmv.pmv;
-
-      let combinedMRT = parseFloat(multiDimResults[n][m].mrt1)
-
-      let finalPPD = comf.pmv(
-        WINTER_COMFORT_PARAMS.airtempValue,
-         combinedMRT, 
-         WINTER_COMFORT_PARAMS.airspeedValue, 
-         WINTER_COMFORT_PARAMS.humidityValue, 
-         WINTER_COMFORT_PARAMS.metabolic, 
-         WINTER_COMFORT_PARAMS.clothingValue, 
-         0.001)
-        // comf.pmv(ta, tr, vel, rh, met, clo, wme)
-        // returns [pmv, ppd]
-        // ta, air temperature (°C)
-        // tr, mean radiant temperature (°C)
-        // vel, relative air velocity (m/s)
-        // rh, relative humidity (%) Used only this way to input humidity level
-        // met, metabolic rate (met)
-        // clo, clothing (clo)
-        // wme, external work, normally around 0 (met)
-
-
-      let da;
-      let colorMult = 2
-      if(PARAMS1.model == 0){
-        da = ROOM_PARAMS.depth / 2 + i;
-        colorMult = 10
-      }else if(PARAMS1.model == 1){
-        da = ROOM_PARAMS.length / 2 + j;
-        colorMult = 10
-      }else if(PARAMS1.model == 2){
-        da = dSolar;
-        colorMult = 7
-      }else if(PARAMS1.model == 3){
-        da = multiDimResults[n][m].dwnSpd;
-        colorMult = 100
-      }else if(PARAMS1.model == 4){
-        da = multiDimResults[n][m].dwnTmp;
-        colorMult = -100
-      }else if(PARAMS1.model == 5){
-        da = multiDimResults[n][m].glzfac;
-        colorMult = 4
-      }else if(PARAMS1.model == 6){
-        da = multiDimResults[n][m].govPPD;
-      }else if(PARAMS1.model == 7){
-        da = multiDimResults[n][m].mrt;
-      }else if(PARAMS1.model == 8){
-        da = multiDimResults[n][m].mrtppd;
-      }else if(PARAMS1.model == 9){
-        da = multiDimResults[n][m].pmv;
-      }else if(PARAMS1.model == 10){
-        colorMult = -100
-        da = multiDimResults[n][m].ppd;
-      }else if(PARAMS1.model == 11){
-        da = multiDimResults[n][m].tarDist;
-        colorMult = 5
-      }else if(PARAMS1.model == 12){
-        da = multiDimResults[n][m].longwaveMRT;
-      }else if(PARAMS1.model == 13){
-        da = multiDimResults[n][m].mrt1;
-      }else if(PARAMS1.model == 14){
-        da = multiDimResults[n][m].shortwaveMRT;
-      }else if(PARAMS1.model == 15){
-        da = multiDimResults[n][m].directShortwaveMRT;
-      }else if(PARAMS1.model == 16){
-        da = multiDimResults[n][m].diffuseShortwaveMRT;
-        colorMult = 5
-      }else if(PARAMS1.model == 17){
-        da = multiDimResults[n][m].reflectedShortwaveMRT;
-        colorMult = 5
-      }else if(PARAMS1.model == 18){
-        da = multiDimResults[n][m].pmv1;
-        colorMult = 5
-      }else{
-        da = finalPPD.ppd
-      }
-
-      if(isNaN(parseFloat(da))){
-        da = 0;
-      }
-      // console.log(n, m)
-
-      // console.log(parseInt(da))
-
-      let plane = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
-        // color: new THREE.Color(`rgb(255,`+parseInt(255 -multiDimResults[n][m].dwnSpd*2)+`,`+parseInt(255 -multiDimResults[n][m].dwnSpd*2)+`)`),
-        color: new THREE.Color(`rgb(255,`+parseInt(255 -da * colorMult)+`,`+parseInt(255 -da * colorMult)+`)`),
-        // color: new THREE.Color(`rgb(255,` + (255 - gridColorArray[colorCount] * 2) + `,` + (255 - gridColorArray[colorCount] * 2) + `)`),
-        side: THREE.DoubleSide
-      }));
-
-      
-
-
-      plane.setRotationFromAxisAngle(new THREE.Vector3(0, 0, 1), util.degrees_to_radians(ROOM_PARAMS.orientation));
-      plane.translateX(j);
-      plane.translateY(i);
-
-      
-      
-
-
-
-
-      // plane.name = "grid1";
-      plane.name = "grid";
-      plane.userData = {
-        loc_i: parseInt(ROOM_PARAMS.depth / 2 + i),
-        loc_j: parseInt(ROOM_PARAMS.length / 2 + j),
-        direct_solar: dSolar,
-        dwnSpd: multiDimResults[n][m].dwnSpd,
-        dwnTmp: multiDimResults[n][m].dwnTmp,
-        glzfac: multiDimResults[n][m].glzfac,
-        govPPD: multiDimResults[n][m].govPPD,
-        mrt: multiDimResults[n][m].mrt,
-        mrtppd: multiDimResults[n][m].mrtppd,
-        pmv: multiDimResults[n][m].pmv,
-        ppd: multiDimResults[n][m].ppd,
-        tarDist: multiDimResults[n][m].tarDist,
-        longwaveMRT: longwave_mrt,
-        mrt1: longwave_mrt + my_erf.dMRT,
-        shortwaveMRT: my_erf.dMRT,
-        directShortwaveMRT: my_erf.dMRT_direct,
-        diffuseShortwaveMRT: my_erf.dMRT_diff,
-        reflectedShortwaveMRT: my_erf.dMRT_refl,
-        pmv1: my_pmv.pmv,
-        finalPPD: finalPPD
-      }
-      // scene.add(plane);
-      // plane.userData = {
-        
-      // }
-      // console.log(cursorPoint.x, cursorPoint.z, plane.userData)
-      scene.add(plane);
-      colorCount++;
-    }
-  }
-  // console.log(multiDimResults)
+  
 
   const lineMaterial = new THREE.LineBasicMaterial({
     color: 0xaaaaaa
@@ -845,91 +557,8 @@ function updateRoom() {
 
 
 
-  let windowMaterial = new THREE.MeshLambertMaterial({
-    color: 0xccccff,
-    transparent: true,
-    opacity: 0.4,
-    side: THREE.DoubleSide
-  });
-  for (let i = 0; i < r.glzCoords.length; i++) {
-    const window = [];
-
-    window.push(new THREE.Vector3(r.glzCoords[i][0][0] - 0.5, r.glzCoords[i][0][1] - ROOM_PARAMS.depth / 2 - 0.5, r.glzCoords[i][0][2] - ROOM_PARAMS.gridHeight));
-    window.push(new THREE.Vector3(r.glzCoords[i][1][0] - 0.5, r.glzCoords[i][1][1] - ROOM_PARAMS.depth / 2 - 0.5, r.glzCoords[i][1][2] - ROOM_PARAMS.gridHeight));
-    window.push(new THREE.Vector3(r.glzCoords[i][2][0] - 0.5, r.glzCoords[i][2][1] - ROOM_PARAMS.depth / 2 - 0.5, r.glzCoords[i][2][2] - ROOM_PARAMS.gridHeight));
-    window.push(new THREE.Vector3(r.glzCoords[i][3][0] - 0.5, r.glzCoords[i][3][1] - ROOM_PARAMS.depth / 2 - 0.5, r.glzCoords[i][3][2] - ROOM_PARAMS.gridHeight));
-    window.push(new THREE.Vector3(r.glzCoords[i][0][0] - 0.5, r.glzCoords[i][0][1] - ROOM_PARAMS.depth / 2 - 0.5, r.glzCoords[i][0][2] - ROOM_PARAMS.gridHeight));
-
-    lineGeometry = new THREE.BufferGeometry().setFromPoints(window);
-    line = new THREE.Line(lineGeometry, lineMaterial);
-    line.name = "outline"
-    line.setRotationFromAxisAngle(new THREE.Vector3(0, 0, 1), util.degrees_to_radians(ROOM_PARAMS.orientation));
-    scene.add(line);
-
-    const geometry1 = new THREE.PlaneBufferGeometry(r.windowWidth, r.windowHeight);
-    geometry1.translate(((r.glzCoords[i][0][0] + r.glzCoords[i][1][0]) / 2) - 0.5, +ROOM_PARAMS.gridHeight - r.windowHeight / 2 - WINDOW_PARAMS.sillHeight, r.glzCoords[i][0][1] - ROOM_PARAMS.depth / 2 - 0.5);
-    geometry1.rotateX(Math.PI * -0.5);
-    const plane1 = new THREE.Mesh(geometry1, windowMaterial);
-
-    plane1.name = "window";
-    plane1.setRotationFromAxisAngle(new THREE.Vector3(0, 0, 1), util.degrees_to_radians(ROOM_PARAMS.orientation));
-    scene.add(plane1);
-  }
-
-  //HORIZONTAL SHADES
-
-  let shadeMaterial = new THREE.MeshLambertMaterial({
-    color: 0x999999,
-    // transparent: true,
-    // opacity: 0.7,
-    side: THREE.DoubleSide
-  });
-
-  for (let i = 0; i < r.glzCoords.length; i++) {
-    for (let j = 0; j < HORIZONTAL_SHADE_PARAMS.number; j++) {
-      const geometry1 = new THREE.PlaneBufferGeometry(r.windowWidth, HORIZONTAL_SHADE_PARAMS.depth);
-      geometry1.translate(0, -HORIZONTAL_SHADE_PARAMS.depth / 2, 0);
-      geometry1.rotateX(util.degrees_to_radians(HORIZONTAL_SHADE_PARAMS.angle));
-      geometry1.translate(((r.glzCoords[i][0][0] + r.glzCoords[i][1][0]) / 2) - 0.5, ROOM_PARAMS.depth / -2 - 0.5 - .01 - HORIZONTAL_SHADE_PARAMS.dist, WINDOW_PARAMS.sillHeight - ROOM_PARAMS.gridHeight + WINDOW_PARAMS.heightFromSill - (HORIZONTAL_SHADE_PARAMS.spacing * j));
-      // geometry1.rotateOnAxis()
-      // geometry1.rotateX(Math.PI * -0.5);
-      const plane1 = new THREE.Mesh(geometry1, shadeMaterial);
-
-      plane1.name = "shade";
-      plane1.setRotationFromAxisAngle(new THREE.Vector3(0, 0, 1), util.degrees_to_radians(ROOM_PARAMS.orientation));
-      scene.add(plane1);
-    }
-  }
-
-  //VERTICAL SHADES
-
-  shadeMaterial = new THREE.MeshLambertMaterial({
-    color: 0xeeeeee,
-    // transparent: true,
-    // opacity: 0.7,
-    side: THREE.DoubleSide
-  });
 
 
-  for (let i = 0; i < r.glzCoords.length; i++) {
-    for (let j = 0; j < VERTICAL_SHADE_PARAMS.number; j++) {
-      let shadeHeight = r.windowHeight;
-      if (VERTICAL_SHADE_PARAMS.fullHeight == 1) {
-        shadeHeight = ROOM_PARAMS.ceilHeight;
-      }
-      const geometry1 = new THREE.PlaneBufferGeometry(VERTICAL_SHADE_PARAMS.depth, shadeHeight);
-      geometry1.rotateX(Math.PI * -0.5);
-      geometry1.rotateZ(Math.PI * -0.5);
-      geometry1.translate(((r.glzCoords[i][0][0] + r.glzCoords[i][1][0]) / 2) - 0.5 + WINDOW_PARAMS.width / 2 - (VERTICAL_SHADE_PARAMS.spacing * j) - VERTICAL_SHADE_PARAMS.lrShift, ROOM_PARAMS.depth / -2 - 0.5 - VERTICAL_SHADE_PARAMS.depth / 2 - .01 - VERTICAL_SHADE_PARAMS.dist, WINDOW_PARAMS.sillHeight - ROOM_PARAMS.gridHeight + WINDOW_PARAMS.heightFromSill / 2);
-      // geometry1.rotateOnAxis()
-      // geometry1.rotateX(Math.PI * -0.5);
-      const plane1 = new THREE.Mesh(geometry1, shadeMaterial);
-
-      plane1.name = "shade";
-      plane1.setRotationFromAxisAngle(new THREE.Vector3(0, 0, 1), util.degrees_to_radians(ROOM_PARAMS.orientation));
-      scene.add(plane1);
-    }
-  }
 
 
 
@@ -937,70 +566,7 @@ function updateRoom() {
 
 // CHECKS INTERSECTIONS
 function render() {
-  raycaster.setFromCamera(mouse, camera);
-  var intersects = raycaster.intersectObjects(scene.children);
-  if (intersects.length > 0) {
-
-    if (INTERSECTED != intersects[0].object) {
-      if (INTERSECTED != null && INTERSECTED.name != null){
-        // console.log(INTERSECTED.name)
-      }
-
-
-      // if (INTERSECTED) INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
-
-      if (INTERSECTED != null && INTERSECTED.name == "grid") {
-        // console.log(INTERSECTED)
-        // console.log(INTERSECTED.userData.direct_solar);
-        let myDiv = document.getElementById("mdata");
-        let txt = "";
-        txt += "MRT: " + INTERSECTED.userData.mrt.toString() + "\n";
-        txt += "Direct Solar: " + INTERSECTED.userData.direct_solar.toString() + "\n";
-        txt += "Location: " + INTERSECTED.userData.loc_i.toString() + ", " + INTERSECTED.userData.loc_j.toString() + "\n";
-        txt += "Glazing Factor " + INTERSECTED.userData.glzfac.toString() + "\n";
-        txt += "MRTPPD: " + INTERSECTED.userData.mrtppd.toString() + "\n";
-        txt += "PMV: " + INTERSECTED.userData.pmv.toString() + "\n";
-        txt += "PPD: " + INTERSECTED.userData.ppd.toString() + "\n";
-        // txt += "PPD2: " + determinePPD(INTERSECTED.userData.pmv) + "\n";
-
-        if (TIME_PARAMS.studyType == 1) {
-          txt += "Azmuth Altitute: " + coordinates[0] + "\n";
-          var mRes = coordinates[0].toString().split(",");
-          var mNum = parseFloat(mRes[1])
-          txt += "Direct Normal Irradiance: " + directNormalIrradiance(parseFloat(mNum)).toString();
-        }
-
-        txt += "MRT: " + INTERSECTED.userData.mrt1.toString() + "\n";
-        // txt += "Direct Solar: " + INTERSECTED.userData.direct_solar.toString() + "\n";
-        txt += "LongwaveMRT: " + INTERSECTED.userData.longwaveMRT.toString() + "\n";
-        txt += "shortwaveMRT: " + INTERSECTED.userData.shortwaveMRT.toString() + "\n";
-        txt += "directShortwaveMRT: " + INTERSECTED.userData.directShortwaveMRT.toString() + "\n";
-        txt += "diffuseShortwaveMRT: " + INTERSECTED.userData.diffuseShortwaveMRT.toString() + "\n";
-        txt += "reflectedShortwaveMRT: " + INTERSECTED.userData.reflectedShortwaveMRT.toString() + "\n";
-        txt += "pmv1: " + INTERSECTED.userData.pmv1 + "\n";
-        txt += "PPD1: " + determinePPD(INTERSECTED.userData.pmv) + "\n";
-        txt += "PPD2: " + determinePPD(INTERSECTED.userData.pmv1) + "\n";
-        txt += "Solar Adjusted MRT: " + parseFloat(parseFloat(INTERSECTED.userData.mrt) + parseFloat(INTERSECTED.userData.mrt1)) + "\n";
-        txt += "Final PPD: " + INTERSECTED.userData.finalPPD.ppd;
-
-
-        myDiv.innerText = txt;
-      }
-
-      
-
-      INTERSECTED = intersects[0].object;
-      // INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
-      // INTERSECTED.material.color.setHex(0xff0000);
-    }
-    
-    
-
-
-  } else {
-    // if (INTERSECTED) INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
-    INTERSECTED = null;
-  }
+  
   renderer.render(scene, camera);
 }
 

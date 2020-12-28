@@ -7,75 +7,61 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 	<script src="https://cdn.jsdelivr.net/npm/tweakpane@1.5.6/dist/tweakpane.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.11.0/underscore-min.js"></script>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="static/css/styles.css"/>
+	<link rel="stylesheet" type="text/css" href="static/css/jquery-ui-1.10.4.custom.css"/>
+
+	<!-- CDN Jquery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<!-- CDN Jquery UI -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+		
+
 	<script src="//d3js.org/d3.v3.min.js"></script>
-	<link type="text/css" rel="stylesheet" href="main.css">
+	<!-- <link type="text/css" rel="stylesheet" href="main.css"> -->
 
 	<style>
 
-body {
+ body {
    margin:0;
    padding:0;
 	 height:100%;
-	 background-color: white;
+	 /* background-color: white; */
 }
-		#footer{
-			border-top: solid;
-			/* overflow: scroll; */
-	
-	background-color: rgba(255,255,255,0.8);
-	
-  /* color:white; */
-   position:fixed;
-   bottom:0;
-   width:100%;
-   height:30px;   /* Height of the footer */
-    -webkit-transition: height 1s, visibility 1s;
-		transition: height 1s, visibility 1s;
-		z-index: 50;
+
+#info {
+	position: absolute;
+	top: 0px;
+	width: 100%;
+	padding: 10px;
+	box-sizing: border-box;
+	text-align: left;
+	text-justify: left;
+	/* text-align: center; */
+	/* -moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	pointer-events: none; */
+	z-index: 1; /* TODO Solve this in HTML */
 }
-#footerbuttondown{
-	/* background-color: black; */
-	color:red;
-  font-size: 35px;
-  width:35px;
-  margin-left:auto;
-  margin-right:auto;
-  text-align: center;
-	position: relative;
-  top:-40px;
-  border-radius:5px;
-	border-radius:5px;
-	visibility:hidden;
-	z-index: 150
+
+#mdata {
+position: absolute;
+
+top: 0px;
+
+padding: 10px;
+
+z-index: 2; /* TODO Solve this in HTML */
 }
-#footerbuttonup{
-	/* background-color: black; */
-	color:red;
-  font-size: 35px;
-  width:35px;
-  margin-left:auto;
-  margin-right:auto;
-  text-align: center;
-	position: relative;
-  top:-60px;
-  border-radius:5px;
-  border-radius:5px;
-	
-	z-index: 50
-}
-#footercont{
-  position:absolute;
-  top:0px;
-  opacity:1;
-	transition: opacity 1s, visibility 2s, display 2s;
-	z-index: 50
-}
-#centerbutton{
-	align:center;
-  width:100%;
-	content-align: center;
-	z-index: 50;
-}
+/*
 
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
 
@@ -86,11 +72,9 @@ body {
   color: #666;
 }
 
-/* STRUCTURE */
 
 .wrapper {
 	padding: 5px;
-	/* max-width: 960px; */
 	width: 95%;
 	margin: 20px auto;
 }
@@ -139,17 +123,17 @@ input[type=number]{
 label{
 	padding-left: 20px;
 	font-weight: 600;
-	/* font-size: 1.2em; */
 }
 
 .ca{
 display: inline-block;
 }
+*/
 
 canvas {
   outline: none;
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0); /* mobile webkit */
-}
+} 
 
 	</style>
 
@@ -171,96 +155,365 @@ canvas {
 
 	<div id="info">
 		<span id="mdata">
-			<!-- <a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> shoebox -->
+
 		</span>
 		
 		<div style="float: right;">
 			<div id="visualization"></div>
-			<div class="tweakpane" id="global_pane" style="width: 330px;">
-			</div>
-			<div class="tweakpane" id="climate_pane" style="width: 330px;">
-			</div>
-			<div class="tweakpane" id="time_pane" style="width: 330px;">
-			</div>
-			<div class="tweakpane" id="room_pane" style="width: 330px;">
-			</div>
-			<div class="tweakpane" id="mrt_pane" style="width: 330px;">
-			</div>
 		</div>
+		<!-- <h4>Solar Comfort Tool | Payette</h4> -->
 	</div>
 
-	<script>
-		//D3 COLOR CHART
+	<script src="./d3Color.js"></script>
 
-		let timeStepValue = 4;
-		let ppdValue1 = 4;
+	<div><br></div>
 
-		d3.select("#visualization").append('svg').attr("height", 40).attr("width", 327)
-		var vis = d3.select("svg")
-		var arr = d3.range(13 * timeStepValue)
-		var ColorScaleArray = [];
-		var dataset = [0, 2, 4, 6, 8, 10, 12];
-
-		//position scale
-		var xScale = d3.scale.linear().domain([0, 13]).range([0, 325])
-
-		//The mystical polylinear color scale
-		// var colorScale = d3.scale.linear().domain([0, 2, 3, 5, 12])
-		//     .range([d3.rgb(255,255,255), d3.rgb(255,222,60), d3.rgb(218,93,127), d3.rgb(220,26,85), d3.rgb(220,26,85)])
-		var colorScale = d3.scale.linear().domain([0, 6, 13])
-			.range(["#ffffff", "#e2706a", "#893132"])
-
-		vis.selectAll('rect').data(arr).enter()
-			.append('rect')
-			.attr({
-				x: function (d) {
-					return xScale(d) + 1
-				},
-				y: 16,
-				height: 12,
-				width: 25,
-				stroke: d3.rgb(0, 0, 0),
-				fill: function (d) {
-					ColorScaleArray.push(d3.rgb(colorScale(d)));
-					return colorScale(d)
-				}
-			});
+	<!-- <div class="ca">
+		<canvas id="myCanvas00" class="ca"></canvas>
+	</div>
+	
+	<div class="ca">
+		<canvas id="myCanvas" class="ca"></canvas>
+	</div> -->
 
 
-		vis.selectAll("text") // <-- Note "text", not "circle" or "rect"
-			.data(dataset)
-			.enter()
-			.append("text") // <-- Same here!
-			.text(function (d) {
-				return d;
-			})
-			.attr("text-anchor", "middle")
-			.attr("font-family", "sans-serif")
-			.attr("font-size", "9px")
-			.attr({
-				x: function (d) {
-					return xScale(d) + 12
-				},
-				y: 40
-			});
 
-		vis.append("text")
-			.attr("x", 0)
-			.attr("y", 12)
-			.text("Heatmap Legend")
-			.attr("font-family", "sans-serif")
-			.attr("font-size", "12px")
-	</script>
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<div class="serifText">
+				<p style="font-size:80%;">This tool shows the impact of shade and glazing geometry on indoor<br>
+				occupant discomfort from direct sun.</p>
+				</div>
+			 </div>
+	    <div class="col-lg-4">
 
-<div class="ca">
-  <!-- <p>div above myCanvas</p> -->
-  <canvas id="myCanvas" class="ca"></canvas>
-</div>
+				<div id="visualization"></div>
+			 </div>
+	    </div>
+	  <div class="row">
+	    <div class="col-lg-8 col-xl-12 col-sm-12">
+	      <div class="row">
+	        <div class="col-lg-12 col-xl-6 col-sm-12">
+						<div id="sketch">
+							<canvas id="myCanvas00" class="ca"></canvas>
+						 <!-- The canvas goes here! -->
+					 </div>
+	        </div>
+	        <div class="col-lg-12 col-xl-6 col-sm-12">
+						<div id="sketch1">
+						 <!-- The canvas goes here! -->
+						 <canvas id="myCanvas" class="ca"></canvas>
+					 </div>
+	        </div>
+	      </div>
+	    </div>
+	    <div class="col-lg-4 col-xl-12 col-sm-12">
+	      <div class="row">
+	       <div class="col-lg-12 col-xl-4 col-sm-12">
 
-<div class="ca">
-  <!-- <p>div above myCanvas00</p> -->
-  <canvas id="myCanvas00" class="ca"></canvas>
-</div>
+					 <div id="occupancyWrapper">
+						<form id="occupantSliders" autocomplete="off">
+							<fieldset class="inputgroup">
+								<!-- <legend>Occupancy Thresholds</legend>
+								<hr> -->
+								<label for="fal"> Floor Area Loss</label>
+								<div class="occSlider"><input type="range" name="fal" id="fal" value="40" min="1" max="99"><p id="ppdOutput">40%</p></div>
+
+			          <label for="mdst">Max Direct Sun Time</label>
+								<div class="occSlider"><input type="range" name="mdst" id="mdst" value="3" min="1" max="12"><p id="ppdOutput2"> 0.75 Hr</p></div>
+
+							</fieldset>
+
+						</form>
+					</div>
+
+					<!-- <div id="inputs">
+
+		<div id="options">
+			<div id="units">
+				<h2>Units</h2><br>
+				<input type="button" name="IP" id="IP" value="IP" class="optionButton selected">
+				<input type="button" name="SI" id="SI" value="SI" class="optionButton unselected">
+				<div style="clear:both;"></div>
+			</div>
+			<div id="share">
+				<h2>Share</h2><br>
+				<input type="button" name="PDF" id="PDF" value="Save PDF" class="optionButton unselected">
+				<input type="button" name="CSV" id="CSV" value="Save CSV" class="optionButton unselected">
+				<input type="button" name="URL" id="URL" value="Copy URL" class="optionButton unselected">
+				<div style="clear:both;"></div>
+			</div>
+		</div>
+
+	</div> -->
+
+
+
+
+					 <div id="inputs">
+
+ 					<!-- <fieldset class="inputgroup"> -->
+						<div>
+							<fieldset class="inputgroup">
+								<div id="caseWrapper">
+									<legend class="heading first">CLIMATE</legend>
+									<div  id="caseSelection">
+										<!-- <label>Case1</label> -->
+										<button type="button" class="button" name="button" id="button">Case 1</button>
+										<button type="button" class="button1OFF" name="button1" id="button1">Case 2</button>
+										<button type="button" class="button2"></button>
+
+									</div>
+								</div>
+								<div id="citySearch">
+					<input type="button" name="CitySearch" id="CitySearch" value="Location Lookup" class="optionButton unselected">
+					<div style="clear:both;"></div>
+				</div><br>
+				</fieldset>
+							</div>
+
+
+ 						<label>Longitude</label>
+ 						<input type="number" name="long" id="long" min="-180" max="180" value="-71" step="1">
+ 						<input type="number" name="long1" id="long1" min="-180" max="180" value="-71" step="1"><br>
+
+ 						<label>Latitude</label>
+ 						<input type="number" name="lat" id="lat" min="-180" max="180"  value="42" step="1">
+ 						<input type="number" name="lat1" id="lat1" min="-180" max="180"  value="42" step="1"><br>
+
+ 						<label>Time Zone Offset</label>
+ 						<input type="number" name="timeZone" id="timeZone" min="-12" max="12"  value="-5" step="1">
+ 						<input type="number" name="timeZone1" id="timeZone1" min="-12" max="12"  value="-5" step="1"><br><br>
+
+
+
+
+					</div>
+					<div id="inputs">
+
+ 					<fieldset class="inputgroup">
+						<div>
+						<div id="caseWrapper">
+ 						<legend class="heading">Study Type</legend>
+					</div>
+
+						<div id="citySearch">
+							<input type="button" name="bHour" id="bHour" value="Single Hour" class="optionButton unselected" onclick="msg()">
+							<input type="button" name="bDay" id="bDay" value="Day" class="optionButton selected" onclick="msg2()">
+							<input type="button" name="bAnnual" id="bAnnual" value="Annual" class="optionButton unselected" onclick="checkAnnual()">
+							<div style="clear:both;"></div>
+						</div>
+							</div>
+							</fieldset>
+
+
+						<label>Hour</label>
+ 						<input type="number" name="hour" id="hour" min="0" max="24" value="12" step="1">
+ 						<input type="number" name="hour1" id="hour1" min="0" max="24" value="12" step="1"><br>
+
+ 						<label>Day</label>
+ 						<input type="number" name="day" id="day" min="1" max="31" value="21" step="1">
+ 						<input type="number" name="day1" id="day1" min="1" max="31" value="21" step="1"><br>
+
+ 						<label>Month</label>
+ 						<input type="number" name="mon" id="mon" min="1" max="12"  value="9" step="1">
+ 						<input type="number" name="mon1" id="mon1" min="1" max="12"  value="9" step="1"><br>
+
+ 						<label>Time Step per Hour</label>
+ 						<input type="number" name="timeStep" id="timeStep" min="1" max="8"  value="4" step="1" disabled><br><br>
+ 						<!-- <input type="number" name="timeStep1" id="timeStep1" min="1" max="8"  value="2" step="1"><br> -->
+
+
+
+
+
+ 				</div>
+	        </div>
+	        <div class="col-lg-12 col-xl-4 col-sm-12">
+
+
+
+
+
+						<div id="inputs">
+
+							<div>
+								<fieldset class="inputgroup">
+									<div id="caseWrapper">
+										<legend class="heading first">Room Geometry</legend>
+										<div  id="caseSelection">
+											<!-- <label>Case1</label> -->
+											<button type="button" class="button" name="button" id="button">Case 1</button>
+											<button type="button" class="button1OFF" name="button1" id="button1">Case 2</button>
+											<button type="button" class="button2"></button>
+
+										</div>
+									</div>
+								</div>
+
+
+
+
+
+									<label>Room Orientation</label>
+									<input type="number" name="north" id="north" min="-360" max="360"  value="0" step="1">
+									<input type="number" name="north1" id="north1" min="-360" max="360"  value="0" step="1"><br><br>
+
+									<label>Ceiling Height</label>
+									<input type="number" name="ceiling" id="ceiling" min="1" max="100"  value="12" step="1">
+									<input type="number" name="ceiling1" id="ceiling1" min="1" max="100"  value="12" step="1"><br>
+
+									<label>Grid Height</label>
+									<input type="number" name="gridHt" id="gridHt" min="0" max="10"  value="3" step="1">
+									<input type="number" name="gridHt1" id="gridHt1" min="0" max="10"  value="3" step="1"><br>
+
+									<label>Room Length</label>
+									<input type="number" name="wallDep" id="wallDep" min="1" max="60"  value="40" step="1">
+									<input type="number" name="wallDep1" id="wallDep1" min="1" max="60"  value="40" step="1"><br>
+
+									<label>Room Depth</label>
+									<input type="number" name="wallWidth" id="wallWidth" min="1" max="60"  value="30" step="1">
+									<input type="number" name="wallWidth1" id="wallWidth1" min="1" max="60"  value="30" step="1"><br><br>
+
+								</fieldset>
+
+								<fieldset class="inputgroup">
+									<legend class="heading">Window Geometry</legend>
+
+									<label>Window Height from Sill</label>
+									<input type="number" name="windowHeight" id="windowHeight" min="0.0" max="12.0"  value="7.0" step="1.0">
+									<input type="number" name="windowHeight1" id="windowHeight1" min="0.0" max="12.0"  value="7.0" step="1.0"><br>
+
+									<label>Sill Height</label>
+									<input type="number" name="sill" id="sill" min="0" max="5"  value="2.0" step="1">
+									<input type="number" name="sill1" id="sill1" min="0" max="5"  value="2.0" step="1"><br>
+
+
+									<label id="setGlazing">Set Glazing Amount By</label><br class="glzBR">
+
+
+									<label for="width" id="windowWidthLabel">
+									<div class="customCheckStyle">
+									<input type="radio" name="glazingRadio" value="windowWidthCheck" id="windowWidthCheck" checked>
+									<label for="windowWidthCheck" id="checkWindWidth"></label>
+									</div>Window Width</label>
+									<!-- <div class="inputWrapperLeft"> -->
+									<input type="number" name="windowWidth" id="windowWidth" min="0" value="14" step="0.5" class="case1">
+									<input type="number" name="windowWidth1" id="windowWidth1" min="0" value="14" step="0.5" class="case1"><br>
+									<!-- </div><br> -->
+
+									<label for="glazing" id="glazingLabel">
+									<div class="customCheckStyle">
+									<input type="radio" name="glazingRadio" value="glazingRatioCheck" id="glazingRatioCheck">
+									<label for="glazingRatioCheck" id="checkGlzRatio"></label>
+								  </div>Window-to-Wall Ratio (%)</label>
+							  	<!-- <div class="inputWrapperLeft"> -->
+									<input type="number" name="glazing"  id="glazing" min="1" max="95" value="39" step="1">
+									<input type="number" name="glazing1"  id="glazing1" min="1" max="95" value="39" step="1"><br>
+									<!-- </div><br> -->
+
+
+									<label>Window Seperation</label>
+									<input type="number" name="distWindow" id="distWindow" min="0"  value="12" step="1">
+									<input type="number" name="distWindow1" id="distWindow1" min="0"  value="12" step="1"><br><br>
+
+
+								</fieldset>
+							</div>
+	        </div>
+	        <div class="col-lg-12 col-xl-4 col-sm-12">
+						<div id="inputs">
+
+		 				<fieldset class="inputgroup">
+							<div>
+								<fieldset class="inputgroup">
+									<div id="caseWrapper">
+										<legend class="heading first">Shade Geometry</legend>
+										<div  id="caseSelection">
+											<!-- <label>Case1</label> -->
+											<button type="button" class="button" name="button" id="button">Case 1</button>
+											<button type="button" class="button1OFF" name="button1" id="button1">Case 2</button>
+											<button type="button" class="button2"></button>
+
+										</div>
+									</div>
+								</div>
+
+
+		 					<label><strong>Horizontal Shade Depth</strong></label>
+							<input type="number" name="hShadeDep" id="hShadeDep" min="0" max="4"  value="1" step="1">
+		 					<input type="number" name="hShadeDep1" id="hShadeDep1" min="0" max="4"  value="1" step="1"><br>
+
+		 					<label>&emsp;Number of Shades</label>
+							<input type="number" name="hShadeNum" id="hShadeNum" min="0" max="10"  value="0" step="1">
+		 					<input type="number" name="hShadeNum1" id="hShadeNum1" min="0" max="10"  value="0" step="1"><br>
+
+		 					<label>&emsp;Spacing</label>
+							<input type="number" name="hShadeSpace" id="hShadeSpace" min="1" max="10"  value="3" step="1">
+		 					<input type="number" name="hShadeSpace1" id="hShadeSpace1" min="1" max="10"  value="3" step="1"><br>
+
+		 					<label>&emsp;Distance from Facade</label>
+							<input type="number" name="hShadeDist" id="hShadeDist" min="0" max="10"  value="0" step="1">
+		 					<input type="number" name="hShadeDist1" id="hShadeDist1" min="0" max="10"  value="0" step="1"><br>
+
+		 					<label>&emsp;Height Above Window</label>
+							<input type="number" name="hShadeHeight" id="hShadeHeight" min="-10" max="10"  value="0" step="1">
+		 					<input type="number" name="hShadeHeight1" id="hShadeHeight1" min="-10" max="10"  value="0" step="1"><br>
+
+		 					<label>&emsp;Angle</label>
+							<input type="number" name="hShadeAngle" id="hShadeAngle" min="0" max="90"  value="90" step="1">
+		 					<input type="number" name="hShadeAngle1" id="hShadeAngle1" min="0" max="90"  value="90" step="1"><br>
+
+		 					<label><strong>Vertical Shade Depth</strong></label>
+
+							<input type="number" name="vShadeDep" id="vShadeDep" min="0" max="4"  value="3" step="1">
+		 					<input type="number" name="vShadeDep1" id="vShadeDep1" min="0" max="4"  value="3" step="1"><br>
+
+
+		 					<label>&emsp;Number of Shades</label>
+							<input type="number" name="vShadeNum" id="vShadeNum" min="0" max="100"  value="0" step="1">
+		 					<input type="number" name="vShadeNum1" id="vShadeNum1" min="0" max="100"  value="0" step="1"><br>
+
+		 					<label>&emsp;Spacing</label>
+							<input type="number" name="vShadeSpace" id="vShadeSpace" min="1" max="10"  value="3" step="1">
+		 					<input type="number" name="vShadeSpace1" id="vShadeSpace1" min="1" max="10"  value="3" step="1"><br>
+
+		 					<label>&emsp;Left/Right</label>
+							<input type="text" name="vShadeStart" id="vShadeStart" value="L">
+		 					<input type="text" name="vShadeStart1" id="vShadeStart1" value="L"><br>
+
+							<label>&emsp;Left/Right Shift</label>
+							<input type="number" name="vShadeShift" id="vShadeShift" min="-10" max="10"  value="0" step="1">
+		 					<input type="number" name="vShadeShift1" id="vShadeShift1" min="-10" max="10"  value="0" step="1"><br>
+
+		 					<label>&emsp;Distance from Facade</label>
+							<input type="number" name="vShadeDist" id="vShadeDist" min="0" max="10"  value="0" step="1">
+		 					<input type="number" name="vShadeDist1" id="vShadeDist1" min="0" max="10"  value="0" step="1"><br>
+
+							<label>&emsp;Full Height Louvers?</label>
+							<input type="checkbox" name="vShadeOn" id="vShadeOn" checked>
+		 					<input type="checkbox" name="vShadeOn1" id="vShadeOn1" checked><br>
+
+							<label>&emsp;&emsp;&emsp;&emsp;Height Above Window</label>
+							<input type="number" name="vShadeHeight" id="vShadeHeight" min="-10" max="10"  value="0" step="1">
+		 					<input type="number" name="vShadeHeight1" id="vShadeHeight1" min="0" max="10"  value="0" step="1"><br>
+
+		 					<label>&emsp;&emsp;&emsp;&emsp;Height Relative to Window</label>
+							<input type="number" name="vShadeScale" id="vShadeScale" min="-10" max="10"  value="0" step="1">
+		 					<input type="number" name="vShadeScale1" id="vShadeScale1" min="0" max="10"  value="0" step="1"><br>
+
+		 				</fieldset>
+		 				</div>
+	       </div>
+	     </div>
+	    </div>
+	  </div>
+	</div>
+
+
+
+
 
 	<script src="./viewer.js" type="module"></script>
 	<script src="./viewer2.js" type="module"></script>
@@ -270,210 +523,7 @@ canvas {
 
 	
 
-	<!-- Click the triangle to toggle the footer :) -->
-<div id="footer"> 
-
-  <div id="footerbuttondown">&#9660;</div>
-  <div id="footerbuttonup">&#9650;</div>
-
-  
-  <div id="footercont">
-	 
-		<div class="wrapper">
-
-			<header>
-				<h1>Solar Comfort Tool</h1>
-				<div id="visualization"></div>
-			</header>
-				
-		<section class="columns">
-			
-			<div class="column">
-				<h2>Geometry</h2>
-				<h3>Room</h3>
-				<p>Enter the overall dimensions of the room. Make sure to select the correct units before proceeding. By default the windows face due South. Rotate the room orientation to adjust</p>
-				<label for="quantity">Orientation:</label>
-	<input type="number" id="quantity" name="quantity" value="0" min="-360" max="360"><br>
-	<label for="quantity">Width (of window wall):</label>
-	<input type="number" id="quantity" name="quantity" value="2" min="1" max="5"><br>
-				<label for="quantity">Depth (from windows):</label>
-	<input type="number" id="quantity" name="quantity" value="2" min="1" max="5"><br>
 	
-	<label for="quantity">Ceiling Height:</label>
-	<input type="number" id="quantity" name="quantity" value="2" min="1" max="5"><br>
-	<label for="quantity">Grid Height:</label>
-	<input type="number" id="quantity" name="quantity" value="2" min="1" max="5"><br>
-	<hr>
-	<h3>Windows</h3>
-	<label for="heightFromSill">Height From Sill:</label>
-	<input type="number" id="heightFromSill" name="heightFromSill" value="2" min="1" max="5"><br>
-	<label for="sillHeight">Sill Height:</label>
-	<input type="number" id="sillHeight" name="sillHeight" value="2" min="1" max="5"><br>
-	<label for="glazingRatio">Glazing Ratio:</label>
-	<input type="number" id="glazingRatio" name="glazingRatio" value="2" min="1" max="5"><br>
-	<label for="windowWidth">Width:</label>
-	<input type="number" id="windowWidth" name="windowWidth" value="2" min="1" max="5"><br>
-	<label for="seperation">Seperation:</label>
-	<input type="number" id="seperation" name="seperation" value="2" min="1" max="5"><br>	
-
-	<hr>
-	<h3>Horizontal Louvers</h3>
-	<label for="heightFromSill">Depth:</label>
-	<input type="number" id="heightFromSill" name="heightFromSill" value="1" min="1" max="5"><br>
-	<label for="sillHeight">Number:</label>
-	<input type="number" id="sillHeight" name="sillHeight" value="0" min="0" max="5"><br>
-	<label for="glazingRatio">Spacing:</label>
-	<input type="number" id="glazingRatio" name="glazingRatio" value="3" min="1" max="10"><br>
-	<label for="windowWidth">Distance from Facade:</label>
-	<input type="number" id="windowWidth" name="windowWidth" value="0" min="0" max="5"><br>
-	<label for="seperation">Height Above:</label>
-	<input type="number" id="seperation" name="seperation" value="0" min="-5" max="5"><br>	
-	<label for="seperation">Angle:</label>
-	<input type="number" id="seperation" name="seperation" value="90" min="0" max="90"><br>	
-
-	<hr>
-	<h3>Vertical Louvers</h3>
-	<label for="heightFromSill">Depth:</label>
-	<input type="number" id="heightFromSill" name="heightFromSill" value="2" min="1" max="5"><br>
-	<label for="sillHeight">Number:</label>
-	<input type="number" id="sillHeight" name="sillHeight" value="2" min="1" max="5"><br>
-	<label for="glazingRatio">Spacing:</label>
-	<input type="number" id="glazingRatio" name="glazingRatio" value="2" min="1" max="5"><br>
-	<label for="windowWidth">Start (Left/Right):</label>
-	<input type="number" id="windowWidth" name="windowWidth" value="2" min="1" max="5"><br>
-	<label for="seperation">Distance from Facade:</label>
-	<input type="number" id="seperation" name="seperation" value="2" min="1" max="5"><br>	
-	<label for="windowWidth">Full Height?:</label>
-	<input type="number" id="windowWidth" name="windowWidth" value="0" min="0" max="5"><br>
-	<label for="seperation">Height Above:</label>
-	<input type="number" id="seperation" name="seperation" value="0" min="-5" max="5"><br>	
-	<label for="seperation">Relative Height</label>
-	<input type="number" id="seperation" name="seperation" value="90" min="0" max="90"><br>	
-</div>
-			
-			<div class="column">
-				<h2>Climate</h2>
-				<h3>Location</h3>
-				<p>Enter the location of the study. If you do not know the lat, long, and timezone, click the button below</p>
-			
-				<label for="latitude">Latitude:</label>
-	<input type="number" id="latitude" name="latitude" value="-71" min="-180" max="180"><br>
-				<label for="quantity">Longitude:</label>
-	<input type="number" id="quantity" name="quantity" value="42" min="-180" max="180"><br>
-	<label for="quantity">Timezone Offset:</label>
-	<input type="number" id="quantity" name="quantity" value="-5" min="-14" max="14"><br>
-	<button style="width: 90%; margin-left:5%; height: 30px; margin-top: 5px; border-radius: 0px; border: none" >Chose Location from City Lookup</button><br>
-			
-	<hr>
-	<h3>Time</h3>
-				<label for="latitude">Hour:</label>
-	<input type="number" id="latitude" name="latitude" value="12" min="1" max="24"><br>
-				<label for="quantity">Day:</label>
-	<input type="number" id="quantity" name="quantity" value="21" min="1" max="31"><br>
-	<label for="quantity">Month:</label>
-	<input type="number" id="quantity" name="quantity" value="9" min="1" max="12"><br>
-	<label for="quantity">Time Step:</label>
-	<input type="number" id="quantity" name="quantity" value="4" min="1" max="8"><br>
-	<hr>
-
-	<h3>Temperature</h3>
-				<label for="latitude">Outdoor Temp:</label>
-	<input type="number" id="latitude" name="latitude" value="12" min="1" max="24"><br>
-				<label for="quantity">Air Temp:</label>
-	<input type="number" id="quantity" name="quantity" value="21" min="1" max="31"><br>
-	<label for="quantity">Wind Speed:</label>
-	<input type="number" id="quantity" name="quantity" value="9" min="1" max="12"><br>
-	<label for="quantity">Humidity:</label>
-	<input type="number" id="quantity" name="quantity" value="4" min="1" max="8"><br>
-	<hr>
-				</div>
-			
-			<div class="column">
-				<h2>Parameters</h2>
-				<h3>Occupant</h3>
-				<label for="latitude">Distance from wall:</label>
-	<input type="number" id="latitude" name="latitude" value="12" min="1" max="24"><br>
-				<label for="quantity">Distance from wall center:</label>
-	<input type="number" id="quantity" name="quantity" value="21" min="1" max="31"><br>
-	<label for="quantity">Posture:</label>
-	<input type="number" id="quantity" name="quantity" value="9" min="1" max="12"><br>
-	<label for="quantity">Clothing Value:</label>
-	<input type="number" id="quantity" name="quantity" value="4" min="1" max="8"><br>
-	<hr>	
-
-	<h3>Room/Window Values</h3>
-				<label for="latitude">U Value:</label>
-	<input type="number" id="latitude" name="latitude" value="12" min="1" max="24"><br>
-				<label for="quantity">Low E:</label>
-	<input type="number" id="quantity" name="quantity" value="21" min="1" max="31"><br>
-	<label for="quantity">Radiant Floors:</label>
-	<input type="number" id="quantity" name="quantity" value="9" min="1" max="12"><br>
-	<label for="quantity">Window Emissivity:</label>
-	<input type="number" id="quantity" name="quantity" value="4" min="1" max="8"><br>
-	<label for="quantity">Window Temp:</label>
-	<input type="number" id="quantity" name="quantity" value="4" min="1" max="8"><br>
-	<label for="quantity">Global Surface Temp:</label>
-	<input type="number" id="quantity" name="quantity" value="4" min="1" max="8"><br>
-	<hr>
-
-	<h3>Solar Heat Gain</h3>
-				<label for="latitude">TSol:</label>
-	<input type="number" id="latitude" name="latitude" value="12" min="1" max="24"><br>
-	<label for="latitude">TSol Shading:</label>
-	<input type="number" id="latitude" name="latitude" value="12" min="1" max="24"><br>
-				<label for="quantity">Direct Normal Irradiance:</label>
-	<input type="number" id="quantity" name="quantity" value="21" min="1" max="31"><br>
-	<label for="quantity">Shortwave Absorpivity:</label>
-	<input type="number" id="quantity" name="quantity" value="9" min="1" max="12"><br>
-	<label for="quantity">Indirect Solar Heat Gain :</label>
-	<input type="number" id="quantity" name="quantity" value="4" min="1" max="8"><br>
-	<hr>
-			</div>
-			
-		</section>	
-			
-		
-		
-		</div>
-
-
-
-  </div>
-</div><!--end of footer-->
-
-<script>
-	document.getElementById("footerbuttondown").onclick = function(){shrink()};
-document.getElementById("footerbuttonup").onclick = function(){ expand()};
-document.getElementById("footer").style.height= "30px"; 
-
-function shrink(){
-if(document.getElementById("footer").style.height= "500px"){
-
-	document.getElementById("footer").style.height= "30px";
-	document.getElementById("footerbuttondown").style.visibility="hidden";  
- document.getElementById("footerbuttonup").style.visibility="visible";  
-	document.getElementById("footercont").style.opacity="0";  
-	document.getElementById("footercont").style.visibility="hidden";
-																		
-}
-}
-
-function expand(){
-if(document.getElementById("footer").style.height= "30px"){
-	
-	document.getElementById("footer").style.height= "500px";
-	document.getElementById("footerbuttondown").style.visibility="visible";  
- document.getElementById("footerbuttonup").style.visibility="hidden";  
-	document.getElementById("footercont").style.opacity="1";  
-	document.getElementById("footercont").style.visibility="visible";
-
-	// shrink();
-
-																								
-}
-}
-
-</script>
 	
 
 </body>

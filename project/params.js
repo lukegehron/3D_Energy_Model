@@ -1,6 +1,6 @@
 // TWEAKPANE Parameter objects
 const PARAMS1 = {
-  model: 13,
+  model: 2,
 };
 
 const CLIMATE_PARAMS = {
@@ -37,7 +37,7 @@ const WINDOW_PARAMS = {
 const HORIZONTAL_SHADE_PARAMS = {
   depth: 0.5,
   number: 0,
-  spacing: 0.3,
+  spacing: 0.4,
   dist: 0,
   heightAbove: 0,
   angle: 0

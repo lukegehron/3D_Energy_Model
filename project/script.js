@@ -17,12 +17,12 @@ let multiDimResults;
 
 script.computeData = function(object) {
     multiDimResults = [];
-    let halfWall = parseInt(ROOM_PARAMS.length / 2)
+    let halfWall = parseInt(ROOM_PARAMS.length*5 / 2)
 
     for(let i = 0; i < halfWall; i++){
         let nDimResults = []
         multiDimResults.push(nDimResults)
-        for(let j = 0; j < 13; j++){
+        for(let j = 0; j < ROOM_PARAMS.depth*5; j++){
             multiDimResults[i].push(0);
         }
     }
