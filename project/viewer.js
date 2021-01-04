@@ -350,6 +350,7 @@ function initTweakPane() {
   // drawGrid();
   // calculate_all();
   updateRoom();
+  cornerSunPath()
 
 }
 
@@ -386,9 +387,75 @@ function updateParams() {
 
 
   updateRoom()
+  
 
 
   animate();
+}
+
+function cornerSunPath(){
+  // MAKE SUN PATH CORNER GRAPHIC
+
+  console.log(xPointLoc, yPointLoc)
+  for(let i = 0; i < xPointLoc.length; i++){
+    const geometry = new THREE.SphereGeometry( 0.1, 32, 32 );
+    const material = new THREE.MeshBasicMaterial( {color: 0x333333} );
+    const sphere = new THREE.Mesh( geometry, material );
+    sphere.position.x = 0.5
+    sphere.position.y = 0.5
+    sphere.rotation.set(xPointLoc[i], yPointLoc[i], 0)
+
+    // pivot = new THREE.Group();
+    // pivot.position.set( 0.0, 0.0, 0 );
+    // mesh.add( pivot );
+    // pivot.add( sphere );
+
+    scene.add( sphere );
+    console.log("hi")
+  }
+  
+
+//   roomOrientationValue = roomOrientationValue*-1
+//   p.push();
+//   p.translate(380,280);
+//   p.strokeCap(p.SQUARE);
+//   p.stroke(light_black+100);
+//   p.strokeWeight(1);
+//   p.noFill();
+//   p.ellipse(0,0,75,45); //main circle
+//   p.fill(light_black+100);
+//   p.line(0,0,45*p.sin((roomOrientationValue+45)*(-3.1415926 / 180)), 27*p.cos((roomOrientationValue+45)*(-3.1415926 / 180)));
+//   p.line(0,0,45*p.sin((roomOrientationValue+135)*(-3.1415926 / 180)), 27*p.cos((roomOrientationValue+135)*(-3.1415926 / 180)));
+//   p.line(0,0,45*p.sin((roomOrientationValue+225)*(-3.1415926 / 180)), 27*p.cos((roomOrientationValue+225)*(-3.1415926 / 180)));
+//   p.textAlign(p.CENTER, p.CENTER);
+//   p.textSize(10);
+//   p.text("N", 56*p.sin((roomOrientationValue-45)*(-3.1415926 / 180)), 34*p.cos((roomOrientationValue-45)*(-3.1415926 / 180)));
+//   p.strokeWeight(4);
+//   p.line(0,0,45*p.sin((roomOrientationValue-45)*(-3.1415926 / 180)), 27*p.cos((roomOrientationValue-45)*(-3.1415926 / 180)));
+//   //p.translate(36*p.sin((roomOrientationValue+45)*(-3.1415926 / 180)), 22*p.cos((roomOrientationValue+45)*(-3.1415926 / 180)));
+//   //p.point(0,0);
+//   p.stroke(10);
+//   p.strokeWeight(3);
+
+//   p.strokeWeight(4);
+//   p.stroke(light_black);
+//   p.point(xPointLoc[0], yPointLoc[0]);
+//   for (let i = 0; i < xPointLoc.length-1; i++){
+//     p.strokeWeight(1);
+//     //p.stroke(light_black);
+//     p.line(xPointLoc[i], yPointLoc[i],xPointLoc[i+1], yPointLoc[i+1]);
+//     p.strokeWeight(4);
+//     //p.stroke(100);
+//     p.point(xPointLoc[i+1], yPointLoc[i+1]);
+//   }
+//   p.strokeWeight(3);
+//   p.stroke(100);
+//   // for (let i = 0; i < xPointLoc.length; i++){
+//   //   p.point(xPointLoc[i], yPointLoc[i]);
+//   // }
+//   p.pop();
+
+// roomOrientationValue = roomOrientationValue*-1
 }
 
 //UPDATE ROOM SIZE
@@ -501,7 +568,7 @@ function updateRoom() {
       let j_1 = i  + depTEN / 2;
       let i_1 = j + lenTEN / 2;
 
-      console.log(i_1, j_1)
+      // console.log(i_1, j_1)
 
       if (typeof multiDimResults[n][m] === 'undefined' || isNaN(multiDimResults[n][m].ppd)) {
         multiDimResults[n][m] = multiDimResults[n][m - 1];
@@ -748,7 +815,7 @@ function updateRoom() {
     }
   }
   // console.log(multiDimResults)
-  console.log(gridColorArray)
+  // console.log(gridColorArray)
 
   const lineMaterial = new THREE.LineBasicMaterial({
     color: 0xaaaaaa
@@ -993,14 +1060,14 @@ function onWindowResize() {
 
   var aspect = window.innerWidth / window.innerHeight;
 
-  camera.left = -frustumSize * aspect / 2;
-  camera.right = frustumSize * aspect / 2;
-  camera.top = frustumSize / 2;
-  camera.bottom = -frustumSize / 2;
+  // camera.left = -frustumSize * aspect / 2;
+  // camera.right = frustumSize * aspect / 2;
+  // camera.top = frustumSize / 2;
+  // camera.bottom = -frustumSize / 2;
 
   camera.updateProjectionMatrix();
 
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(window.innerWidth/2.2, window.innerHeight/2.2);
 
 }
 

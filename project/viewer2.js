@@ -575,14 +575,14 @@ function onWindowResize() {
 
   var aspect = window.innerWidth / window.innerHeight;
 
-  camera.left = -frustumSize * aspect / 2;
-  camera.right = frustumSize * aspect / 2;
-  camera.top = frustumSize / 2;
-  camera.bottom = -frustumSize / 2;
+  // camera.left = -frustumSize * aspect / 2;
+  // camera.right = frustumSize * aspect / 2;
+  // camera.top = frustumSize / 2;
+  // camera.bottom = -frustumSize / 2;
 
   camera.updateProjectionMatrix();
 
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(window.innerWidth/2.2, window.innerHeight/2.2);
 
 }
 
