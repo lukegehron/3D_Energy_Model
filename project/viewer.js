@@ -113,7 +113,7 @@ function init(canva) {
   //THREE_CAMERA
   // var aspect = window.innerWidth / window.innerHeight;
   // camera = new THREE.OrthographicCamera( frustumSize * aspect / - 2, frustumSize * aspect / 2, frustumSize / 2, frustumSize / - 2, 0.1, 10000 );
-  camera = new THREE.PerspectiveCamera(1, window.innerWidth / window.innerHeight, 1, 100000);
+  camera = new THREE.PerspectiveCamera(1, window.innerWidth / window.innerHeight, 10, 1000);
   camera.position.x = 400;
   camera.position.y = 400;
   camera.position.z = 400;
@@ -209,134 +209,134 @@ function init(canva) {
 
 //INITIALIZE TWEAKPANE PANELS
 function initTweakPane() {
-  // const global_pane = new Tweakpane({
-  //   container: document.getElementById('global_pane'),
-  //   title: 'Model Type',
-  // });
-  // global_pane.addInput(PARAMS1, 'model', {
-  //   options: {
-  //     loc_i: 0,
-  //       loc_j: 1,
-  //       direct_solar: 2,
-  //       dwnSpd: 3,
-  //       dwnTmp: 4,
-  //       glzfac: 5,
-  //       govPPD: 6,
-  //       mrt: 7,
-  //       mrtppd: 8,
-  //       pmv: 9,
-  //       ppd: 10,
-  //       tarDist: 11,
-  //       longwaveMRT: 12,
-  //       mrt1: 13,
-  //       shortwaveMRT: 14,
-  //       directShortwaveMRT: 15,
-  //       diffuseShortwaveMRT: 16,
-  //       reflectedShortwaveMRT: 17,
-  //       pmv1: 18,
-  //       finalPPD:19
-  //   },
-  // });
+  const global_pane = new Tweakpane({
+    // container: document.getElementById('global_pane'),
+    title: 'Model Type',
+  });
+  global_pane.addInput(PARAMS1, 'model', {
+    options: {
+      loc_i: 0,
+        loc_j: 1,
+        direct_solar: 2,
+        dwnSpd: 3,
+        dwnTmp: 4,
+        glzfac: 5,
+        govPPD: 6,
+        mrt: 7,
+        mrtppd: 8,
+        pmv: 9,
+        ppd: 10,
+        tarDist: 11,
+        longwaveMRT: 12,
+        mrt1: 13,
+        shortwaveMRT: 14,
+        directShortwaveMRT: 15,
+        diffuseShortwaveMRT: 16,
+        reflectedShortwaveMRT: 17,
+        pmv1: 18,
+        finalPPD:19
+    },
+  });
 
-  // const climate_pane = new Tweakpane({
-  //   container: document.getElementById('climate_pane'),
-  //   title: 'Climate',
-  // })
+  const climate_pane = global_pane.addFolder({
+    // container: document.getElementById('climate_pane'),
+    title: 'Climate',
+  })
 
-  // climate_pane.addInput(CLIMATE_PARAMS, 'longitude');
-  // climate_pane.addInput(CLIMATE_PARAMS, 'latitude');
-  // climate_pane.addInput(CLIMATE_PARAMS, 'timeZoneOffset');
+  climate_pane.addInput(CLIMATE_PARAMS, 'longitude');
+  climate_pane.addInput(CLIMATE_PARAMS, 'latitude');
+  climate_pane.addInput(CLIMATE_PARAMS, 'timeZoneOffset');
 
-  // const time_pane = new Tweakpane({
-  //   container: document.getElementById('time_pane'),
-  //   title: 'Time',
-  // })
-  // time_pane.addInput(TIME_PARAMS, 'studyType');
-  // time_pane.addInput(TIME_PARAMS, 'hour');
-  // time_pane.addInput(TIME_PARAMS, 'day');
-  // time_pane.addInput(TIME_PARAMS, 'month');
+  const time_pane = global_pane.addFolder({
+    // container: document.getElementById('time_pane'),
+    title: 'Time',
+  })
+  time_pane.addInput(TIME_PARAMS, 'studyType');
+  time_pane.addInput(TIME_PARAMS, 'hour');
+  time_pane.addInput(TIME_PARAMS, 'day');
+  time_pane.addInput(TIME_PARAMS, 'month');
 
-  // const geometry_pane = new Tweakpane({
-  //   container: document.getElementById('room_pane'),
-  // });
+  const geometry_pane = global_pane.addFolder({
+    // container: document.getElementById('room_pane'),
+  });
 
-  // const room_pane = geometry_pane.addFolder({
-  //   title: 'Geometry',
-  // });
+  const room_pane = geometry_pane.addFolder({
+    title: 'Geometry',
+  });
 
-  // const roomPanel = room_pane.addFolder({
-  //   title: 'Room',
-  // });
-  // roomPanel.addInput(ROOM_PARAMS, 'orientation');
-  // roomPanel.addInput(ROOM_PARAMS, 'ceilHeight');
-  // roomPanel.addInput(ROOM_PARAMS, 'gridHeight');
-  // roomPanel.addInput(ROOM_PARAMS, 'depth');
-  // roomPanel.addInput(ROOM_PARAMS, 'length');
+  const roomPanel = room_pane.addFolder({
+    title: 'Room',
+  });
+  roomPanel.addInput(ROOM_PARAMS, 'orientation');
+  roomPanel.addInput(ROOM_PARAMS, 'ceilHeight');
+  roomPanel.addInput(ROOM_PARAMS, 'gridHeight');
+  roomPanel.addInput(ROOM_PARAMS, 'depth');
+  roomPanel.addInput(ROOM_PARAMS, 'length');
 
-  // const windowPanel = room_pane.addFolder({
-  //   expanded: false,
-  //   title: 'Window',
-  // });
-  // windowPanel.addInput(WINDOW_PARAMS, 'heightFromSill');
-  // windowPanel.addInput(WINDOW_PARAMS, 'sillHeight');
-  // windowPanel.addInput(WINDOW_PARAMS, 'glazingBy');
-  // windowPanel.addInput(WINDOW_PARAMS, 'separation');
+  const windowPanel = room_pane.addFolder({
+    expanded: false,
+    title: 'Window',
+  });
+  windowPanel.addInput(WINDOW_PARAMS, 'heightFromSill');
+  windowPanel.addInput(WINDOW_PARAMS, 'sillHeight');
+  windowPanel.addInput(WINDOW_PARAMS, 'glazingBy');
+  windowPanel.addInput(WINDOW_PARAMS, 'separation');
 
-  // const hshadePanel = room_pane.addFolder({
-  //   expanded: false,
-  //   title: 'Horizontal Shade',
-  // });
-  // hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'depth');
-  // hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'number');
-  // hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'spacing');
-  // hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'dist');
-  // hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'heightAbove');
-  // hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'angle');
+  const hshadePanel = room_pane.addFolder({
+    expanded: false,
+    title: 'Horizontal Shade',
+  });
+  hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'depth');
+  hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'number');
+  hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'spacing');
+  hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'dist');
+  hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'heightAbove');
+  hshadePanel.addInput(HORIZONTAL_SHADE_PARAMS, 'angle');
 
-  // const vshadePanel = room_pane.addFolder({
-  //   expanded: false,
-  //   title: 'Vertical Shade',
-  // });
-  // vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'depth');
-  // vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'number');
-  // vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'spacing');
-  // vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'leftRight');
-  // vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'lrShift');
-  // vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'dist');
-  // vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'fullHeight');
-  // vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'heightAbove');
-  // vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'relativeHeight');
-  // vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'angle');
+  const vshadePanel = room_pane.addFolder({
+    expanded: false,
+    title: 'Vertical Shade',
+  });
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'depth');
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'number');
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'spacing');
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'leftRight');
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'lrShift');
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'dist');
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'fullHeight');
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'heightAbove');
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'relativeHeight');
+  vshadePanel.addInput(VERTICAL_SHADE_PARAMS, 'angle');
 
-//   const mrt_pane = new Tweakpane({
-//     container: document.getElementById('mrt_pane'),
-//     title: 'MRT',
-//   })
+  const mrt_pane = global_pane.addFolder({
+    // container: document.getElementById('mrt_pane'),
+    title: 'MRT',
+  })
 
-//   mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'directNormalIrradiance');
-//   mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'fractionOfBodyExposed');
-//   mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'shortWaveAbsorpivity');
-//   mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'TSol');
-//   mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'SHGCIndirect');
-//   mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'TSolShading');
-
-
-  // global_pane.on('change', (value) => {-349,-519,-88,94,72,-41,93,65,-41,97,62,-41,-209,400,-96,-8,201,-73,-42,216,-76,-128,234,-83,-145,257,-86,-158,281,-88,-165,312,-91,-163,340,-93,-153,370,-96,-99,219,-80,-245,386,-101,26,208,-71,-183,467,-102,-229,331,-91,-205,230,-85,162,-50,-41,90,75,-41,145,11,-41,139,0,-41,117,-4,-41,106,2,-41,102,14,-41,92,20,-41,100,25,-41,93,32,-41,84,31,-41,169,33,-41,165,24,-41,161,15,-41,157,6,-41,153,-3,-41,148,-12,-41,144,-21,-41,-192,444,-99,-201,422,-98,-219,376,-94,-225,352,-92,-229,303,-89,-224,276,-88,-217,251,-86,-190,209,-83,-172,187,-81,43,8,-41,36,15,-41,26,25,-41,18,33,-41,10,40,-41,-11,75,-44,-6,66,-42,-1,57,-41,4,48,-41,-6,-166,-41,227,-128,-44,-134,-158,-41,181,-73,-43,-179,-282,-41,40,-119,-41,31,-131,-41,64,-168,-41,70,-158,-41,84,-157,-41,175,-181,-42,271,-583,-41,109,-656,-42,100,-642,-41,202,-661,-33,230,-638,-34,229,-671,-33,51,-407,-41,-2,-421,-41,-2,-433,-41,10,-484,-42,71,-440,-41,-54,439,-101,-77,401,-98,-58,393,-96,-46,390,-95,-42,399,-96,-41,427,-98,-161,165,-80,-84,94,-56,-73,55,-48,-61,59,-47,-83,43,-48,-22,89,-47,12,103,-47,3,99,-47,-5,96,-47,-14,93,-47,67,-438,-41,66,-443,-41,-149,-612,-51,-28,-438,-41,-29,-437,-41,-28,-437,-41,-160,-419,-44,293,6,-65,279,34,-62,307,28,-70,283,81,-68,314,-157,-66,300,-130,-62,328,-135,-75,328,-195,-74,303,-180,-62,307,-211,-68,342,-200,-80,328,-222,-77,338,-339,-79,352,-317,-84,317,-328,-71,313,-297,-72,337,-312,-80,338,-252,-82,310,-247,-72,324,-274,-76,385,-368,-90,370,-341,-88,398,-346,-97,398,-405,-91,373,-391,-86,377,-422,-86,412,-411,-95,399,-433,-90,389,-316,-95,402,-294,-99,367,-305,-89,363,-274,-88,388,-288,-95,388,-229,-94,360,-224,-86,375,-251,-91,377,-106,-89,363,-79,-87,391,-84,-93,390,-143,-91,366,-129,-86,370,-160,-86,405,-149,-97,391,-171,-91,400,-201,-95,373,-195,-87,340,-107,-81,354,-172,-82,405,-219,-98,376,-392,-87,333,-362,-76,346,-399,-79,322,-385,-69,326,-416,-67,361,-405,-83,347,-427,-78,352,-485,-72,365,-463,-81,330,-474,-64,326,-443,-64,351,-457,-75,382,-480,-85,378,-449,-85,474,-428,-112,477,-459,-112,446,-437,-106,422,-422,-98,426,-453,-98,461,-442,-111,447,-464,-106,443,-406,-106,457,-384,-110,422,-395,-100,418,-364,-102,442,-378,-106,429,-341,-103,472,-372,-112,456,-203,-111,459,-253,-112,463,-284,-112,484,-295,-112,494,-412,-112,508,-390,-112,473,-401,-112,469,-370,-112,493,-385,-112,466,-320,-112,480,-347,-112,420,-253,-102,406,-226,-98,434,-231,-104,433,-291,-105,409,-276,-100,413,-307,-102,448,-296,-110,434,-319,-105,424,-202,-103,509,-480,-112,498,-504,-112,502,-534,-112,537,-523,-112,523,-546,-112,458,-474,-109,471,-512,-112,447,-497,-106,450,-528,-107,472,-539,-112,476,-598,-112,490,-575,-112,455,-586,-109,506,-592,-112,503,-562,-112,407,-582,-95,411,-613,-96,380,-590,-84,355,-576,-73,359,-607,-78,394,-596,-90,376,-560,-81,390,-538,-88,355,-549,-72,351,-518,-70,375,-532,-80,362,-495,-76,405,-526,-94,428,-566,-102,441,-544,-106,406,-555,-95,413,-501,-96,434,-155,-105,419,-90,-103,452,-178,-111,449,-143,-110,421,-183,-103,407,-118,-99,379,56,-90,393,-9,-93,409,-43,-99,395,22,-94,368,146,-100,383,80,-93,366,115,-92,352,180,-101,312,232,-99,326,167,-90,341,226,-107,366,204,-108,328,198,-97,459,-628,-110,490,-623,-112,520,-618,-112,377,-645,-84,428,-652,-102,393,-662,-89,407,-640,-94,331,118,-84,302,124,-77,301,284,-108,327,296,-114,343,262,-113,301,186,-86,289,245,-96,-263,-57,-94,-283,-121,-91,-261,-140,-82,-241,-77,-88,-257,-170,-74,-229,-158,-63,-206,-145,-56,-242,-137,-74,-230,-109,-77,-216,-133,-65,-185,-82,-69,-207,-63,-81,-208,-94,-73,-286,-159,-87,-265,-95,-91,-226,25,-90,-247,-38,-93,-170,26,-69,-168,57,-71,-177,-13,-72,-191,12,-76,-203,-17,-82,-167,-25,-68,-190,-37,-76,-218,-49,-86,-202,44,-80,-222,-20,-89,-244,0,-94,-224,63,-88,-169,-65,-66,-150,-8,-62,-152,-46,-63,-125,-3,-56,-118,31,-57,-144,26,-62,-110,59,-58,-139,52,-63,-150,100,-71,-154,74,-70,-129,79,-64,-178,105,-77,-180,74,-75,-146,123,-73,-125,102,-66,-192,152,-84,-173,119,-78,-169,148,-79,-204,84,-82,-238,70,-92,-260,90,-97,-215,131,-86,-216,100,-85,-269,-177,-78,-264,-206,-68,-293,-195,-84,-286,-214,-75,-282,-243,-64,-276,-269,-54,-299,-294,-58,-292,-323,-50,-298,-354,-52,-281,-377,-48,-274,-406,-51,-280,-436,-69,-254,-431,-52,-240,-454,-58,-246,-485,-71,-220,-479,-61,-234,-512,-70,-208,-506,-64,-311,-232,-81,-318,-400,-73,-325,-381,-73,-300,-363,-54,-288,-451,-74,-296,-432,-73,-300,-402,-65,-270,-471,-73,-259,-498,-73,-245,-562,-73,-257,-535,-74,-220,-576,-69,-232,-549,-71,-239,-588,-72,-282,-541,-78,-284,-503,-78,-296,-477,-78,-305,-442,-76,-417,-123,-99,-439,-88,-97,-424,-34,-97,-435,-174,-98,-414,71,-97,-489,83,-96,-497,163,-97,-467,181,-98,-396,43,-98,-380,-30,-99,-398,-76,-99,-381,-156,-99,-340,-106,-98,-347,-74,-100,-381,81,-98,-409,162,-99,-519,-173,-95,-348,54,-100,-333,92,-101,-313,-2,-101,-328,-40,-100,-284,-29,-99,-283,23,-101,-248,9,-95,-258,41,-98,-281,61,-101,-261,81,-98,-295,68,-101,-272,188,-98,-271,219,-99,-260,171,-97,-248,240,-97,-236,161,-92,-234,192,-94,-280,151,-100,-224,145,-88,-257,131,-91,-306,145,-101,-287,166,-100,-297,213,-101,-299,182,-101,-300,120,-101,-274,126,-98,-430,412,-101,-460,394,-99,-466,423,-99,-429,449,-102,-352,422,-105,-389,434,-103,-351,459,-105,-242,446,-106,-303,459,-106,-303,502,-106,-232,485,-106,-272,476,-106,-259,414,-106,-349,277,-103,-426,215,-99,-311,242,-102,-310,272,-103,-247,252,-96,-261,299,-100,-283,278,-102,-285,247,-101,-289,303,-103,-266,323,-102,-284,338,-105,-261,359,-103,-304,299,-103,-310,323,-105,-349,168,-102,-360,217,-102,-279,-530,-77,-284,-505,-78,-322,-507,-85,-335,-495,-87,-336,-577,-87,-315,-555,-84,-303,-582,-82,-316,-535,-84,-459,-293,-96,-412,-276,-96,-474,-362,-95,-426,-346,-96,-410,-424,-94,-449,-408,-95,-324,-265,-78,-317,-284,-70,-313,-313,-63,-342,-302,-80,-329,-352,-71,-366,-289,-90,-361,-238,-94,-338,-258,-86,-331,-229,-88,-332,-209,-91,-340,-376,-79,-348,-356,-80,-344,-413,-85,-352,-327,-83,-329,-188,-92,-304,-170,-90,-311,-151,-92,-315,-119,-95,-301,-106,-94,-328,-457,-85,-343,-452,-87,-369,-458,-90,-361,-477,-89,-388,-492,-91,-395,-473,-91,-405,-483,-92,-438,-482,-94,-449,-461,-94,-379,-437,-91,-407,-366,-94,-400,-397,-93,-373,-391,-89,-385,-336,-92,-436,-212,-97,-155,-509,-49,-129,-504,-47,-105,-518,-45,-81,-512,-43,-75,-541,-43,-67,-579,-43,-79,-595,-43,-151,-529,-49,-151,-574,-51,-57,-507,-43,-338,-671,-89,-336,-730,-86,-311,-712,-81,-304,-741,-81,-308,-693,-80,-314,-666,-86,-195,-665,-67,-190,-691,-62,-185,-740,-61,-193,-711,-64,-172,-688,-55,-178,-661,-62,363,-629,-81,312,-623,-60,346,-612,-73,333,-635,-69,329,-662,-68,359,-657,-81,281,-640,-49,301,-668,-60,305,-641,-59,122,-717,-42,147,346,-84,159,330,-82,227,354,-106,130,424,-106,76,412,-93,61,442,-102,42,457,-104,9,449,-100,13,430,-97,-590,329,-96,-621,348,-95,-574,422,-96,-386,-654,-92,-154,-616,-54,-103,-379,-41,-102,-372,-41,475,-570,-112
+  mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'directNormalIrradiance');
+  mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'fractionOfBodyExposed');
+  mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'shortWaveAbsorpivity');
+  mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'TSol');
+  mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'SHGCIndirect');
+  mrt_pane.addInput(SUMMER_COMFORT_PARAMS, 'TSolShading');
 
 
-//   mrt_pane.on('change', (value) => {
-//     // console.log('changed: ' + String(value));
-//     // console.log(ROOM_PARAMS)
-//     updateParams();
-//   });
 
-  set_wall_properties();
-  render_zone();
-  update_view_factors();
-  update_shortwave_components();
-  update_visualization();
+  global_pane.on('change', (value) => {
+    // console.log('changed: ' + String(value));
+    // console.log(ROOM_PARAMS)
+    updateParams();
+  });
+
   // drawGrid();
   // calculate_all();
+
+  // set_wall_properties();
+  // render_zone();
+  // update_view_factors();
+  // update_shortwave_components();
+  // update_visualization();
+
   updateRoom();
   cornerSunPath()
 
@@ -387,11 +387,19 @@ function cornerSunPath(){
   // console.log(xPointLoc, yPointLoc)
 
   let geometry = new THREE.CircleGeometry( 0.8, 32 );
-  let material = new THREE.MeshBasicMaterial( { color: 0xcccccc } );
+  let material = new THREE.MeshBasicMaterial( { color: 0xffffff } );
   let circle = new THREE.Mesh( geometry, material );
   circle.position.x = 6
       circle.position.y = 3.5
       circle.position.z = -1
+scene.add( circle );
+
+geometry = new THREE.CircleGeometry( 0.83, 32 );
+  material = new THREE.MeshBasicMaterial( { color: 0x333333 } );
+  circle = new THREE.Mesh( geometry, material );
+  circle.position.x = 6
+      circle.position.y = 3.5
+      circle.position.z = -1.01
 scene.add( circle );
 
   console.log(coordinates)
@@ -453,7 +461,8 @@ scene.add( circle );
   var length = 0.8
 
 
-  var arrowHelper = new THREE.ArrowHelper(dir, origin, length, 0x000000 , 0.3, 0.3);
+  var arrowHelper = new THREE.ArrowHelper(dir, origin, length, 0x333333 , 0.3, 0.3);
+  arrowHelper.scale.z = 0.1
   scene.add(arrowHelper);
 
   const loader = new THREE.FontLoader();
@@ -467,10 +476,10 @@ loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
 		curveSegments: 12,
 		bevelEnabled: false
   } );
-  var textMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
+  var textMaterial = new THREE.MeshBasicMaterial({ color: 0x333333 });
   var textMesh = new THREE.Mesh(textGeo, textMaterial);
   textMesh.position.x = 5.9;
-  textMesh.position.y = 3.1;
+  textMesh.position.y = 3.15;
   textMesh.position.z = -0.99;
   // textMesh.rotation.x = -Math.PI / 2;
   // textMesh.rotation.z = -Math.PI / 2;
@@ -652,115 +661,115 @@ function updateRoom() {
       // colorCount++;
 
 
-      let my_point = new THREE.Vector3(0, 0, 0);
-      let cursorPoint = new THREE.Vector3(i_1 *0.2 - 0.4, j_1*0.2 + 0.1, 0)
-      my_point.x = cursorPoint.x - mrt.room.width/ 2;
-      my_point.y = cursorPoint.y - mrt.room.depth / 2;
-      my_point.z = 0;
+      // let my_point = new THREE.Vector3(0, 0, 0); //MRTMRTMRT
+      // let cursorPoint = new THREE.Vector3(i_1 *0.2 - 0.4, j_1*0.2 + 0.1, 0)
+      // my_point.x = cursorPoint.x - mrt.room.width/ 2;
+      // my_point.y = cursorPoint.y - mrt.room.depth / 2;
+      // my_point.z = 0;
 
-      var point_view_factors = calculate_view_factors(cursorPoint);
-      var longwave_mrt = mrt.calc(point_view_factors);
-      // console.log(longwave_mrt)
+      // var point_view_factors = calculate_view_factors(cursorPoint);
+      // var longwave_mrt = mrt.calc(point_view_factors);
+      // // console.log(longwave_mrt)
 
-      var window_objects = get_window_objects();
+      // var window_objects = get_window_objects();
 
-      if (window_objects) {
-        var window_object_vfs = _.map(window_objects, function (w) {
-          return _.find(point_view_factors, function (o) {
-            return o.name == w.name;
-          }).view_factor;
-        });
-        var my_erf = calculate_erf_point(
-          my_point,
-          solarcal.skydome_center,
-          window_objects,
-          window_object_vfs
-        );
-      } else {
-        my_erf = {
-          dMRT_direct: 0,
-          dMRT_diff: 0,
-          dMRT_refl: 0,
-          dMRT: 0,
-          ERF: 0
-        };
-      }
+      // if (window_objects) {
+      //   var window_object_vfs = _.map(window_objects, function (w) {
+      //     return _.find(point_view_factors, function (o) {
+      //       return o.name == w.name;
+      //     }).view_factor;
+      //   });
+      //   var my_erf = calculate_erf_point(
+      //     my_point,
+      //     solarcal.skydome_center,
+      //     window_objects,
+      //     window_object_vfs
+      //   );
+      // } else {
+      //   my_erf = {
+      //     dMRT_direct: 0,
+      //     dMRT_diff: 0,
+      //     dMRT_refl: 0,
+      //     dMRT: 0,
+      //     ERF: 0
+      //   };
+      // }
 
-      if (params.display === "Longwave MRT") {
-        display_value = longwave_mrt;
-      } else if (params.display === "MRT") {
-        display_value = longwave_mrt + my_erf.dMRT;
-      } else if (params.display === "Shortwave dMRT") {
-        display_value = my_erf.dMRT;
-      } else if (params.display === "Direct shortwave dMRT") {
-        display_value = my_erf.dMRT_direct;
-      } else if (params.display === "Diffuse shortwave dMRT") {
-        display_value = my_erf.dMRT_diff;
-      } else if (params.display === "Reflected shortwave dMRT") {
-        display_value = my_erf.dMRT_refl;
-      } else if (params.display === "PMV") {
-        var mrt_total = longwave_mrt + my_erf.dMRT;
-        var my_pmv = comf.pmvElevatedAirspeed(
-          comfort.ta,
-          mrt_total,
-          comfort.vel,
-          comfort.rh,
-          comfort.met,
-          comfort.clo,
-          0
-        );
-        display_value = my_pmv.pmv;
-      }
-      // console.log(cursorPoint.x, cursorPoint.z, display_value.toFixed(1));
+      // if (params.display === "Longwave MRT") {
+      //   display_value = longwave_mrt;
+      // } else if (params.display === "MRT") {
+      //   display_value = longwave_mrt + my_erf.dMRT;
+      // } else if (params.display === "Shortwave dMRT") {
+      //   display_value = my_erf.dMRT;
+      // } else if (params.display === "Direct shortwave dMRT") {
+      //   display_value = my_erf.dMRT_direct;
+      // } else if (params.display === "Diffuse shortwave dMRT") {
+      //   display_value = my_erf.dMRT_diff;
+      // } else if (params.display === "Reflected shortwave dMRT") {
+      //   display_value = my_erf.dMRT_refl;
+      // } else if (params.display === "PMV") {
+      //   var mrt_total = longwave_mrt + my_erf.dMRT;
+      //   var my_pmv = comf.pmvElevatedAirspeed(
+      //     comfort.ta,
+      //     mrt_total,
+      //     comfort.vel,
+      //     comfort.rh,
+      //     comfort.met,
+      //     comfort.clo,
+      //     0
+      //   );
+      //   display_value = my_pmv.pmv;
+      // }
+      // // console.log(cursorPoint.x, cursorPoint.z, display_value.toFixed(1));
 
-      var mrt_total = longwave_mrt + my_erf.dMRT;
-      var my_pmv = comf.pmvElevatedAirspeed(
-        comfort.ta,
-        mrt_total,
-        comfort.vel,
-        comfort.rh,
-        comfort.met,
-        comfort.clo,
-        0
-      );
+      // var mrt_total = longwave_mrt + my_erf.dMRT;
+      // var my_pmv = comf.pmvElevatedAirspeed(
+      //   comfort.ta,
+      //   mrt_total,
+      //   comfort.vel,
+      //   comfort.rh,
+      //   comfort.met,
+      //   comfort.clo,
+      //   0
+      // );
 
 
-      // plane = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
-      //   // color: new THREE.Color(`rgb(255,`+parseInt(255 -multiDimResults[n][m].dwnSpd*2)+`,`+parseInt(255 -multiDimResults[n][m].dwnSpd*2)+`)`),
-      //   color: new THREE.Color(`rgb(255,` + (255 - parseInt(display_value * 2)) + `,` + (255 - parseInt(display_value * 2)) + `)`),
-      //   side: THREE.DoubleSide
-      // }));
-      // plane.translateX(m - mrt.room.width/2);
-      // plane.translateY(n - mrt.room.depth/2);
-      // plane.translateZ(-1);
+      // // plane = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
+      // //   // color: new THREE.Color(`rgb(255,`+parseInt(255 -multiDimResults[n][m].dwnSpd*2)+`,`+parseInt(255 -multiDimResults[n][m].dwnSpd*2)+`)`),
+      // //   color: new THREE.Color(`rgb(255,` + (255 - parseInt(display_value * 2)) + `,` + (255 - parseInt(display_value * 2)) + `)`),
+      // //   side: THREE.DoubleSide
+      // // }));
+      // // plane.translateX(m - mrt.room.width/2);
+      // // plane.translateY(n - mrt.room.depth/2);
+      // // plane.translateZ(-1);
 
-      multiDimResults[n][m].longwaveMRT = longwave_mrt;
-      multiDimResults[n][m].mrt1 = longwave_mrt + my_erf.dMRT;
-      multiDimResults[n][m].shortwaveMRT = my_erf.dMRT;
-      multiDimResults[n][m].directShortwaveMRT = my_erf.dMRT_direct;
-      multiDimResults[n][m].diffuseShortwaveMRT = my_erf.dMRT_diff;
-      multiDimResults[n][m].reflectedShortwaveMRT= my_erf.dMRT_refl;
-      multiDimResults[n][m].pmv1 = my_pmv.pmv;
+      // multiDimResults[n][m].longwaveMRT = longwave_mrt;
+      // multiDimResults[n][m].mrt1 = longwave_mrt + my_erf.dMRT;
+      // multiDimResults[n][m].shortwaveMRT = my_erf.dMRT;
+      // multiDimResults[n][m].directShortwaveMRT = my_erf.dMRT_direct;
+      // multiDimResults[n][m].diffuseShortwaveMRT = my_erf.dMRT_diff;
+      // multiDimResults[n][m].reflectedShortwaveMRT= my_erf.dMRT_refl;
+      // multiDimResults[n][m].pmv1 = my_pmv.pmv;
 
-      let combinedMRT = parseFloat(multiDimResults[n][m].mrt1)
+      // let combinedMRT = parseFloat(multiDimResults[n][m].mrt1)
 
-      let finalPPD = comf.pmv(
-        WINTER_COMFORT_PARAMS.airtempValue,
-         combinedMRT, 
-         WINTER_COMFORT_PARAMS.airspeedValue, 
-         WINTER_COMFORT_PARAMS.humidityValue, 
-         WINTER_COMFORT_PARAMS.metabolic, 
-         WINTER_COMFORT_PARAMS.clothingValue, 
-         0.001)
-        // comf.pmv(ta, tr, vel, rh, met, clo, wme)
-        // returns [pmv, ppd]
-        // ta, air temperature (°C)
-        // tr, mean radiant temperature (°C)
-        // vel, relative air velocity (m/s)
-        // rh, relative humidity (%) Used only this way to input humidity level
-        // met, metabolic rate (met)
-        // clo, clothing (clo)
-        // wme, external work, normally around 0 (met)
+      // let finalPPD = comf.pmv(
+      //   WINTER_COMFORT_PARAMS.airtempValue,
+      //    combinedMRT, 
+      //    WINTER_COMFORT_PARAMS.airspeedValue, 
+      //    WINTER_COMFORT_PARAMS.humidityValue, 
+      //    WINTER_COMFORT_PARAMS.metabolic, 
+      //    WINTER_COMFORT_PARAMS.clothingValue, 
+      //    0.001)
+      //   // comf.pmv(ta, tr, vel, rh, met, clo, wme)
+      //   // returns [pmv, ppd]
+      //   // ta, air temperature (°C)
+      //   // tr, mean radiant temperature (°C)
+      //   // vel, relative air velocity (m/s)
+      //   // rh, relative humidity (%) Used only this way to input humidity level
+      //   // met, metabolic rate (met)
+      //   // clo, clothing (clo)
+      //   // wme, external work, normally around 0 (met) //MRTMRTMRT
 
 
       let da;
@@ -774,48 +783,48 @@ function updateRoom() {
       }else if(PARAMS1.model == 2){
         da = dSolar;
         colorMult = 5
-      }else if(PARAMS1.model == 3){
-        da = multiDimResults[n][m].dwnSpd;
-        colorMult = 100
-      }else if(PARAMS1.model == 4){
-        da = multiDimResults[n][m].dwnTmp;
-        colorMult = -100
-      }else if(PARAMS1.model == 5){
-        da = multiDimResults[n][m].glzfac;
-        colorMult = 4
-      }else if(PARAMS1.model == 6){
-        da = multiDimResults[n][m].govPPD;
-      }else if(PARAMS1.model == 7){
-        da = multiDimResults[n][m].mrt;
-      }else if(PARAMS1.model == 8){
-        da = multiDimResults[n][m].mrtppd;
-      }else if(PARAMS1.model == 9){
-        da = multiDimResults[n][m].pmv;
-      }else if(PARAMS1.model == 10){
-        colorMult = -100
-        da = multiDimResults[n][m].ppd;
-      }else if(PARAMS1.model == 11){
-        da = multiDimResults[n][m].tarDist;
-        colorMult = 5
-      }else if(PARAMS1.model == 12){
-        da = multiDimResults[n][m].longwaveMRT;
-      }else if(PARAMS1.model == 13){
-        da = multiDimResults[n][m].mrt1;
-      }else if(PARAMS1.model == 14){
-        da = multiDimResults[n][m].shortwaveMRT;
-      }else if(PARAMS1.model == 15){
-        da = multiDimResults[n][m].directShortwaveMRT;
-      }else if(PARAMS1.model == 16){
-        da = multiDimResults[n][m].diffuseShortwaveMRT;
-        colorMult = 5
-      }else if(PARAMS1.model == 17){
-        da = multiDimResults[n][m].reflectedShortwaveMRT;
-        colorMult = 5
-      }else if(PARAMS1.model == 18){
-        da = multiDimResults[n][m].pmv1;
-        colorMult = 5
-      }else{
-        da = finalPPD.ppd
+      // }else if(PARAMS1.model == 3){ //MRTMRTMRT
+      //   da = multiDimResults[n][m].dwnSpd;
+      //   colorMult = 100
+      // }else if(PARAMS1.model == 4){
+      //   da = multiDimResults[n][m].dwnTmp;
+      //   colorMult = -100
+      // }else if(PARAMS1.model == 5){
+      //   da = multiDimResults[n][m].glzfac;
+      //   colorMult = 4
+      // }else if(PARAMS1.model == 6){
+      //   da = multiDimResults[n][m].govPPD;
+      // }else if(PARAMS1.model == 7){
+      //   da = multiDimResults[n][m].mrt;
+      // }else if(PARAMS1.model == 8){
+      //   da = multiDimResults[n][m].mrtppd;
+      // }else if(PARAMS1.model == 9){
+      //   da = multiDimResults[n][m].pmv;
+      // }else if(PARAMS1.model == 10){
+      //   colorMult = -100
+      //   da = multiDimResults[n][m].ppd;
+      // }else if(PARAMS1.model == 11){
+      //   da = multiDimResults[n][m].tarDist;
+      //   colorMult = 5
+      // }else if(PARAMS1.model == 12){
+      //   da = multiDimResults[n][m].longwaveMRT;
+      // }else if(PARAMS1.model == 13){
+      //   da = multiDimResults[n][m].mrt1;
+      // }else if(PARAMS1.model == 14){
+      //   da = multiDimResults[n][m].shortwaveMRT;
+      // }else if(PARAMS1.model == 15){
+      //   da = multiDimResults[n][m].directShortwaveMRT;
+      // }else if(PARAMS1.model == 16){
+      //   da = multiDimResults[n][m].diffuseShortwaveMRT;
+      //   colorMult = 5
+      // }else if(PARAMS1.model == 17){
+      //   da = multiDimResults[n][m].reflectedShortwaveMRT;
+      //   colorMult = 5
+      // }else if(PARAMS1.model == 18){
+      //   da = multiDimResults[n][m].pmv1;
+      //   colorMult = 5
+      // }else{
+      //   da = finalPPD.ppd //MRTMRTMRT
       }
 
       if(isNaN(parseFloat(da))){
@@ -859,15 +868,15 @@ function updateRoom() {
         mrtppd: multiDimResults[n][m].mrtppd,
         pmv: multiDimResults[n][m].pmv,
         ppd: multiDimResults[n][m].ppd,
-        tarDist: multiDimResults[n][m].tarDist,
-        longwaveMRT: longwave_mrt,
-        mrt1: longwave_mrt + my_erf.dMRT,
-        shortwaveMRT: my_erf.dMRT,
-        directShortwaveMRT: my_erf.dMRT_direct,
-        diffuseShortwaveMRT: my_erf.dMRT_diff,
-        reflectedShortwaveMRT: my_erf.dMRT_refl,
-        pmv1: my_pmv.pmv,
-        finalPPD: finalPPD
+        tarDist: multiDimResults[n][m].tarDist, 
+        // longwaveMRT: longwave_mrt, //MRTMRTMRT
+        // mrt1: longwave_mrt + my_erf.dMRT,
+        // shortwaveMRT: my_erf.dMRT,
+        // directShortwaveMRT: my_erf.dMRT_direct,
+        // diffuseShortwaveMRT: my_erf.dMRT_diff,
+        // reflectedShortwaveMRT: my_erf.dMRT_refl,
+        // pmv1: my_pmv.pmv,
+        // finalPPD: finalPPD   //MRTMRTMRT
       }
       // scene.add(plane);
       // plane.userData = {
@@ -1052,70 +1061,70 @@ function updateRoom() {
 
 // CHECKS INTERSECTIONS
 function render() {
-  raycaster.setFromCamera(mouse, camera);
-  var intersects = raycaster.intersectObjects(scene.children);
-  if (intersects.length > 0) {
+  // raycaster.setFromCamera(mouse, camera);
+  // var intersects = raycaster.intersectObjects(scene.children);
+  // if (intersects.length > 0) {
 
-    if (INTERSECTED != intersects[0].object) {
-      if (INTERSECTED != null && INTERSECTED.name != null){
-        // console.log(INTERSECTED.name)
-      }
-
-
-      // if (INTERSECTED) INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
-
-      if (INTERSECTED != null && INTERSECTED.name == "grid") {
-        // console.log(INTERSECTED)
-        // console.log(INTERSECTED.userData.direct_solar);
-        let myDiv = document.getElementById("mdata");
-        let txt = "";
-        txt += "MRT: " + INTERSECTED.userData.mrt.toString() + "\n";
-        txt += "Direct Solar: " + INTERSECTED.userData.direct_solar.toString() + "\n";
-        txt += "Location: " + INTERSECTED.userData.loc_i.toString() + ", " + INTERSECTED.userData.loc_j.toString() + "\n";
-        txt += "Glazing Factor " + INTERSECTED.userData.glzfac.toString() + "\n";
-        txt += "MRTPPD: " + INTERSECTED.userData.mrtppd.toString() + "\n";
-        txt += "PMV: " + INTERSECTED.userData.pmv.toString() + "\n";
-        txt += "PPD: " + INTERSECTED.userData.ppd.toString() + "\n";
-        // txt += "PPD2: " + determinePPD(INTERSECTED.userData.pmv) + "\n";
-
-        if (TIME_PARAMS.studyType == 1) {
-          txt += "Azmuth Altitute: " + coordinates[0] + "\n";
-          var mRes = coordinates[0].toString().split(",");
-          var mNum = parseFloat(mRes[1])
-          txt += "Direct Normal Irradiance: " + directNormalIrradiance(parseFloat(mNum)).toString();
-        }
-
-        txt += "MRT: " + INTERSECTED.userData.mrt1.toString() + "\n";
-        // txt += "Direct Solar: " + INTERSECTED.userData.direct_solar.toString() + "\n";
-        txt += "LongwaveMRT: " + INTERSECTED.userData.longwaveMRT.toString() + "\n";
-        txt += "shortwaveMRT: " + INTERSECTED.userData.shortwaveMRT.toString() + "\n";
-        txt += "directShortwaveMRT: " + INTERSECTED.userData.directShortwaveMRT.toString() + "\n";
-        txt += "diffuseShortwaveMRT: " + INTERSECTED.userData.diffuseShortwaveMRT.toString() + "\n";
-        txt += "reflectedShortwaveMRT: " + INTERSECTED.userData.reflectedShortwaveMRT.toString() + "\n";
-        txt += "pmv1: " + INTERSECTED.userData.pmv1 + "\n";
-        txt += "PPD1: " + determinePPD(INTERSECTED.userData.pmv) + "\n";
-        txt += "PPD2: " + determinePPD(INTERSECTED.userData.pmv1) + "\n";
-        txt += "Solar Adjusted MRT: " + parseFloat(parseFloat(INTERSECTED.userData.mrt) + parseFloat(INTERSECTED.userData.mrt1)) + "\n";
-        txt += "Final PPD: " + INTERSECTED.userData.finalPPD.ppd;
+  //   if (INTERSECTED != intersects[0].object) {
+  //     if (INTERSECTED != null && INTERSECTED.name != null){
+  //       // console.log(INTERSECTED.name)
+  //     }
 
 
-        // myDiv.innerText = txt;
-      }
+  //     // if (INTERSECTED) INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
+
+  //     if (INTERSECTED != null && INTERSECTED.name == "grid") {
+  //       // console.log(INTERSECTED)
+  //       // console.log(INTERSECTED.userData.direct_solar);
+  //       let myDiv = document.getElementById("mdata");
+  //       let txt = "";
+  //       txt += "MRT: " + INTERSECTED.userData.mrt.toString() + "\n";
+  //       txt += "Direct Solar: " + INTERSECTED.userData.direct_solar.toString() + "\n";
+  //       txt += "Location: " + INTERSECTED.userData.loc_i.toString() + ", " + INTERSECTED.userData.loc_j.toString() + "\n";
+  //       txt += "Glazing Factor " + INTERSECTED.userData.glzfac.toString() + "\n";
+  //       txt += "MRTPPD: " + INTERSECTED.userData.mrtppd.toString() + "\n";
+  //       txt += "PMV: " + INTERSECTED.userData.pmv.toString() + "\n";
+  //       txt += "PPD: " + INTERSECTED.userData.ppd.toString() + "\n";
+  //       // txt += "PPD2: " + determinePPD(INTERSECTED.userData.pmv) + "\n";
+
+  //       if (TIME_PARAMS.studyType == 1) {
+  //         txt += "Azmuth Altitute: " + coordinates[0] + "\n";
+  //         var mRes = coordinates[0].toString().split(",");
+  //         var mNum = parseFloat(mRes[1])
+  //         txt += "Direct Normal Irradiance: " + directNormalIrradiance(parseFloat(mNum)).toString();
+  //       }
+
+  //       txt += "MRT: " + INTERSECTED.userData.mrt1.toString() + "\n";
+  //       // txt += "Direct Solar: " + INTERSECTED.userData.direct_solar.toString() + "\n";
+  //       txt += "LongwaveMRT: " + INTERSECTED.userData.longwaveMRT.toString() + "\n";
+  //       txt += "shortwaveMRT: " + INTERSECTED.userData.shortwaveMRT.toString() + "\n";
+  //       txt += "directShortwaveMRT: " + INTERSECTED.userData.directShortwaveMRT.toString() + "\n";
+  //       txt += "diffuseShortwaveMRT: " + INTERSECTED.userData.diffuseShortwaveMRT.toString() + "\n";
+  //       txt += "reflectedShortwaveMRT: " + INTERSECTED.userData.reflectedShortwaveMRT.toString() + "\n";
+  //       txt += "pmv1: " + INTERSECTED.userData.pmv1 + "\n";
+  //       txt += "PPD1: " + determinePPD(INTERSECTED.userData.pmv) + "\n";
+  //       txt += "PPD2: " + determinePPD(INTERSECTED.userData.pmv1) + "\n";
+  //       txt += "Solar Adjusted MRT: " + parseFloat(parseFloat(INTERSECTED.userData.mrt) + parseFloat(INTERSECTED.userData.mrt1)) + "\n";
+  //       txt += "Final PPD: " + INTERSECTED.userData.finalPPD.ppd;
+
+
+  //       // myDiv.innerText = txt;
+  //     }
 
       
 
-      INTERSECTED = intersects[0].object;
-      // INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
-      // INTERSECTED.material.color.setHex(0xff0000);
-    }
+  //     INTERSECTED = intersects[0].object;
+  //     // INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
+  //     // INTERSECTED.material.color.setHex(0xff0000);
+  //   }
     
     
 
 
-  } else {
-    // if (INTERSECTED) INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
-    INTERSECTED = null;
-  }
+  // } else {
+  //   // if (INTERSECTED) INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
+  //   INTERSECTED = null;
+  // }
   renderer.render(scene, camera);
 }
 
