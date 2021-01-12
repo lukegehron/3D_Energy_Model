@@ -177,19 +177,7 @@ function init(canva) {
   var length = 3;
   var hex = 0x000000;
 
-  var arrowHelper = new THREE.ArrowHelper(dir, origin, length, hex, 0.3, 0.3);
-  // scene.add(arrowHelper);
-
-  // var textGeo = new THREE.TextGeometry("N", {
-  //   size: 1,
-  //   height: 0.1,
-  // });
-  // var textMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
-  // var textMesh = new THREE.Mesh(textGeo, textMaterial);
-  // textMesh.position = new THREE.Vector3(0, 0, -5);
-  // textMesh.rotation.x = -Math.PI / 2;
-  // textMesh.rotation.z = -Math.PI / 2;
-  // scene.add(textMesh);
+  
 
   var sunGeometry = new THREE.SphereGeometry(0.5, 32, 32);
   var sunMaterial = new THREE.MeshLambertMaterial({
@@ -396,23 +384,99 @@ function updateParams() {
 function cornerSunPath(){
   // MAKE SUN PATH CORNER GRAPHIC
 
-  console.log(xPointLoc, yPointLoc)
-  for(let i = 0; i < xPointLoc.length; i++){
-    const geometry = new THREE.SphereGeometry( 0.1, 32, 32 );
-    const material = new THREE.MeshBasicMaterial( {color: 0x333333} );
-    const sphere = new THREE.Mesh( geometry, material );
-    sphere.position.x = 0.5
-    sphere.position.y = 0.5
-    sphere.rotation.set(xPointLoc[i], yPointLoc[i], 0)
+  // console.log(xPointLoc, yPointLoc)
+
+  let geometry = new THREE.CircleGeometry( 0.8, 32 );
+  let material = new THREE.MeshBasicMaterial( { color: 0xcccccc } );
+  let circle = new THREE.Mesh( geometry, material );
+  circle.position.x = 6
+      circle.position.y = 3.5
+      circle.position.z = -1
+scene.add( circle );
+
+  console.log(coordinates)
+  for(let i = 0; i < coordinates.length; i++){
+    if(coordinates[i][1] != null && coordinates[i][1] > 0){  
+      if(i % 4 == 0){
+
+      
+      const geometry = new THREE.SphereGeometry( 0.05, 32, 32 );
+      const material = new THREE.MeshBasicMaterial( {color: 0x333333} );
+      const sphere = new THREE.Mesh( geometry, material );
+  
+      // sphere.rotation.set(xPointLoc[i], yPointLoc[i], 0)
+
+      sphere.position.x = 6
+      sphere.position.y = 3.5
+      sphere.position.z = -1
+
+      var axis = new THREE.Vector3( 0, 0, 1 ).normalize();
+  
+      sphere.rotateOnWorldAxis(axis, 45*Math.PI/180)
+
+      var axis = new THREE.Vector3( 1, 0, 0 ).normalize();
+  
+      sphere.rotateOnWorldAxis(axis, coordinates[i][1]*Math.PI/180)
+
+      var axis = new THREE.Vector3( 0, 0, 1 ).normalize();
+  
+      sphere.rotateOnWorldAxis(axis, coordinates[i][0]*Math.PI/180)
+  
+      sphere.translateX(0.5)
+      sphere.translateY(0.5)
+      // sphere.translateZ(0.5)
+      scene.add( sphere );
+      // console.log("hi")
+    }
+    }
+
+    
+    
+    // sphere.position.y = 0.5
+
+    
+
+    // sphere.position.x = xPointLoc[i]*0.1
+    // sphere.position.y = yPointLoc[i]*0.1
+    
 
     // pivot = new THREE.Group();
     // pivot.position.set( 0.0, 0.0, 0 );
     // mesh.add( pivot );
     // pivot.add( sphere );
 
-    scene.add( sphere );
-    console.log("hi")
+  
   }
+
+  var dir = new THREE.Vector3( 0, 1, 0 ).normalize();
+  var origin = new THREE.Vector3( 6, 3.5, -0.98 )
+  var length = 0.8
+
+
+  var arrowHelper = new THREE.ArrowHelper(dir, origin, length, 0x000000 , 0.3, 0.3);
+  scene.add(arrowHelper);
+
+  const loader = new THREE.FontLoader();
+
+loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
+
+	const textGeo = new THREE.TextGeometry( 'N', {
+		font: font,
+		size: 0.2,
+		height: 0.005,
+		curveSegments: 12,
+		bevelEnabled: false
+  } );
+  var textMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
+  var textMesh = new THREE.Mesh(textGeo, textMaterial);
+  textMesh.position.x = 5.9;
+  textMesh.position.y = 3.1;
+  textMesh.position.z = -0.99;
+  // textMesh.rotation.x = -Math.PI / 2;
+  // textMesh.rotation.z = -Math.PI / 2;
+  scene.add(textMesh);
+} );
+  
   
 
 //   roomOrientationValue = roomOrientationValue*-1
@@ -1141,6 +1205,8 @@ function getSolar() {
   }
 
   // console.log(suncoordinates)
+
+  
 
 
   for (let i = 0; i < coordinates.length; i += parseInt(timestep)) {
