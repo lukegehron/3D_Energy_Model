@@ -94,7 +94,9 @@ var case1Data = {
 // init('myCanvas');
 init('myCanvas00');
 // init();
-initTweakPane();
+// initTweakPane();
+updateRoom();
+  cornerSunPath()
 animate();
 
 // function renderCommon(canvas){}
