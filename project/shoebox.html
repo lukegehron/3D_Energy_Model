@@ -24,48 +24,48 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/2.8.1/alpine.js"></script>
 
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+		
 
 	<script src="//d3js.org/d3.v3.min.js"></script>
 	<!-- <link type="text/css" rel="stylesheet" href="main.css"> -->
 
 	<style>
-		body {
-			margin: 0;
-			padding: 0;
-			height: 100%;
-			/* background-color: white; */
-		}
 
-		#info {
-			position: absolute;
-			top: 0px;
-			width: 100%;
-			padding: 10px;
-			box-sizing: border-box;
-			text-align: left;
-			text-justify: left;
-			/* text-align: center; */
-			/* -moz-user-select: none;
+ body {
+   margin:0;
+   padding:0;
+	 height:100%;
+	 /* background-color: white; */
+}
+
+#info {
+	position: absolute;
+	top: 0px;
+	width: 100%;
+	padding: 10px;
+	box-sizing: border-box;
+	text-align: left;
+	text-justify: left;
+	/* text-align: center; */
+	/* -moz-user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
 	pointer-events: none; */
-			z-index: 1;
-			/* TODO Solve this in HTML */
-		}
+	z-index: 1; /* TODO Solve this in HTML */
+}
 
-		#mdata {
-			position: absolute;
+#mdata {
+position: absolute;
 
-			top: 0px;
+top: 0px;
 
-			padding: 10px;
+padding: 10px;
 
-			z-index: 2;
-			/* TODO Solve this in HTML */
-		}
-
-		/*
+z-index: 2; /* TODO Solve this in HTML */
+}
+/*
 
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
 
@@ -134,15 +134,11 @@ display: inline-block;
 }
 */
 
-		canvas {
-			outline: none;
-			-webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-			/* mobile webkit */
-		}
+canvas {
+  outline: none;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0); /* mobile webkit */
+} 
 
-		body{
-			width: 100%;
-		}
 	</style>
 
 	<script type="text/javascript" charset="utf-8" src="./ladybug.js"></script>
@@ -163,69 +159,59 @@ display: inline-block;
 		// Increment Buttons
 
 		// URL Alert
-		$(function () {
+		$(function() {
 			$("#URLpop").dialog({
 				autoOpen: false,
 				draggable: false,
 				closeOnEscape: true,
 				buttons: [
-					{
-						text: "Short URL",
-						click: function () {
-							var urlToShorten = $("#URLpop textarea").val();
-							shorten(urlToShorten, function (response) {
-								// replace long url with shortened url
-								$("#URLpop textarea").empty();
-								$("#URLpop textarea").append(response.data.url);
-								$("#URLpop textarea").select();
-							});
-						}
-					},
-					{
-						text: "Standard URL",
-						click: function () {
-							var standardURL = createURL(false)
+					{text: "Short URL",
+					click: function() {
+						var urlToShorten = $("#URLpop textarea").val();
+						shorten(urlToShorten, function(response) {
+							// replace long url with shortened url
+							$("#URLpop textarea").empty();
+							$("#URLpop textarea").append(response.data.url);
+							$("#URLpop textarea").select();
+								});
+					}},
+					{text: "Standard URL",
+					click: function() {
+						var standardURL = createURL(false)
 							// replace long url with shortened url
 							$("#URLpop textarea").empty();
 							$("#URLpop textarea").append(standardURL);
 							$("#URLpop textarea").select();
-						}
-					},
-					{
-						text: "Full URL",
-						click: function () {
-							var fullURL = createURL(true)
+					}},
+					{text: "Full URL",
+					click: function() {
+						var fullURL = createURL(true)
 							// replace long url with shortened url
 							$("#URLpop textarea").empty();
 							$("#URLpop textarea").append(fullURL);
 							$("#URLpop textarea").select();
-						}
-					},
-					{
-						text: "Close",
-						click: function () {
-							$(this).dialog("close");
-						}
-					},
-				],
+					}},
+					{text: "Close",
+					click: function() {
+						$(this).dialog("close");
+					}},
+					],
 				modal: true,
 				width: 450,
 			});
 		});
 		// Select Outdoor Temperature Dialog
-		$(function () {
+		$(function() {
 			$("#Outdoorpop").dialog({
 				autoOpen: false,
 				draggable: false,
 				closeOnEscape: true,
 				buttons: [
-					{
-						text: "Close",
-						click: function () {
-							$(this).dialog("close");
-						}
-					},
-				],
+					{text: "Close",
+					click: function() {
+						$(this).dialog("close");
+					}},
+					],
 				modal: true,
 				width: 450,
 			});
@@ -236,20 +222,18 @@ display: inline-block;
 </head>
 
 <body>
-	<div class="hiddenPopup" style="visibility: hidden; height: 0px">
 
-		<div id="URLpop">
-			<textarea>the link</textarea>
-		</div>
+	<div id="URLpop">
+		<textarea>the link</textarea>
+	</div>
 
-		<div id="Outdoorpop">
-			<h1>Search for Location Data</h1>
-			<p>Location information provided by the<br>
-				<a href="http://www.ladybug.tools/epwmap/" target="_blank">US. Dept. of Energy EPW database</a>.
-			</p>
+	<div id="Outdoorpop">
+		<h1>Search for Location Data</h1>
+		<p>Location information provided by the<br>
+			<a href="http://www.ladybug.tools/epwmap/" target="_blank">US. Dept. of Energy EPW database</a>.</p>
 
-			<div class="dropdown">
-				<legend>Continent</legend>
+		<div class="dropdown">
+			<legend>Continent</legend>
 				<select id="continent">
 					<option>Select</option>
 					<option>Africa</option>
@@ -262,53 +246,52 @@ display: inline-block;
 			</div>
 
 			<div id="countryDiv" class="empty">
-				<legend>Country Code</legend>
+			<legend>Country Code</legend>
 				<select id="country" disabled>
 					<option> </option>
 				</select>
 			</div>
 
 			<div id="stateDiv" class="empty">
-				<legend>State/Province</legend>
+			<legend>State/Province</legend>
 				<select id="state" disabled>
 					<option> </option>
 				</select>
 			</div>
 
 			<div id="cityDiv" class="empty">
-				<legend>City</legend>
+			<legend>City</legend>
 				<select id="city" disabled>
 					<option> </option>
 				</select>
 			</div>
 
-			<div id="outTempDiv" class="temperatureEmpty">
-				<legend>Longitude </legend>
-				<textarea id="outTempTextArea" disabled>the link</textarea>
-			</div>
-
-			<div id="outTempDiv1" class="temperatureEmpty">
-				<legend>Latitude</legend>
-				<textarea id="outTempTextArea1" disabled>the link</textarea>
-			</div>
-
-			<div id="outTempDiv2" class="temperatureEmpty">
-				<legend>Timezone Offset</legend>
-				<textarea id="outTempTextArea2" disabled>the link</textarea>
-			</div>
-
-			<div id="applyTempDiv" class="desButton">
-				<input type="button" name="Apply" id="Apply" value="Enter Results" disabled>
-			</div>
-
+		<div id="outTempDiv" class="temperatureEmpty">
+		<legend>Longitude </legend>
+		<textarea id="outTempTextArea" disabled>the link</textarea>
 		</div>
+
+		<div id="outTempDiv1" class="temperatureEmpty">
+		<legend>Latitude</legend>
+		<textarea id="outTempTextArea1" disabled>the link</textarea>
+		</div>
+
+		<div id="outTempDiv2" class="temperatureEmpty">
+		<legend>Timezone Offset</legend>
+		<textarea id="outTempTextArea2" disabled>the link</textarea>
+		</div>
+
+		<div id="applyTempDiv" class="desButton">
+		<input type="button" name="Apply" id="Apply" value="Enter Results" disabled>
+		</div>
+
 	</div>
 
 	<div id="info">
 		<span id="mdata">
 
 		</span>
-
+		
 		<div style="float: right;">
 			<div id="visualization"></div>
 		</div>
@@ -333,25 +316,25 @@ display: inline-block;
 		<div class="row">
 			<div class="col">
 				<div class="serifText">
-					<p style="font-size:80%;">This tool shows the impact of shade and glazing geometry on indoor<br>
-						occupant discomfort from direct sun.</p>
+				<p style="font-size:80%;">This tool shows the impact of shade and glazing geometry on indoor<br>
+				occupant discomfort from direct sun.</p>
 				</div>
-			</div>
-			<div class="col-lg-4">
+			 </div>
+	    <div class="col-lg-4">
 
 				<div id="visualization"></div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-lg-8 col-xl-12 col-sm-12">
-				<div class="row">
-					<div class="col-lg-12 col-xl-6 col-sm-12">
+			 </div>
+	    </div>
+	  <div class="row">
+	    <div class="col-lg-8 col-xl-12 col-sm-12">
+	      <div class="row">
+	        <div class="col-lg-12 col-xl-6 col-sm-12">
 						<div id="sketch">
 							<canvas id="myCanvas00" class="ca"></canvas>
-							<!-- The canvas goes here! -->
-						</div>
-					</div>
-					<div class="col-lg-12 col-xl-6 col-sm-12">
+						 <!-- The canvas goes here! -->
+					 </div>
+	        </div>
+	        <div class="col-lg-12 col-xl-6 col-sm-12">
 						<div id="sketch1">
 							<!-- The canvas goes here! -->
 							<canvas id="myCanvas" class="ca"></canvas>
@@ -953,12 +936,12 @@ display: inline-block;
 	<script src="./solarCalculator.js"></script>
 
 	<script type="text/javascript" src="static/js/locationData.js"></script>
-	<script type="text/javascript" src="static/js/render.js"></script>
+		<script type="text/javascript" src="static/js/render.js"></script>
 
+	
 
-
-
-
+	
+	
 
 </body>
 
