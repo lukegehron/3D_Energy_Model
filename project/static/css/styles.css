@@ -1102,7 +1102,7 @@ div.case2, div.case3, #inputs input.case2, #inputs input.case3, hr.case2, hr.cas
 	cursor:pointer;
 }
 .button2 {
-  background-color: #FFF; /* this is the hidden white button */
+  background-color: none; /* this is the hidden white button */
   border: none;
 	height: 18px;
 	width: 60px;

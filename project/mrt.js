@@ -321,7 +321,7 @@ mrt.view_factors = function () {
       average_azimuths
     );
 
-    if (surface.subsurfaces.length > 0) {
+    if (surface.subsurface && surface.subsurfaces.length > 0) {
       for (var j = 0; j < surface.subsurfaces.length; j++) {
         var subsurface = surface.subsurfaces[j];
         // start with offset of parent surface

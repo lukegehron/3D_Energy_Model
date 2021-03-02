@@ -89,12 +89,135 @@ var case1Data = {
   metabolic: WINTER_COMFORT_PARAMS.metabolic
 }
 
+let Lon1 = document.getElementById("long").value;
+      document.getElementsByName("long")[0].addEventListener('input', updateRoom);
+
+      let Lat1 = document.getElementById("lat").value;
+      document.getElementsByName("lat")[0].addEventListener('input', updateRoom);
+
+
+
+      let TimeZone1 = document.getElementById("timeZone").value;
+      document.getElementsByName("timeZone")[0].addEventListener('input', updateRoom);
+
+
+      let Hour1 = document.getElementById("hour").value;
+      document.getElementsByName("hour")[0].addEventListener('input', updateRoom);
+
+      let Day1 = document.getElementById("day").value;
+      document.getElementsByName("day")[0].addEventListener('input', updateRoom);
+
+      let Month1 = document.getElementById("mon").value;
+      document.getElementsByName("mon")[0].addEventListener('input', updateRoom);
+
+      // let timestep = document.getElementById("timeStep").value;
+      // document.getElementsByName("timeStep")[0].addEventListener('input', updateRoom);
+
+
+      let roomOrientationValue1 = document.getElementById("north").value;
+      document.getElementsByName("north")[0].addEventListener('input', updateRoom);
+
+      let gridHeightValue = document.getElementById("gridHt").value;
+      document.getElementsByName("gridHt")[0].addEventListener('input', updateRoom);
+
+      let ceilingHeightValue = document.getElementById("ceiling").value;
+      document.getElementsByName("ceiling")[0].addEventListener('input', updateRoom);
+      let ceilingHeightValue1 = document.getElementById("ceiling").value;
+      document.getElementsByName("ceiling")[0].addEventListener('input', updateRoom);
+
+      let wallLen = document.getElementById("wallWidth").value;
+      document.getElementsByName("wallWidth")[0].addEventListener('input', updateRoom);
+
+      let wallDepVal = document.getElementById("wallDep").value;
+      document.getElementsByName("wallDep")[0].addEventListener('input', updateRoom);
+
+      let windowHeightValue = document.getElementById("windowHeight").value*10;
+      document.getElementsByName("windowHeight")[0].addEventListener('input', updateRoom);
+      windowHeightValue = windowHeightValue/10;
+
+      let windowWidthValue = document.getElementById("windowWidth").value;
+      document.getElementsByName("windowWidth")[0].addEventListener('input', updateRoom);
+
+      let glzRatioValue = document.getElementById("glazing").value;
+      document.getElementsByName("glazing")[0].addEventListener('input', updateRoom);
+
+      let sillHeightValue = document.getElementById("sill").value;
+      document.getElementsByName("sill")[0].addEventListener('input', updateRoom);
+
+      let distanceWindows = document.getElementById("distWindow").value;
+      document.getElementsByName("distWindow")[0].addEventListener('input', updateRoom);
+
+
+
+      let horzShadeDep = document.getElementById("hShadeDep").value;
+      document.getElementsByName("hShadeDep")[0].addEventListener('input', updateRoom);
+
+      let horzShadeNum = document.getElementById("hShadeNum").value;
+      document.getElementsByName("hShadeNum")[0].addEventListener('input', updateRoom);
+
+      let horzShadeSpace = document.getElementById("hShadeSpace").value;
+      document.getElementsByName("hShadeSpace")[0].addEventListener('input', updateRoom);
+
+      let horzShadeDist = document.getElementById("hShadeDist").value;
+      document.getElementsByName("hShadeDist")[0].addEventListener('input', updateRoom);
+
+      let horzShadeHeight = document.getElementById("hShadeHeight").value;
+      document.getElementsByName("hShadeHeight")[0].addEventListener('input', updateRoom);
+
+      let horzShadeAngle = document.getElementById("hShadeAngle").value;
+      document.getElementsByName("hShadeAngle")[0].addEventListener('input', updateRoom);
+
+      let vertShadeOn = document.getElementById("vShadeOn").value;
+      document.getElementsByName("vShadeOn")[0].addEventListener('click', updateRoom);
+
+      let checkbox = document.querySelector("input[name=vShadeOn]");
+
+
+      if(checkbox.checked) {
+          vertShadeOn = 0;
+      } else {
+          vertShadeOn = 1;
+      }
+
+
+      let vertShadeDep = document.getElementById("vShadeDep").value;
+      document.getElementsByName("vShadeDep")[0].addEventListener('input', updateRoom);
+
+      let vertShadeNum = document.getElementById("vShadeNum").value;
+      document.getElementsByName("vShadeNum")[0].addEventListener('input', updateRoom);
+
+      let vertShadeSpace = document.getElementById("vShadeSpace").value;
+      document.getElementsByName("vShadeSpace")[0].addEventListener('input', updateRoom);
+
+      let vertShadeShift = document.getElementById("vShadeShift").value;
+      document.getElementsByName("vShadeShift")[0].addEventListener('input', updateRoom);
+
+      let vertShadeDist = document.getElementById("vShadeDist").value;
+      document.getElementsByName("vShadeDist")[0].addEventListener('input', updateRoom);
+
+      let vertShadeHeight = document.getElementById("vShadeHeight").value;
+      document.getElementsByName("vShadeHeight")[0].addEventListener('input', updateRoom);
+
+      let vertShadeScale = document.getElementById("vShadeScale").value;
+      document.getElementsByName("vShadeScale")[0].addEventListener('input', updateRoom);
+
+      let vertShadeStart = document.getElementById("vShadeStart").value;
+      document.getElementsByName("vShadeStart")[0].addEventListener('input', updateRoom);
+
+
+      // let valFal = document.getElementById("fal").value; //FLOOR AREA LOSS
+      // document.getElementsByName("fal")[0].addEventListener('input', updateRoom1);
+
+      // let valMDST = document.getElementById("mdst").value; // MAX DIRECT SUN TIME
+      // document.getElementsByName("mdst")[0].addEventListener('input', updateRoom1);
+
 
 
 // init('myCanvas');
 init('myCanvas00');
 // init();
-// initTweakPane();
+initTweakPane();
+// calculate_all();
 updateRoom();
   cornerSunPath()
 animate();
@@ -206,6 +329,9 @@ function init(canva) {
   
 
 }
+
+
+
 
 //INITIALIZE TWEAKPANE PANELS
 function initTweakPane() {
@@ -332,7 +458,7 @@ function initTweakPane() {
   // calculate_all();
 
   // set_wall_properties();
-  // render_zone();
+  render_zone();
   // update_view_factors();
   // update_shortwave_components();
   // update_visualization();
@@ -558,6 +684,48 @@ function updateRoom() {
     clothingValue: WINTER_COMFORT_PARAMS.clothingValue,
     metabolic: WINTER_COMFORT_PARAMS.metabolic
   }
+  Lon1 = document.getElementById("long").value;
+  Lat1 = document.getElementById("lat").value;
+  TimeZone1 = document.getElementById("timeZone").value;
+  Hour1 = document.getElementById("hour").value;
+  Day1 = document.getElementById("day").value;
+  Month1 = document.getElementById("mon").value;
+  roomOrientationValue1 = document.getElementById("north").value;
+  gridHeightValue = document.getElementById("gridHt").value;
+  ceilingHeightValue = document.getElementById("ceiling").value;
+  ceilingHeightValue1 = document.getElementById("ceiling").value;
+  wallLen = document.getElementById("wallWidth").value;
+  wallDepVal = document.getElementById("wallDep").value;
+  windowHeightValue = document.getElementById("windowHeight").value * 10;
+  windowHeightValue = windowHeightValue / 10;
+  windowWidthValue = document.getElementById("windowWidth").value;
+  glzRatioValue = document.getElementById("glazing").value;
+  sillHeightValue = document.getElementById("sill").value;
+  distanceWindows = document.getElementById("distWindow").value;
+  horzShadeDep = document.getElementById("hShadeDep").value;
+  horzShadeNum = document.getElementById("hShadeNum").value;
+  horzShadeSpace = document.getElementById("hShadeSpace").value;
+  horzShadeDist = document.getElementById("hShadeDist").value;
+  horzShadeHeight = document.getElementById("hShadeHeight").value;
+  horzShadeAngle = document.getElementById("hShadeAngle").value;
+  vertShadeOn = document.getElementById("vShadeOn").value;
+  checkbox = document.querySelector("input[name=vShadeOn]");
+
+  if (checkbox.checked) {
+    vertShadeOn = 0;
+  } else {
+    vertShadeOn = 1;
+  }
+
+  vertShadeDep = document.getElementById("vShadeDep").value;
+  vertShadeNum = document.getElementById("vShadeNum").value;
+  vertShadeSpace = document.getElementById("vShadeSpace").value;
+  vertShadeShift = document.getElementById("vShadeShift").value;
+  vertShadeDist = document.getElementById("vShadeDist").value;
+  vertShadeHeight = document.getElementById("vShadeHeight").value;
+  vertShadeScale = document.getElementById("vShadeScale").value;
+  vertShadeStart = document.getElementById("vShadeStart").value;
+  console.log(Lon1)
 
   var geoResult = geo.createGlazingForRect(
     parseFloat(ROOM_PARAMS.ceilHeight),
@@ -661,115 +829,129 @@ function updateRoom() {
       // colorCount++;
 
 
-      // let my_point = new THREE.Vector3(0, 0, 0); //MRTMRTMRT
-      // let cursorPoint = new THREE.Vector3(i_1 *0.2 - 0.4, j_1*0.2 + 0.1, 0)
-      // my_point.x = cursorPoint.x - mrt.room.width/ 2;
-      // my_point.y = cursorPoint.y - mrt.room.depth / 2;
-      // my_point.z = 0;
+      let my_point = new THREE.Vector3(0, 0, 0); //MRTMRTMRT
+      let cursorPoint = new THREE.Vector3(i_1 *0.2 - 0.4, j_1*0.2 + 0.1, 0)
+      my_point.x = cursorPoint.x - mrt.room.width/ 2;
+      my_point.y = cursorPoint.y - mrt.room.depth / 2;
+      my_point.z = 0;
 
-      // var point_view_factors = calculate_view_factors(cursorPoint);
-      // var longwave_mrt = mrt.calc(point_view_factors);
-      // // console.log(longwave_mrt)
+      var point_view_factors = calculate_view_factors(cursorPoint);
+      var longwave_mrt = mrt.calc(point_view_factors);
+      // console.log(point_view_factors)
+      // console.log(longwave_mrt)
 
-      // var window_objects = get_window_objects();
+      var window_objects = get_window_objects();
+      // console.log(window_objects)
 
-      // if (window_objects) {
-      //   var window_object_vfs = _.map(window_objects, function (w) {
-      //     return _.find(point_view_factors, function (o) {
-      //       return o.name == w.name;
-      //     }).view_factor;
-      //   });
-      //   var my_erf = calculate_erf_point(
-      //     my_point,
-      //     solarcal.skydome_center,
-      //     window_objects,
-      //     window_object_vfs
-      //   );
-      // } else {
-      //   my_erf = {
-      //     dMRT_direct: 0,
-      //     dMRT_diff: 0,
-      //     dMRT_refl: 0,
-      //     dMRT: 0,
-      //     ERF: 0
-      //   };
-      // }
+      if (window_objects) {
+        var window_object_vfs = _.map(window_objects, function (w) {
+          return _.find(point_view_factors, function (o) {
+            return o.name == "wall1";
+            // return o.name == w.name;
+          }).view_factor;
+        });
 
-      // if (params.display === "Longwave MRT") {
-      //   display_value = longwave_mrt;
-      // } else if (params.display === "MRT") {
-      //   display_value = longwave_mrt + my_erf.dMRT;
-      // } else if (params.display === "Shortwave dMRT") {
-      //   display_value = my_erf.dMRT;
-      // } else if (params.display === "Direct shortwave dMRT") {
-      //   display_value = my_erf.dMRT_direct;
-      // } else if (params.display === "Diffuse shortwave dMRT") {
-      //   display_value = my_erf.dMRT_diff;
-      // } else if (params.display === "Reflected shortwave dMRT") {
-      //   display_value = my_erf.dMRT_refl;
-      // } else if (params.display === "PMV") {
-      //   var mrt_total = longwave_mrt + my_erf.dMRT;
-      //   var my_pmv = comf.pmvElevatedAirspeed(
-      //     comfort.ta,
-      //     mrt_total,
-      //     comfort.vel,
-      //     comfort.rh,
-      //     comfort.met,
-      //     comfort.clo,
-      //     0
-      //   );
-      //   display_value = my_pmv.pmv;
-      // }
-      // // console.log(cursorPoint.x, cursorPoint.z, display_value.toFixed(1));
-
-      // var mrt_total = longwave_mrt + my_erf.dMRT;
-      // var my_pmv = comf.pmvElevatedAirspeed(
-      //   comfort.ta,
-      //   mrt_total,
-      //   comfort.vel,
-      //   comfort.rh,
-      //   comfort.met,
-      //   comfort.clo,
-      //   0
-      // );
+        // console.log(window_object_vfs)
+        var my_erf = calculate_erf_point(
+          my_point,
+          solarcal.skydome_center,
+          window_objects,
+          window_object_vfs
+        );
+      } else {
+        my_erf = {
+          dMRT_direct: 0,
+          dMRT_diff: 0,
+          dMRT_refl: 0,
+          dMRT: 0,
+          ERF: 0
+        };
+      }
 
 
-      // // plane = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
-      // //   // color: new THREE.Color(`rgb(255,`+parseInt(255 -multiDimResults[n][m].dwnSpd*2)+`,`+parseInt(255 -multiDimResults[n][m].dwnSpd*2)+`)`),
-      // //   color: new THREE.Color(`rgb(255,` + (255 - parseInt(display_value * 2)) + `,` + (255 - parseInt(display_value * 2)) + `)`),
-      // //   side: THREE.DoubleSide
-      // // }));
-      // // plane.translateX(m - mrt.room.width/2);
-      // // plane.translateY(n - mrt.room.depth/2);
-      // // plane.translateZ(-1);
+    // let  my_erf = {
+    //     dMRT_direct: 0,
+    //     dMRT_diff: 0,
+    //     dMRT_refl: 0,
+    //     dMRT: 0,
+    //     ERF: 0
+    //   };
 
-      // multiDimResults[n][m].longwaveMRT = longwave_mrt;
-      // multiDimResults[n][m].mrt1 = longwave_mrt + my_erf.dMRT;
-      // multiDimResults[n][m].shortwaveMRT = my_erf.dMRT;
-      // multiDimResults[n][m].directShortwaveMRT = my_erf.dMRT_direct;
-      // multiDimResults[n][m].diffuseShortwaveMRT = my_erf.dMRT_diff;
-      // multiDimResults[n][m].reflectedShortwaveMRT= my_erf.dMRT_refl;
-      // multiDimResults[n][m].pmv1 = my_pmv.pmv;
+      if (params.display === "Longwave MRT") {
+        display_value = longwave_mrt;
+      } else if (params.display === "MRT") {
+        display_value = longwave_mrt + my_erf.dMRT;
+      } else if (params.display === "Shortwave dMRT") {
+        display_value = my_erf.dMRT;
+      } else if (params.display === "Direct shortwave dMRT") {
+        display_value = my_erf.dMRT_direct;
+      } else if (params.display === "Diffuse shortwave dMRT") {
+        display_value = my_erf.dMRT_diff;
+      } else if (params.display === "Reflected shortwave dMRT") {
+        display_value = my_erf.dMRT_refl;
+      } else if (params.display === "PMV") {
+        var mrt_total = longwave_mrt + my_erf.dMRT;
+        var my_pmv = comf.pmvElevatedAirspeed(
+          comfort.ta,
+          mrt_total,
+          comfort.vel,
+          comfort.rh,
+          comfort.met,
+          comfort.clo,
+          0
+        );
+        display_value = my_pmv.pmv;
+      }
+      // console.log(cursorPoint.x, cursorPoint.z, display_value.toFixed(1));
 
-      // let combinedMRT = parseFloat(multiDimResults[n][m].mrt1)
+      var mrt_total = longwave_mrt + my_erf.dMRT;
+      var my_pmv = comf.pmvElevatedAirspeed(
+        comfort.ta,
+        mrt_total,
+        comfort.vel,
+        comfort.rh,
+        comfort.met,
+        comfort.clo,
+        0
+      );
 
-      // let finalPPD = comf.pmv(
-      //   WINTER_COMFORT_PARAMS.airtempValue,
-      //    combinedMRT, 
-      //    WINTER_COMFORT_PARAMS.airspeedValue, 
-      //    WINTER_COMFORT_PARAMS.humidityValue, 
-      //    WINTER_COMFORT_PARAMS.metabolic, 
-      //    WINTER_COMFORT_PARAMS.clothingValue, 
-      //    0.001)
-      //   // comf.pmv(ta, tr, vel, rh, met, clo, wme)
-      //   // returns [pmv, ppd]
-      //   // ta, air temperature (°C)
-      //   // tr, mean radiant temperature (°C)
-      //   // vel, relative air velocity (m/s)
-      //   // rh, relative humidity (%) Used only this way to input humidity level
-      //   // met, metabolic rate (met)
-      //   // clo, clothing (clo)
-      //   // wme, external work, normally around 0 (met) //MRTMRTMRT
+
+      // plane = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
+      //   // color: new THREE.Color(`rgb(255,`+parseInt(255 -multiDimResults[n][m].dwnSpd*2)+`,`+parseInt(255 -multiDimResults[n][m].dwnSpd*2)+`)`),
+      //   color: new THREE.Color(`rgb(255,` + (255 - parseInt(display_value * 2)) + `,` + (255 - parseInt(display_value * 2)) + `)`),
+      //   side: THREE.DoubleSide
+      // }));
+      // plane.translateX(m - mrt.room.width/2);
+      // plane.translateY(n - mrt.room.depth/2);
+      // plane.translateZ(-1);
+
+      multiDimResults[n][m].longwaveMRT = longwave_mrt;
+      multiDimResults[n][m].mrt1 = longwave_mrt + my_erf.dMRT;
+      multiDimResults[n][m].shortwaveMRT = my_erf.dMRT;
+      multiDimResults[n][m].directShortwaveMRT = my_erf.dMRT_direct;
+      multiDimResults[n][m].diffuseShortwaveMRT = my_erf.dMRT_diff;
+      multiDimResults[n][m].reflectedShortwaveMRT= my_erf.dMRT_refl;
+      multiDimResults[n][m].pmv1 = my_pmv.pmv;
+
+      let combinedMRT = parseFloat(multiDimResults[n][m].mrt1)
+
+      let finalPPD = comf.pmv(
+        WINTER_COMFORT_PARAMS.airtempValue,
+         combinedMRT, 
+         WINTER_COMFORT_PARAMS.airspeedValue, 
+         WINTER_COMFORT_PARAMS.humidityValue, 
+         WINTER_COMFORT_PARAMS.metabolic, 
+         WINTER_COMFORT_PARAMS.clothingValue, 
+         0.001)
+        // comf.pmv(ta, tr, vel, rh, met, clo, wme)
+        // returns [pmv, ppd]
+        // ta, air temperature (°C)
+        // tr, mean radiant temperature (°C)
+        // vel, relative air velocity (m/s)
+        // rh, relative humidity (%) Used only this way to input humidity level
+        // met, metabolic rate (met)
+        // clo, clothing (clo)
+        // wme, external work, normally around 0 (met) //MRTMRTMRT
 
 
       let da;
@@ -783,48 +965,48 @@ function updateRoom() {
       }else if(PARAMS1.model == 2){
         da = dSolar;
         colorMult = 5
-      // }else if(PARAMS1.model == 3){ //MRTMRTMRT
-      //   da = multiDimResults[n][m].dwnSpd;
-      //   colorMult = 100
-      // }else if(PARAMS1.model == 4){
-      //   da = multiDimResults[n][m].dwnTmp;
-      //   colorMult = -100
-      // }else if(PARAMS1.model == 5){
-      //   da = multiDimResults[n][m].glzfac;
-      //   colorMult = 4
-      // }else if(PARAMS1.model == 6){
-      //   da = multiDimResults[n][m].govPPD;
-      // }else if(PARAMS1.model == 7){
-      //   da = multiDimResults[n][m].mrt;
-      // }else if(PARAMS1.model == 8){
-      //   da = multiDimResults[n][m].mrtppd;
-      // }else if(PARAMS1.model == 9){
-      //   da = multiDimResults[n][m].pmv;
-      // }else if(PARAMS1.model == 10){
-      //   colorMult = -100
-      //   da = multiDimResults[n][m].ppd;
-      // }else if(PARAMS1.model == 11){
-      //   da = multiDimResults[n][m].tarDist;
-      //   colorMult = 5
-      // }else if(PARAMS1.model == 12){
-      //   da = multiDimResults[n][m].longwaveMRT;
-      // }else if(PARAMS1.model == 13){
-      //   da = multiDimResults[n][m].mrt1;
-      // }else if(PARAMS1.model == 14){
-      //   da = multiDimResults[n][m].shortwaveMRT;
-      // }else if(PARAMS1.model == 15){
-      //   da = multiDimResults[n][m].directShortwaveMRT;
-      // }else if(PARAMS1.model == 16){
-      //   da = multiDimResults[n][m].diffuseShortwaveMRT;
-      //   colorMult = 5
-      // }else if(PARAMS1.model == 17){
-      //   da = multiDimResults[n][m].reflectedShortwaveMRT;
-      //   colorMult = 5
-      // }else if(PARAMS1.model == 18){
-      //   da = multiDimResults[n][m].pmv1;
-      //   colorMult = 5
-      // }else{
-      //   da = finalPPD.ppd //MRTMRTMRT
+      }else if(PARAMS1.model == 3){ //MRTMRTMRT
+        da = multiDimResults[n][m].dwnSpd;
+        colorMult = 100
+      }else if(PARAMS1.model == 4){
+        da = multiDimResults[n][m].dwnTmp;
+        colorMult = -100
+      }else if(PARAMS1.model == 5){
+        da = multiDimResults[n][m].glzfac;
+        colorMult = 4
+      }else if(PARAMS1.model == 6){
+        da = multiDimResults[n][m].govPPD;
+      }else if(PARAMS1.model == 7){
+        da = multiDimResults[n][m].mrt;
+      }else if(PARAMS1.model == 8){
+        da = multiDimResults[n][m].mrtppd;
+      }else if(PARAMS1.model == 9){
+        da = multiDimResults[n][m].pmv;
+      }else if(PARAMS1.model == 10){
+        colorMult = -100
+        da = multiDimResults[n][m].ppd;
+      }else if(PARAMS1.model == 11){
+        da = multiDimResults[n][m].tarDist;
+        colorMult = 5
+      }else if(PARAMS1.model == 12){
+        da = multiDimResults[n][m].longwaveMRT;
+      }else if(PARAMS1.model == 13){
+        da = multiDimResults[n][m].mrt1;
+      }else if(PARAMS1.model == 14){
+        da = multiDimResults[n][m].shortwaveMRT;
+      }else if(PARAMS1.model == 15){
+        da = multiDimResults[n][m].directShortwaveMRT;
+      }else if(PARAMS1.model == 16){
+        da = multiDimResults[n][m].diffuseShortwaveMRT;
+        colorMult = 5
+      }else if(PARAMS1.model == 17){
+        da = multiDimResults[n][m].reflectedShortwaveMRT;
+        colorMult = 5
+      }else if(PARAMS1.model == 18){
+        da = multiDimResults[n][m].pmv1;
+        colorMult = 5
+      }else{
+        da = finalPPD.ppd //MRTMRTMRT
       }
 
       if(isNaN(parseFloat(da))){
@@ -869,14 +1051,14 @@ function updateRoom() {
         pmv: multiDimResults[n][m].pmv,
         ppd: multiDimResults[n][m].ppd,
         tarDist: multiDimResults[n][m].tarDist, 
-        // longwaveMRT: longwave_mrt, //MRTMRTMRT
-        // mrt1: longwave_mrt + my_erf.dMRT,
-        // shortwaveMRT: my_erf.dMRT,
-        // directShortwaveMRT: my_erf.dMRT_direct,
-        // diffuseShortwaveMRT: my_erf.dMRT_diff,
-        // reflectedShortwaveMRT: my_erf.dMRT_refl,
-        // pmv1: my_pmv.pmv,
-        // finalPPD: finalPPD   //MRTMRTMRT
+        longwaveMRT: longwave_mrt, //MRTMRTMRT
+        mrt1: longwave_mrt + my_erf.dMRT,
+        shortwaveMRT: my_erf.dMRT,
+        directShortwaveMRT: my_erf.dMRT_direct,
+        diffuseShortwaveMRT: my_erf.dMRT_diff,
+        reflectedShortwaveMRT: my_erf.dMRT_refl,
+        pmv1: my_pmv.pmv,
+        finalPPD: finalPPD   //MRTMRTMRT
       }
       // scene.add(plane);
       // plane.userData = {
@@ -2271,9 +2453,9 @@ function calculate_erf_point(
   // computations whereas the sun object is an icon
   var my_sun_dir = new THREE.Vector3();
   my_sun_dir.copy(sun.position);
-  my_sun_dir.sub(skydome_center);
+  // my_sun_dir.sub(skydome_center);
   my_sun_dir.multiplyScalar(1000);
-  my_sun_dir.add(skydome_center);
+  // my_sun_dir.add(skydome_center);
   my_sun_dir.sub(my_vector);
 
   var sun_position = new THREE.Vector3();

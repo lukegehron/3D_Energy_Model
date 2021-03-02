@@ -22,6 +22,10 @@ button {
 	text-transform: uppercase;
 }
 
+.button2{
+	background-color: none !important;
+}
+
 canvas {
 	display: block;
 }
